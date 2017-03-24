@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:elevation="8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/header_layout">
+
+            <RelativeLayout
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/img_layout">
+
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:id="@+id/item_image"
+                    android:padding="16dp"
+                    android:src="@drawable/android"/>
+
+                <Button
+                    style="@style/DefaultButton"
+                    android:id="@+id/button_add_image"
+                    android:text="@string/button_add_image"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    style="@style/DefaultEditText"
+                    android:id="@+id/text_item_name"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/item_name"
+                    android:textSize="30sp"
+                    android:layout_toEndOf="@+id/text_item_name"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/item_summary"
+                    android:layout_toEndOf="@+id/item_name"/>
+            </RelativeLayout>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="@dimen/fab_margin"
+                android:src="@android:drawable/ic_menu_edit"
+                android:elevation="8dp"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            android:id="@+id/list_of_tasks"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/header_layout"
+            android:visibility="gone"
+            android:background="@drawable/selected_item"/>
+
+        <Button
+            style="@style/DefaultButton"
+            android:layout_below="@+id/list_of_tasks"
+            android:id="@+id/button_add_task"
+            android:text="@string/button_add_task"
+            android:visibility="gone"/>
+
+        <Button
+            style="@style/DefaultButton"
+            android:layout_below="@+id/list_of_tasks"
+            android:id="@+id/button_delete_task"
+            android:text="@string/button_delete_task"
+            android:layout_alignParentEnd="true"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/button_delete_task">
+
+            <Button
+                style="@style/DefaultButton"
+                android:id="@+id/button_save_changes"
+                android:text="@string/button_save_item"
+                android:layout_marginTop="20dp"
+                android:visibility="gone"/>
+
+            <Button
+                style="@style/DefaultButton"
+                android:id="@+id/button_delete_item"
+                android:text="@string/button_delete_item"
+                android:layout_marginTop="20dp"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

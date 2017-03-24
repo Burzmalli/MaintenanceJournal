@@ -1,0 +1,54 @@
+<resources>
+    <string name="app_name">Maintenance Journal</string>
+    <string name="screen_schedule">Schedule</string>
+    <string name="action_settings">Settings</string>
+    <string-array name="things_list">
+        <item>Thing 1</item>
+        <item>Thing 2</item>
+        <item>Thing 3</item>
+    </string-array>
+    <string name="title_activity_detail">DetailActivity</string>
+    <string name="title_activity_create_item">CreateItem</string>
+    <string name="label_item_name">Item Name</string>
+    <string name="label_task_name">Task Name</string>
+    <string name="label_task_date">Date</string>
+    <string name="label_task_comment">Comment</string>
+    <string name="button_save_item">Save Item</string>
+    <string name="button_delete_item">Delete Item</string>
+    <string name="button_add_task">Add Task</string>
+    <string name="button_save_task">Save Task</string>
+    <string name="button_delete_task">Delete Task</string>
+    <string name="title_activity_create_task">CreateTaskActivity</string>
+    <string name="title_add_item">Create Item</string>
+    <string name="title_create_task">Create Task</string>
+    <string name="menu_item_hide">Hide Appbar</string>
+    <string name="button_add_image">Add Picture</string>
+    <string name="source_from_camera">From Camera</string>
+    <string name="source_from_gallery">From Gallery</string>
+    <string name="source_cancel">Cancel</string>
+    <string name="title_activity_schedule">ScheduleActivity</string>
+    <string name="checkbox_recurring">Recurring</string>
+    <string name="text_pick_date">Maintenance Date</string>
+    <string name="text_cost">Est. Cost</string>
+    <string name="hint_task_name">Enter Task Name</string>
+    <string name="hint_item_name">Enter Item Name</string>
+    <string name="hint_task_cost">$0.00</string>
+    <string name="error_unique_name">An item already exists with the name %1$s. Please enter a unique name.</string>
+    <string name="alert_title_unique_name">Name Exists</string>
+    <string name="drawer_open">Open Drawer</string>
+    <string name="drawer_close">Close Drawer</string>
+    <string name="title_add_photo">Add a Photo</string>
+    <string name="label_push_notifications">Enable Push Notifications</string>
+    <string name="label_from">From</string>
+    <string name="label_to">To</string>
+    <string name="alert_delete_task_title">Delete Task</string>
+    <string name="alert_delete_task_msg">Are you sure you wat to delete the task %1$s?</string>
+    <string name="alert_delete_item_title">Delete Item</string>
+    <string name="alert_delete_item_msg">Are you sure you wat to delete the item %1$s? (All tasks for this item will also be deleted.)</string>
+    <string-array name="screens">
+        <item>Item List</item>
+        <item>Schedule</item>
+        <item>Options</item>
+    </string-array>
+    <string name="title_activity_options">Options</string>
+</resources>
