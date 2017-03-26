@@ -8,6 +8,8 @@ import android.os.AsyncTask;
 
 public class DatabaseAsyncTask extends AsyncTask {
 
+    private final String secret = "wcI1zYDjCPmBKtMOdaeMEad6zuey6wkcdHIRWn1k";
+
     @Override
     protected Object doInBackground(Object[] params) {
         String result = "";

@@ -28,7 +28,7 @@ import java.util.List;
  * A global item master for storing the app's maintenance items
  */
 public class DataMgr {
-    public static List<MaintenanceItem> Items = new ArrayList<MaintenanceItem>();
+    public static List<MaintenanceItem> Items = new ArrayList<>();
     public static JournalCardAdapter.MaintenanceItemHolder lastClicked = null;
     public static Activity mainActivity;
     public static Bitmap selectedImage;
@@ -38,6 +38,11 @@ public class DataMgr {
     private static int mId;
 
     private static IItemSvc myManager;
+
+    static {
+        //myManager = new ItemFirebaseMgr();
+        myManager = new ItemDatabaseMgr(mainActivity.getBaseContext());
+    }
 
     public static void GlobalLoad()
     {
@@ -93,9 +98,6 @@ public class DataMgr {
         if(mainActivity == null)
             return;
 
-        if(myManager == null)
-            myManager = new ItemDatabaseMgr(mainActivity.getBaseContext());
-
         Items = myManager.loadItems();
     }
 
@@ -111,15 +113,11 @@ public class DataMgr {
         if(mainActivity == null)
             return;
 
-        if(myManager == null)
-            myManager = new ItemDatabaseMgr(mainActivity.getBaseContext());
-
         myManager.createItem(item);
     }
 
     public static void updateItem(MaintenanceItem item)
     {
-
         myManager.updateItem(item);
     }
 
@@ -134,9 +132,6 @@ public class DataMgr {
     {
         if(mainActivity == null)
             return;
-
-        if(myManager == null)
-            myManager = new ItemDatabaseMgr(mainActivity.getBaseContext());
 
         myManager.createTask(task);
     }
