@@ -1,4 +1,7 @@
-package com.example.joe.maintenancejournal;
+package com.example.joe.maintenancejournal.data;
+
+import com.example.joe.maintenancejournal.data.entities.MaintenanceItem;
+import com.example.joe.maintenancejournal.data.entities.MaintenanceTask;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.example.joe.maintenancejournal;
+package com.example.joe.maintenancejournal.data;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -9,6 +9,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+
+import com.example.joe.maintenancejournal.R;
+import com.example.joe.maintenancejournal.data.entities.MaintenanceItem;
+import com.example.joe.maintenancejournal.data.entities.MaintenanceTask;
+import com.example.joe.maintenancejournal.ux.JournalCardAdapter;
+import com.example.joe.maintenancejournal.ux.MainActivity;
 
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
@@ -21,7 +27,7 @@ import java.util.List;
  * Created by Joe on 9/08/2016.
  * A global item master for storing the app's maintenance items
  */
-public class GlobalMgr {
+public class DataMgr {
     public static List<MaintenanceItem> Items = new ArrayList<MaintenanceItem>();
     public static JournalCardAdapter.MaintenanceItemHolder lastClicked = null;
     public static Activity mainActivity;

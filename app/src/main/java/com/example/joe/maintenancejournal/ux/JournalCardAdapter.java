@@ -1,6 +1,5 @@
-package com.example.joe.maintenancejournal;
+package com.example.joe.maintenancejournal.ux;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,6 +17,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.joe.maintenancejournal.data.DataMgr;
+import com.example.joe.maintenancejournal.R;
+import com.example.joe.maintenancejournal.data.entities.MaintenanceItem;
+import com.example.joe.maintenancejournal.data.entities.MaintenanceTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -173,10 +177,10 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                     Intent intent = new Intent(v.getContext(), CreateTaskActivity.class);
 
                     if(mHeldItem == null)
-                        mHeldItem = GlobalMgr.GetItemFromName(mItemName.getText().toString());
+                        mHeldItem = DataMgr.GetItemFromName(mItemName.getText().toString());
 
                     //Pass the index for the item that will get the new task
-                    intent.putExtra("itemIndex", GlobalMgr.Items.indexOf(mHeldItem));
+                    intent.putExtra("itemIndex", DataMgr.Items.indexOf(mHeldItem));
 
                     //Open the screen
                     v.getContext().startActivity(intent);
@@ -187,9 +191,9 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
             mAddImgBtn.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
 
-                    ((MainActivity) GlobalMgr.mainActivity).selectImage();
+                    ((MainActivity) DataMgr.mainActivity).selectImage();
 
-                    Bitmap img = GlobalMgr.selectedImage;
+                    Bitmap img = DataMgr.selectedImage;
 
                     if(img == null)
                         return;
@@ -211,7 +215,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             mHeldItem.Tasks.remove(selectedTask);
-                            GlobalMgr.deleteTask(selectedTask);
+                            DataMgr.deleteTask(selectedTask);
                             mParent.notifyDataSetChanged();
                         }
 
@@ -234,8 +238,8 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             CollapseCard();
-                            GlobalMgr.deleteItem(mHeldItem);
-                            GlobalMgr.Items.remove(mHeldItem);
+                            DataMgr.deleteItem(mHeldItem);
+                            DataMgr.Items.remove(mHeldItem);
                             mHeldItem = null;
                             mParent.notifyDataSetChanged();
                         }
@@ -248,15 +252,15 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
 
         public void ExpandCard()
         {
-            mHeldItem = GlobalMgr.GetItemFromName(mItemName.getText().toString());
+            mHeldItem = DataMgr.GetItemFromName(mItemName.getText().toString());
 
-            if(GlobalMgr.lastClicked != null)
-                GlobalMgr.lastClicked.CollapseCard();
+            if(DataMgr.lastClicked != null)
+                DataMgr.lastClicked.CollapseCard();
 
             mTaskList.setVisibility(View.VISIBLE);
             mEditItemBtn.setVisibility(View.VISIBLE);
 
-            GlobalMgr.lastClicked = this;
+            DataMgr.lastClicked = this;
 
             expanded = true;
         }
@@ -275,7 +279,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
         public void StartEdit()
         {
             if(mHeldItem == null)
-                mHeldItem = GlobalMgr.GetItemFromName(mItemName.getText().toString());
+                mHeldItem = DataMgr.GetItemFromName(mItemName.getText().toString());
 
             if(mHeldItem == null)
                 return;
@@ -305,7 +309,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
         {
             if(!isCanceled) {
                 if(mHeldItem == null)
-                    mHeldItem = GlobalMgr.GetItemFromName(mItemName.getText().toString());
+                    mHeldItem = DataMgr.GetItemFromName(mItemName.getText().toString());
 
                 if(mHeldItem == null)
                     return;
@@ -313,7 +317,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                 mHeldItem.ItemName = mEditName.getText().toString();
                 mItemName.setText(mHeldItem.ItemName);
 
-                GlobalMgr.updateItem(mHeldItem);
+                DataMgr.updateItem(mHeldItem);
             }
             else
             {

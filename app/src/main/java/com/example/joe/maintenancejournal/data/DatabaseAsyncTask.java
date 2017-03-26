@@ -1,4 +1,4 @@
-package com.example.joe.maintenancejournal;
+package com.example.joe.maintenancejournal.data;
 
 import android.os.AsyncTask;
 
@@ -7,9 +7,12 @@ import android.os.AsyncTask;
  */
 
 public class DatabaseAsyncTask extends AsyncTask {
+
     @Override
     protected Object doInBackground(Object[] params) {
-        return null;
+        String result = "";
+
+        return result;
     }
 
     @Override

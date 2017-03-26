@@ -1,10 +1,13 @@
-package com.example.joe.maintenancejournal;
+package com.example.joe.maintenancejournal.data;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.example.joe.maintenancejournal.data.entities.MaintenanceItem;
+import com.example.joe.maintenancejournal.data.entities.MaintenanceTask;
 
 import java.util.ArrayList;
 import java.util.Date;

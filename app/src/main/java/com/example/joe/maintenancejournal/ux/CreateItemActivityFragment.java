@@ -1,4 +1,4 @@
-package com.example.joe.maintenancejournal;
+package com.example.joe.maintenancejournal.ux;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +12,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.joe.maintenancejournal.data.DataMgr;
+import com.example.joe.maintenancejournal.data.entities.MaintenanceItem;
+import com.example.joe.maintenancejournal.data.entities.MaintenanceTask;
+import com.example.joe.maintenancejournal.R;
 
 import java.util.List;
 
@@ -61,7 +66,7 @@ public class CreateItemActivityFragment extends Fragment {
                 Intent intent = new Intent(view.getContext(), CreateTaskActivity.class);
 
                 //Pass the index for the item that will get the new task
-                intent.putExtra("itemIndex", GlobalMgr.Items.indexOf(myItem));
+                intent.putExtra("itemIndex", DataMgr.Items.indexOf(myItem));
 
                 //Open the screen
                 startActivity(intent);
@@ -76,7 +81,7 @@ public class CreateItemActivityFragment extends Fragment {
                 //Find the name text view and assign the text to the created item
                 TextView tv = (TextView)myView.findViewById(R.id.text_item_name);
 
-                if(!GlobalMgr.isNameUnique(tv.getText().toString()))
+                if(!DataMgr.isNameUnique(tv.getText().toString()))
                 {
                     new AlertDialog.Builder(getContext())
                             .setTitle(getString(R.string.alert_title_unique_name))
@@ -96,7 +101,7 @@ public class CreateItemActivityFragment extends Fragment {
                 if(myItem != null)
                     myItem.ItemName = tv.getText().toString();
 
-                GlobalMgr.saveItem(myItem);
+                DataMgr.saveItem(myItem);
 
                 //Close the screen to return to the item list
                 getActivity().finish();

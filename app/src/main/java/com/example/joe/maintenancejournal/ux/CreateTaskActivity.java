@@ -1,8 +1,10 @@
-package com.example.joe.maintenancejournal;
+package com.example.joe.maintenancejournal.ux;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
+import com.example.joe.maintenancejournal.R;
 
 public class CreateTaskActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.example.joe.maintenancejournal;
+package com.example.joe.maintenancejournal.data;
 
 import android.content.Context;
 
@@ -25,10 +25,10 @@ public class ConfigMgr implements IConfigMgr{
 
         try {
 
-            if(GlobalMgr.mainActivity == null)
+            if(DataMgr.mainActivity == null)
                 return;
 
-            Context context = GlobalMgr.mainActivity.getBaseContext();
+            Context context = DataMgr.mainActivity.getBaseContext();
 
             //Clear the existing items
             Configuration = new Configuration();
@@ -66,10 +66,10 @@ public class ConfigMgr implements IConfigMgr{
         ObjectOutputStream osw = null;
 
         try {
-            if(GlobalMgr.mainActivity == null)
+            if(DataMgr.mainActivity == null)
                 return;
 
-            Context context = GlobalMgr.mainActivity.getBaseContext();
+            Context context = DataMgr.mainActivity.getBaseContext();
 
             //Open a fileoutputstream for writing
             fsw = context.openFileOutput(configFile, Context.MODE_PRIVATE);

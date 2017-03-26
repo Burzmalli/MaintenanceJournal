@@ -1,4 +1,4 @@
-package com.example.joe.maintenancejournal;
+package com.example.joe.maintenancejournal.ux;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -31,6 +31,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.joe.maintenancejournal.data.DataMgr;
+import com.example.joe.maintenancejournal.data.entities.MaintenanceItem;
+import com.example.joe.maintenancejournal.data.entities.MaintenanceTask;
+import com.example.joe.maintenancejournal.R;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -53,16 +58,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        GlobalMgr.mainActivity = this;
+        DataMgr.mainActivity = this;
 
-        GlobalMgr.GlobalLoad();
+        DataMgr.GlobalLoad();
 
-        if(GlobalMgr.Items.size() < 1) {
+        if(DataMgr.Items.size() < 1) {
             //Get previously saved items
-            GlobalMgr.ReadSerializedItems(getBaseContext());
+            DataMgr.ReadSerializedItems(getBaseContext());
 
             //Create dummy item data if no data was read
-            if (GlobalMgr.Items.size() < 1) {
+            if (DataMgr.Items.size() < 1) {
                 CreateDummyData();
             }
         }
@@ -173,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
 
         firstItem.Tasks.add(firstTask);
 
-        GlobalMgr.addItem(firstItem);
+        DataMgr.addItem(firstItem);
 
         firstItem = new MaintenanceItem();
         firstTask = new MaintenanceTask();
@@ -192,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
 
         firstItem.Tasks.add(firstTask);
 
-        GlobalMgr.addItem(firstItem);
+        DataMgr.addItem(firstItem);
     }
 
     @Override
@@ -253,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        GlobalMgr.selectedImage = bm;
+        DataMgr.selectedImage = bm;
 
         return bm;
     }
@@ -280,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        GlobalMgr.selectedImage = thumbnail;
+        DataMgr.selectedImage = thumbnail;
 
         return thumbnail;
     }

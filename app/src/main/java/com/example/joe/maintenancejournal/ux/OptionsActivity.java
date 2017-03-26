@@ -1,10 +1,8 @@
-package com.example.joe.maintenancejournal;
+package com.example.joe.maintenancejournal.ux;
 
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,7 +18,9 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.joe.maintenancejournal.data.DataMgr;
+import com.example.joe.maintenancejournal.R;
 
 public class OptionsActivity extends AppCompatActivity {
 
@@ -69,7 +69,7 @@ public class OptionsActivity extends AppCompatActivity {
 
         mNotificationsSwitch = (Switch) findViewById(R.id.switch_notifications);
 
-        mNotificationsSwitch.setChecked(GlobalMgr.ConfigMgr.Configuration.EnableNotifications);
+        mNotificationsSwitch.setChecked(DataMgr.ConfigMgr.Configuration.EnableNotifications);
 
         mNotificationsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -77,9 +77,9 @@ public class OptionsActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView,
                                          boolean isChecked) {
 
-                GlobalMgr.ConfigMgr.Configuration.EnableNotifications = isChecked;
+                DataMgr.ConfigMgr.Configuration.EnableNotifications = isChecked;
 
-                GlobalMgr.ConfigMgr.saveConfiguration();
+                DataMgr.ConfigMgr.saveConfiguration();
 
             }
         });

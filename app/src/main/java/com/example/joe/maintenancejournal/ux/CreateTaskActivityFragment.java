@@ -1,4 +1,4 @@
-package com.example.joe.maintenancejournal;
+package com.example.joe.maintenancejournal.ux;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -14,6 +14,11 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.joe.maintenancejournal.data.DataMgr;
+import com.example.joe.maintenancejournal.data.entities.MaintenanceItem;
+import com.example.joe.maintenancejournal.data.entities.MaintenanceTask;
+import com.example.joe.maintenancejournal.R;
 
 import java.text.NumberFormat;
 import java.util.Calendar;
@@ -39,7 +44,7 @@ public class CreateTaskActivityFragment extends Fragment {
         int itemIndex = intent.getIntExtra("itemIndex", 0);
 
         //Get the item based on the index
-        myItem = GlobalMgr.Items.get(itemIndex);
+        myItem = DataMgr.Items.get(itemIndex);
 
         //Get the view for later use
         myView = inflater.inflate(R.layout.fragment_create_task, container, false);

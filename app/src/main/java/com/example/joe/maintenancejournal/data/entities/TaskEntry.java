@@ -1,23 +1,20 @@
-package com.example.joe.maintenancejournal;
+package com.example.joe.maintenancejournal.data.entities;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
- * Created by Joe on 9/08/2016.
+ * Created by Joe on 3/25/2017.
  */
-public class MaintenanceTask implements java.io.Serializable{
+
+public class TaskEntry {
+    public MaintenanceTask Parent;
     public String TaskName;
-    public Date StartDate;
+    public Date TaskDate;
     public double TaskCost;
-    public boolean Recurring;
-    public String FrequencyType;
-    public String Frequency;
     public int ItemId;
-    public int TaskId = -1;
-    public List<TaskEntry> Entries = new ArrayList<>();
+    public int EntryId = -1;
+    public String Notes;
 
     //Set the string value for display in lists
     public String toString()
@@ -29,6 +26,6 @@ public class MaintenanceTask implements java.io.Serializable{
     {
         //Format the date to something short
         SimpleDateFormat sd =  new SimpleDateFormat("MM/dd/yyyy");
-        return sd.format(StartDate);
+        return sd.format(TaskDate);
     }
 }

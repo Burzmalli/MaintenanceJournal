@@ -1,4 +1,4 @@
-package com.example.joe.maintenancejournal;
+package com.example.joe.maintenancejournal.ux;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -19,6 +19,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.joe.maintenancejournal.data.DataMgr;
+import com.example.joe.maintenancejournal.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -80,7 +83,7 @@ public class ScheduleActivity extends AppCompatActivity {
         }
 
         //Set the list source to the item's tasks
-        thingsList = GlobalMgr.GetTasks();
+        thingsList = DataMgr.GetTasks();
 
         //Update the list view with a list adapter
         thingsListView = (ListView) findViewById(R.id.list_of_tasks);
@@ -168,15 +171,15 @@ public class ScheduleActivity extends AppCompatActivity {
 
         if(fromSelected == null)
         {
-            thingsList.addAll(GlobalMgr.GetTasks());
+            thingsList.addAll(DataMgr.GetTasks());
         }
         else if(toSelected == null)
         {
-            thingsList.addAll(GlobalMgr.GetFilteredTasks(fromSelected));
+            thingsList.addAll(DataMgr.GetFilteredTasks(fromSelected));
         }
         else
         {
-            thingsList.addAll(GlobalMgr.GetFilteredTasks(fromSelected, toSelected));
+            thingsList.addAll(DataMgr.GetFilteredTasks(fromSelected, toSelected));
         }
 
         if(thingsArrayAdapter != null) {

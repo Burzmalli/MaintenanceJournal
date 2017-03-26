@@ -1,4 +1,4 @@
-package com.example.joe.maintenancejournal;
+package com.example.joe.maintenancejournal.ux;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,6 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.joe.maintenancejournal.data.DataMgr;
+import com.example.joe.maintenancejournal.R;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -33,7 +36,7 @@ public class MainActivityFragment extends Fragment {
         mgr.setOrientation(LinearLayoutManager.VERTICAL);
         thingsListView.setLayoutManager(mgr);
 
-        thingsArrayAdapter = new JournalCardAdapter(GlobalMgr.Items);
+        thingsArrayAdapter = new JournalCardAdapter(DataMgr.Items);
 
         thingsListView.setAdapter(thingsArrayAdapter);
 

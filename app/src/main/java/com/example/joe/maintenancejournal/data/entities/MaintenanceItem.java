@@ -1,8 +1,5 @@
-package com.example.joe.maintenancejournal;
+package com.example.joe.maintenancejournal.data.entities;
 
-import android.view.View;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
