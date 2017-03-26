@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/MaintenanceTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".ux.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/MaintenanceTheme.NoActionBar">
             <intent-filter>
@@ -24,19 +24,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CreateItemActivity"
+            android:name=".ux.CreateItemActivity"
             android:label="@string/title_activity_create_item"
             android:theme="@style/MaintenanceTheme.NoActionBar" />
         <activity
-            android:name=".CreateTaskActivity"
+            android:name=".ux.CreateTaskActivity"
             android:label="@string/title_activity_create_task"
             android:theme="@style/MaintenanceTheme.NoActionBar" />
         <activity
-            android:name=".ScheduleActivity"
+            android:name=".ux.ScheduleActivity"
             android:label="@string/title_activity_schedule"
             android:theme="@style/MaintenanceTheme.NoActionBar" />
         <activity
-            android:name=".OptionsActivity"
+            android:name=".ux.OptionsActivity"
             android:label="@string/title_activity_options"
             android:theme="@style/MaintenanceTheme.NoActionBar"></activity>
     </application>
