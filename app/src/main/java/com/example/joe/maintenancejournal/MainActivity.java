@@ -162,14 +162,14 @@ public class MainActivity extends AppCompatActivity {
         firstItem.ItemName = "ExampleItem1";
         firstTask.TaskName = "ExampleTask1-1";
         firstTask.TaskCost = 3.55;
-        firstTask.TaskDate = Calendar.getInstance().getTime();
+        firstTask.StartDate = Calendar.getInstance().getTime();
 
         firstItem.Tasks.add(firstTask);
 
         firstTask = new MaintenanceTask();
         firstTask.TaskName = "ExampleTask1-2";
         firstTask.TaskCost = 10.38;
-        firstTask.TaskDate = Calendar.getInstance().getTime();
+        firstTask.StartDate = Calendar.getInstance().getTime();
 
         firstItem.Tasks.add(firstTask);
 
@@ -181,14 +181,14 @@ public class MainActivity extends AppCompatActivity {
         firstItem.ItemName = "ExampleItem2";
         firstTask.TaskName = "ExampleTask2-1";
         firstTask.TaskCost = 3.55;
-        firstTask.TaskDate = Calendar.getInstance().getTime();
+        firstTask.StartDate = Calendar.getInstance().getTime();
 
         firstItem.Tasks.add(firstTask);
 
         firstTask = new MaintenanceTask();
         firstTask.TaskName = "ExampleTask2-2";
         firstTask.TaskCost = 10.38;
-        firstTask.TaskDate = Calendar.getInstance().getTime();
+        firstTask.StartDate = Calendar.getInstance().getTime();
 
         firstItem.Tasks.add(firstTask);
 

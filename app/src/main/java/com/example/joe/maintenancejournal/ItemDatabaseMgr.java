@@ -109,7 +109,7 @@ public class ItemDatabaseMgr extends SQLiteOpenHelper implements IItemSvc{
         task.TaskId = cursor.getInt(0);
         task.TaskName = cursor.getString(1);
         task.TaskCost = cursor.getDouble(2);
-        task.TaskDate = new Date(cursor.getLong(3));
+        task.StartDate = new Date(cursor.getLong(3));
         task.Recurring = cursor.getInt(4) == 1;
         task.ItemId = cursor.getInt(5);
 
@@ -185,7 +185,7 @@ public class ItemDatabaseMgr extends SQLiteOpenHelper implements IItemSvc{
 
         values.put("name", task.TaskName);
         values.put("cost", task.TaskCost);
-        values.put("date", task.TaskDate.getTime());
+        values.put("date", task.StartDate.getTime());
         values.put("recurring", task.Recurring ? 1 : 0);
         values.put("itemId", task.ItemId);
 
@@ -203,7 +203,7 @@ public class ItemDatabaseMgr extends SQLiteOpenHelper implements IItemSvc{
 
         values.put("name", task.TaskName);
         values.put("cost", task.TaskCost);
-        values.put("date", task.TaskDate.getTime());
+        values.put("date", task.StartDate.getTime());
         values.put("recurring", task.Recurring ? 1 : 0);
         values.put("itemId", task.ItemId);
 

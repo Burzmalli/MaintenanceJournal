@@ -4,12 +4,8 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -194,7 +190,7 @@ public class GlobalMgr {
         {
             for(MaintenanceTask task : itm.Tasks)
             {
-                if(task.TaskDate.equals(from) || task.TaskDate.after(from))
+                if(task.StartDate.equals(from) || task.StartDate.after(from))
                     tasks.add(itm.ItemName + " : " + task.TaskName + " : " + task.getShortDate() + " : $" + task.TaskCost);
             }
         }
@@ -210,8 +206,8 @@ public class GlobalMgr {
         {
             for(MaintenanceTask task : itm.Tasks)
             {
-                if((task.TaskDate.equals(from) || task.TaskDate.after(from))
-                        && (task.TaskDate.equals(to) || task.TaskDate.before(to)))
+                if((task.StartDate.equals(from) || task.StartDate.after(from))
+                        && (task.StartDate.equals(to) || task.StartDate.before(to)))
                     tasks.add(itm.ItemName + " : " + task.TaskName + " : " + task.getShortDate() + " : $" + task.TaskCost);
             }
         }
@@ -232,7 +228,7 @@ public class GlobalMgr {
                 if(nextTask == null)
                     nextTask = task;
 
-                if(task.TaskDate.before(nextTask.TaskDate) && task.TaskDate.after(calendar.getTime()))
+                if(task.StartDate.before(nextTask.StartDate) && task.StartDate.after(calendar.getTime()))
                     nextTask = task;
             }
         }

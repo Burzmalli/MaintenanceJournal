@@ -74,7 +74,7 @@ public class CreateTaskActivityFragment extends Fragment {
                 Calendar cal = Calendar.getInstance();
                 cal.set(picker.getYear(), picker.getMonth(), picker.getDayOfMonth());
 
-                task.TaskDate = cal.getTime();
+                task.StartDate = cal.getTime();
                 task.ItemId = myItem.ItemId;
 
                 CheckedTextView ctv = (CheckedTextView) myView.findViewById(R.id.checkbox_recurring);
