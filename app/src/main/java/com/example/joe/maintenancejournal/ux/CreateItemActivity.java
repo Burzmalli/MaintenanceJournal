@@ -8,7 +8,7 @@ import com.example.joe.maintenancejournal.data.DataMgr;
 import com.example.joe.maintenancejournal.data.entities.MaintenanceItem;
 import com.example.joe.maintenancejournal.R;
 
-public class CreateItemActivity extends AppCompatActivity {
+public class CreateItemActivity extends BaseActivity {
 
     protected MaintenanceItem myItem;
 

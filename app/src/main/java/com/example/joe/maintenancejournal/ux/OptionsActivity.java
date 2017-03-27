@@ -22,7 +22,7 @@ import android.widget.TextView;
 import com.example.joe.maintenancejournal.data.DataMgr;
 import com.example.joe.maintenancejournal.R;
 
-public class OptionsActivity extends AppCompatActivity {
+public class OptionsActivity extends BaseActivity {
 
     private String[] drawerListViewItems;
     private ListView drawerListView;

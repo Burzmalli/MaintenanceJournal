@@ -1,5 +1,7 @@
 package com.example.joe.maintenancejournal.data;
 
+import android.os.AsyncTask;
+
 import com.example.joe.maintenancejournal.data.entities.MaintenanceItem;
 import com.example.joe.maintenancejournal.data.entities.MaintenanceTask;
 
@@ -10,8 +12,13 @@ import java.util.List;
  */
 
 public class ItemFirebaseMgr implements IItemSvc {
+
+    private final String FIREBASEURL = "https://maintenance-journal.firebaseio.com/";
+
     @Override
     public List<MaintenanceItem> loadItems() {
+        new DatabaseAsyncTask().execute(FIREBASEURL);
+
         return null;
     }
 

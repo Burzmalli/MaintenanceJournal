@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.joe.maintenancejournal.App;
 import com.example.joe.maintenancejournal.data.DataMgr;
 import com.example.joe.maintenancejournal.R;
 import com.example.joe.maintenancejournal.data.entities.MaintenanceItem;
@@ -127,7 +128,12 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                         view.setSelected(true);
                         selectedTask = mHeldItem.Tasks.get(position);
                         mDeleteTaskBtn.setVisibility(View.VISIBLE);
-                    }
+                    } /*else {
+                        Intent performIntent = new Intent(view.getContext(), PerformMaintenanceActivity.class);
+                        performIntent.putExtra("itemIndex", DataMgr.GetItemPosition(mHeldItem));
+                        performIntent.putExtra("taskIndex", position);
+                        view.getContext().startActivity(performIntent);
+                    }*/
                 }
             });
 

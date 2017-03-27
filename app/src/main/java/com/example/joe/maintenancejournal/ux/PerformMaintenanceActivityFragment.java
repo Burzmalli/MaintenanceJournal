@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckedTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,20 +18,22 @@ import com.example.joe.maintenancejournal.data.DataMgr;
 import com.example.joe.maintenancejournal.data.entities.MaintenanceItem;
 import com.example.joe.maintenancejournal.data.entities.MaintenanceTask;
 import com.example.joe.maintenancejournal.R;
+import com.example.joe.maintenancejournal.data.entities.TaskEntry;
 
 import java.text.NumberFormat;
 import java.util.Calendar;
 
 /**
- * A placeholder fragment containing a simple view.
+ * Created by Joe on 3/26/2017.
  */
-public class CreateTaskActivityFragment extends Fragment {
 
+public class PerformMaintenanceActivityFragment extends Fragment {
     private View myView;
 
     private MaintenanceItem myItem = null;
+    private MaintenanceTask myTask = null;
 
-    public CreateTaskActivityFragment() {
+    public PerformMaintenanceActivityFragment() {
     }
 
     @Override
@@ -42,14 +43,17 @@ public class CreateTaskActivityFragment extends Fragment {
         Intent intent = getActivity().getIntent();
 
         int itemIndex = intent.getIntExtra("itemIndex", 0);
+        int taskIndex = intent.getIntExtra("taskIndex", 0);
 
         //Get the item based on the index
         myItem = DataMgr.Items.get(itemIndex);
+        myTask = myItem.Tasks.get(taskIndex);
 
         //Get the view for later use
-        myView = inflater.inflate(R.layout.fragment_create_task, container, false);
+        myView = inflater.inflate(R.layout.fragment_perform_maintenance, container, false);
 
         final EditText costText = (EditText) myView.findViewById(R.id.text_entry_cost);
+        final EditText notesText = (EditText) myView.findViewById(R.id.entry_notes);
 
         //Set the button functionality when saving the task
         Button saveBtn = (Button) myView.findViewById(R.id.button_save_entry);
@@ -63,15 +67,15 @@ public class CreateTaskActivityFragment extends Fragment {
                 if(tv.getText().toString().isEmpty() || costText.getText().toString().isEmpty())
                     return;
 
-                MaintenanceTask task = new MaintenanceTask();
-                task.TaskName = tv.getText().toString();
+                TaskEntry entry = new TaskEntry();
+                entry.TaskName = myTask.TaskName;
 
                 String cleanString = costText.getText().toString().replaceAll("[$,]", "");
 
                 double parsed = Double.parseDouble(cleanString);
 
                 //Set a default task cost (functionality coming next time)
-                task.TaskCost = parsed;
+                entry.EntryCost = parsed;
 
                 //Get the date from the date picker and set the task date to it
                 DatePicker picker = (DatePicker) myView.findViewById(R.id.picker_task_date);
@@ -79,29 +83,16 @@ public class CreateTaskActivityFragment extends Fragment {
                 Calendar cal = Calendar.getInstance();
                 cal.set(picker.getYear(), picker.getMonth(), picker.getDayOfMonth());
 
-                task.StartDate = cal.getTime();
-                task.ItemId = myItem.ItemId;
-
-                CheckedTextView ctv = (CheckedTextView) myView.findViewById(R.id.checkbox_recurring);
-                task.Recurring = ctv.isChecked();
+                entry.EntryDate = cal.getTime();
+                entry.Notes = notesText.getText().toString();
+                entry.ItemId = myItem.ItemId;
+                entry.TaskId = myTask.TaskId;
 
                 //Add the task to the selected item's task list
-                myItem.Tasks.add(task);
+                myTask.Entries.add(entry);
 
                 //Close the screen
                 getActivity().finish();
-            }
-        });
-
-        final CheckedTextView ctv = (CheckedTextView) myView.findViewById(R.id.checkbox_recurring);
-        ctv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ctv.isChecked())
-                    ctv.setChecked(false);
-                else
-                    ctv.setChecked(true);
-
             }
         });
 

@@ -14,7 +14,7 @@ public class MaintenanceTask implements java.io.Serializable{
     public double TaskCost;
     public boolean Recurring;
     public String FrequencyType;
-    public String Frequency;
+    public int Frequency;
     public int ItemId;
     public int TaskId = -1;
     public List<TaskEntry> Entries = new ArrayList<>();

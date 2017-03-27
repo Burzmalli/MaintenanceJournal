@@ -10,8 +10,9 @@ import java.util.Date;
 public class TaskEntry {
     public MaintenanceTask Parent;
     public String TaskName;
-    public Date TaskDate;
-    public double TaskCost;
+    public Date EntryDate;
+    public double EntryCost;
+    public int TaskId;
     public int ItemId;
     public int EntryId = -1;
     public String Notes;
@@ -19,13 +20,13 @@ public class TaskEntry {
     //Set the string value for display in lists
     public String toString()
     {
-        return TaskName + " : " + getShortDate() + " : $" + TaskCost;
+        return TaskName + " : " + getShortDate() + " : $" + EntryCost;
     }
 
     public String getShortDate()
     {
         //Format the date to something short
         SimpleDateFormat sd =  new SimpleDateFormat("MM/dd/yyyy");
-        return sd.format(TaskDate);
+        return sd.format(EntryDate);
     }
 }

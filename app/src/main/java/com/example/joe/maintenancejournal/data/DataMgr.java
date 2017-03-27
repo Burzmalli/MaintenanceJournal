@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
+import com.example.joe.maintenancejournal.App;
 import com.example.joe.maintenancejournal.R;
 import com.example.joe.maintenancejournal.data.entities.MaintenanceItem;
 import com.example.joe.maintenancejournal.data.entities.MaintenanceTask;
@@ -34,20 +35,31 @@ public class DataMgr {
     public static Bitmap selectedImage;
     private static String saveFilename = "items.txt";
     public static ConfigMgr ConfigMgr = new ConfigMgr();
+    private static boolean initialized = false;
 
     private static int mId;
 
     private static IItemSvc myManager;
 
     static {
-        //myManager = new ItemFirebaseMgr();
-        myManager = new ItemDatabaseMgr(mainActivity.getBaseContext());
+        myManager = new ItemFirebaseMgr();
+        //myManager = new ItemDatabaseMgr(App.sharedInstance);
     }
 
-    public static void GlobalLoad()
+    public static int GetItemPosition(MaintenanceItem itm) {
+        if(!Items.contains(itm))
+            return -1;
+
+        return Items.indexOf(itm);
+    }
+
+    public static void InitialLoad()
     {
-        ConfigMgr.loadConfiguration();
-        LoadItems();
+        if(!initialized) {
+            ConfigMgr.loadConfiguration();
+            LoadItems();
+            initialized = true;
+        }
     }
 
     //Item reading method that uses the passed context for file IO
@@ -95,10 +107,8 @@ public class DataMgr {
 
     public static void LoadItems()
     {
-        if(mainActivity == null)
-            return;
-
-        Items = myManager.loadItems();
+        //Items = myManager.loadItems();
+        myManager.loadItems();
     }
 
     public static void addItem(MaintenanceItem item)

@@ -20,7 +20,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuInflater;
 import android.view.View;
@@ -43,7 +42,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     String userChoosenTask;
     int REQUEST_CAMERA = 0;
@@ -60,9 +59,9 @@ public class MainActivity extends AppCompatActivity {
 
         DataMgr.mainActivity = this;
 
-        DataMgr.GlobalLoad();
+        DataMgr.InitialLoad();
 
-        if(DataMgr.Items.size() < 1) {
+        /*if(DataMgr.Items.size() < 1) {
             //Get previously saved items
             DataMgr.ReadSerializedItems(getBaseContext());
 
@@ -70,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             if (DataMgr.Items.size() < 1) {
                 CreateDummyData();
             }
-        }
+        }*/
 
         setContentView(R.layout.activity_main);
 
@@ -81,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         drawerListView = (ListView) findViewById(R.id.left_drawer);
 
         //Set the adapter for the navigation drawer's list
-        drawerListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, drawerListViewItems));
+        drawerListView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, drawerListViewItems));
 
         //Get the drawer layout
         drawerLayout = (DrawerLayout) findViewById(R.id.main_drawer);
