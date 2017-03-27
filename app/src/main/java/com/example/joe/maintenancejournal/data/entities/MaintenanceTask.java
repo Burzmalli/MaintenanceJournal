@@ -9,14 +9,15 @@ import java.util.List;
  * Created by Joe on 9/08/2016.
  */
 public class MaintenanceTask implements java.io.Serializable{
-    public String TaskName;
+    public String TaskName = "";
     public Date StartDate;
     public double TaskCost;
     public boolean Recurring;
-    public String FrequencyType;
+    public String FrequencyType = "";
     public int Frequency;
     public int ItemId;
     public int TaskId = -1;
+    public String TaskDescription = "";
     public List<TaskEntry> Entries = new ArrayList<>();
 
     //Set the string value for display in lists

@@ -20,7 +20,9 @@ public class CreateItemActivity extends BaseActivity {
 
         myItem.ItemName = "temp";
 
-        DataMgr.Items.add(myItem);
+        myItem.ItemId = DataMgr.GetGapIndex();
+
+        DataMgr.Items.add(myItem.ItemId, myItem);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_item);

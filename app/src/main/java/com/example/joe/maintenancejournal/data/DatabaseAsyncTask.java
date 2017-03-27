@@ -12,15 +12,18 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 
 /**
@@ -38,14 +41,26 @@ public class DatabaseAsyncTask extends AsyncTask {
         try {
             URL url = new URL(params[0].toString());
             String requestMethod = params[1].toString();
-            String requestJson = params[2].toString();
+
 
             urlConnection = (HttpURLConnection) url.openConnection();
 
             urlConnection.setRequestProperty("Accept", "application/json");
+            //urlConnection.setRequestProperty("Content-Type","application/json");
             urlConnection.setRequestMethod(requestMethod);
-            urlConnection.setDoInput(true);
-            urlConnection.setDoOutput(true);
+
+            if(params.length > 2) {
+                String requestJson = params[2].toString();
+
+                urlConnection.setDoInput(true);
+                urlConnection.setDoOutput(true);
+                urlConnection.connect();
+
+                DataOutputStream outstream = new DataOutputStream(urlConnection.getOutputStream());
+                outstream.writeBytes(requestJson);
+                outstream.flush();
+                outstream.close();
+            }
 
             InputStream is = new BufferedInputStream(urlConnection.getInputStream());
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -78,25 +93,33 @@ public class DatabaseAsyncTask extends AsyncTask {
             for( int i = 0; i < length; i++ ) {
                 MaintenanceItem item = new MaintenanceItem();
 
-                JSONObject obj = jsonArray.getJSONObject(i);
+                if(!jsonArray.isNull(i)) {
+                    JSONObject obj = jsonArray.getJSONObject(i);
 
-                item.ItemName = obj.getString("itemname");
-                item.ItemDescription = obj.getString("itemdescription");
+                    item.ItemId = i;
 
-                for(int j = 0; j < obj.getJSONArray("itemtasks").length(); j++) {
-                    JSONObject task = obj.getJSONArray("itemtasks").getJSONObject(j);
+                    item.ItemName = obj.getString("itemname");
+                    item.ItemDescription = obj.getString("itemdescription");
 
-                    MaintenanceTask tsk = new MaintenanceTask();
-                    tsk.TaskName = task.getString("taskname");
-                    tsk.TaskCost = task.getDouble("taskcost");
-                    tsk.FrequencyType = task.getString("frequencytype");
-                    tsk.Frequency = task.getInt("frequency");
-                    tsk.StartDate = StrToDate(task.getString("startdate"));
+                    for (int j = 0; j < obj.getJSONArray("itemtasks").length(); j++) {
+                        JSONObject task = obj.getJSONArray("itemtasks").getJSONObject(j);
 
-                    item.Tasks.add(tsk);
+                        MaintenanceTask tsk = new MaintenanceTask();
+                        tsk.TaskName = task.getString("taskname");
+                        tsk.TaskCost = task.getDouble("taskcost");
+                        tsk.FrequencyType = task.getString("frequencytype");
+                        tsk.Frequency = task.getInt("frequency");
+                        tsk.StartDate = StrToDate(task.getString("startdate"));
+                        tsk.Recurring = task.getBoolean("recurring");
+                        tsk.TaskDescription = task.getString("taskdescription");
+                        tsk.ItemId = item.ItemId;
+                        tsk.TaskId = j + item.ItemId;
+
+                        item.Tasks.add(tsk);
+                    }
+
+                    DataMgr.Items.add(item);
                 }
-
-                DataMgr.Items.add(item);
             }
 
             App.sharedInstance.RefereshCurrentActivity();

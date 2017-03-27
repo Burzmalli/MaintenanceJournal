@@ -17,6 +17,9 @@ import com.example.joe.maintenancejournal.data.entities.MaintenanceTask;
 import com.example.joe.maintenancejournal.ux.JournalCardAdapter;
 import com.example.joe.maintenancejournal.ux.MainActivity;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
@@ -126,6 +129,41 @@ public class DataMgr {
         myManager.createItem(item);
     }
 
+    public static int GetGapIndex() {
+        int gap = 0;
+
+        for(MaintenanceItem itm : Items)
+            if(itm.ItemId == gap) gap++;
+
+        return gap;
+    }
+
+    public static JSONArray getItemJSONArray() {
+        JSONArray array = new JSONArray();
+
+        for(MaintenanceItem itm : Items) {
+            JSONObject obj = itm.GetAsJSONObject();
+
+            if(obj != null)
+                array.put(obj);
+        }
+
+        return array;
+    }
+
+    public static MaintenanceItem findTaskOwner(MaintenanceTask task) {
+
+        if(task.ItemId < Items.size())
+            return Items.get(task.ItemId);
+
+        for(MaintenanceItem item : Items) {
+            if(item.Tasks.contains(task))
+                return item;
+        }
+
+        return null;
+    }
+
     public static void updateItem(MaintenanceItem item)
     {
         myManager.updateItem(item);
@@ -133,9 +171,8 @@ public class DataMgr {
 
     public static void deleteItem(MaintenanceItem item)
     {
-        Items.remove(item);
-
         myManager.deleteItem(item);
+        Items.remove(item);
     }
 
     public static void saveTask(MaintenanceTask task)

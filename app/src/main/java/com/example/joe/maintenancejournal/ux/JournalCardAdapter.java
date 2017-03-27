@@ -97,7 +97,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
         private Button mDeleteItemBtn;
         private FloatingActionButton mEditItemBtn;
         private Button mSaveChangesBtn;
-        private Button mAddImgBtn;
+        //private Button mAddImgBtn;
 
         private boolean expanded = false;
         public static boolean editing = false;
@@ -116,7 +116,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
             mDeleteTaskBtn = (Button) itemView.findViewById(R.id.button_delete_task);
             mEditItemBtn = (FloatingActionButton) itemView.findViewById(R.id.fab);
             mSaveChangesBtn = (Button) itemView.findViewById(R.id.button_save_changes);
-            mAddImgBtn = (Button) itemView.findViewById(R.id.button_add_image);
+            //mAddImgBtn = (Button) itemView.findViewById(R.id.button_add_image);
             mDeleteItemBtn = (Button) itemView.findViewById(R.id.button_delete_item);
 
             mTaskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -158,7 +158,10 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                     }
                     else
                     {
-                        ExpandCard();
+                        if(expanded)
+                            CollapseCard();
+                        else
+                            ExpandCard();
                     }
                 }
             });
@@ -194,7 +197,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                 }
             });
 
-            mAddImgBtn.setOnClickListener(new View.OnClickListener() {
+            /*mAddImgBtn.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
 
                     ((MainActivity) DataMgr.mainActivity).selectImage();
@@ -206,7 +209,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
 
                     mItemImg.setImageBitmap(img);
                 }
-            });
+            });*/
 
             mDeleteTaskBtn.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
@@ -243,7 +246,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                     {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            CollapseCard();
+                            //CollapseCard();
                             DataMgr.deleteItem(mHeldItem);
                             DataMgr.Items.remove(mHeldItem);
                             mHeldItem = null;
@@ -260,7 +263,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
         {
             mHeldItem = DataMgr.GetItemFromName(mItemName.getText().toString());
 
-            if(DataMgr.lastClicked != null)
+            if(DataMgr.lastClicked != null && DataMgr.lastClicked != this)
                 DataMgr.lastClicked.CollapseCard();
 
             mTaskList.setVisibility(View.VISIBLE);
@@ -295,7 +298,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
             mItemName.setVisibility(itemView.GONE);
             mEditName.setVisibility(itemView.VISIBLE);
             mAddTaskBtn.setVisibility(itemView.VISIBLE);
-            mAddImgBtn.setVisibility(itemView.VISIBLE);
+            //mAddImgBtn.setVisibility(itemView.VISIBLE);
             mDeleteItemBtn.setVisibility(itemView.VISIBLE);
 
             if(mHeldItem.ItemName.isEmpty()) {
@@ -353,7 +356,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
             mEditName.setVisibility(itemView.GONE);
             mItemName.setVisibility(itemView.VISIBLE);
             mEditItemBtn.setVisibility(itemView.VISIBLE);
-            mAddImgBtn.setVisibility(itemView.GONE);
+            //mAddImgBtn.setVisibility(itemView.GONE);
             mDeleteItemBtn.setVisibility(itemView.GONE);
 
             editing = false;
