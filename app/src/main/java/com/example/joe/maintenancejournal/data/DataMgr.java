@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v7.widget.RecyclerView;
 
 import com.example.joe.maintenancejournal.App;
 import com.example.joe.maintenancejournal.R;
@@ -39,6 +40,7 @@ public class DataMgr {
     private static String saveFilename = "items.txt";
     public static ConfigMgr ConfigMgr = new ConfigMgr();
     private static boolean initialized = false;
+    public static String DATA_UPDATE_COMPLETE = "data_updated";
 
     private static int mId;
 
@@ -106,6 +108,10 @@ public class DataMgr {
                 return;
             }
         }
+    }
+
+    public static void NotifyDataChanged() {
+
     }
 
     public static void LoadItems()

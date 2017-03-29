@@ -158,47 +158,6 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void CreateDummyData()
-    {
-        MaintenanceItem firstItem = new MaintenanceItem();
-        MaintenanceTask firstTask = new MaintenanceTask();
-
-        firstItem.ItemName = "ExampleItem1";
-        firstTask.TaskName = "ExampleTask1-1";
-        firstTask.TaskCost = 3.55;
-        firstTask.StartDate = Calendar.getInstance().getTime();
-
-        firstItem.Tasks.add(firstTask);
-
-        firstTask = new MaintenanceTask();
-        firstTask.TaskName = "ExampleTask1-2";
-        firstTask.TaskCost = 10.38;
-        firstTask.StartDate = Calendar.getInstance().getTime();
-
-        firstItem.Tasks.add(firstTask);
-
-        DataMgr.addItem(firstItem);
-
-        firstItem = new MaintenanceItem();
-        firstTask = new MaintenanceTask();
-
-        firstItem.ItemName = "ExampleItem2";
-        firstTask.TaskName = "ExampleTask2-1";
-        firstTask.TaskCost = 3.55;
-        firstTask.StartDate = Calendar.getInstance().getTime();
-
-        firstItem.Tasks.add(firstTask);
-
-        firstTask = new MaintenanceTask();
-        firstTask.TaskName = "ExampleTask2-2";
-        firstTask.TaskCost = 10.38;
-        firstTask.StartDate = Calendar.getInstance().getTime();
-
-        firstItem.Tasks.add(firstTask);
-
-        DataMgr.addItem(firstItem);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

@@ -1,11 +1,15 @@
 package com.example.joe.maintenancejournal.data;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.example.joe.maintenancejournal.App;
 import com.example.joe.maintenancejournal.data.entities.MaintenanceItem;
 import com.example.joe.maintenancejournal.data.entities.MaintenanceTask;
+import com.example.joe.maintenancejournal.ux.BaseActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -31,6 +35,12 @@ import java.util.Date;
  */
 
 public class DatabaseAsyncTask extends AsyncTask {
+
+    private Context myContext;
+
+    public DatabaseAsyncTask(Context context) {
+        myContext = context;
+    }
 
     @Override
     protected Object doInBackground(Object[] params) {
@@ -122,7 +132,8 @@ public class DatabaseAsyncTask extends AsyncTask {
                 }
             }
 
-            App.sharedInstance.RefereshCurrentActivity();
+            LocalBroadcastManager.getInstance(myContext)
+                    .sendBroadcast(new Intent(DataMgr.DATA_UPDATE_COMPLETE));
         } catch (Exception ex) {
             ex.printStackTrace();
         }

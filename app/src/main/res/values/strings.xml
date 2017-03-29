@@ -38,6 +38,7 @@
     <string name="hint_item_name">Enter Item Name</string>
     <string name="hint_cost_value">$0.00</string>
     <string name="hint_add_notes">Add notes here...</string>
+    <string name="toast_download_complete">Download complete!</string>
     <string name="error_unique_name">An item already exists with the name %1$s. Please enter a unique name.</string>
     <string name="alert_title_unique_name">Name Exists</string>
     <string name="drawer_open">Open Drawer</string>
