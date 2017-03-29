@@ -1,5 +1,6 @@
 package com.example.joe.maintenancejournal.data;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 import com.example.joe.maintenancejournal.data.entities.MaintenanceItem;
@@ -14,12 +15,17 @@ import java.util.List;
 public class ItemFirebaseMgr implements IItemSvc {
 
     private final String FIREBASEURL = "https://maintenance-journal.firebaseio.com/";
+    private Context myContext;
+
+    public ItemFirebaseMgr(Context context) {
+        myContext = context;
+    }
 
     @Override
     public List<MaintenanceItem> loadItems() {
         String getUrl = FIREBASEURL + "items.json";
 
-        new DatabaseAsyncTask().execute(getUrl, "GET");
+        new DatabaseAsyncTask(myContext).execute(getUrl, "GET");
 
         return null;
     }
@@ -29,21 +35,21 @@ public class ItemFirebaseMgr implements IItemSvc {
         String createUrl = FIREBASEURL + "items/" + item.ItemId + "/.json";
         //String createUrl = FIREBASEURL + "items/.json";
         //String createUrl = FIREBASEURL + "items.json";
-        new DatabaseAsyncTask().execute(createUrl, "PUT", item.GetJSON());
+        new DatabaseAsyncTask(myContext).execute(createUrl, "PUT", item.GetJSON());
     }
 
     @Override
     public void updateItem(MaintenanceItem item) {
         String updateUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
         //String createUrl = FIREBASEURL + "items.json";
-        new DatabaseAsyncTask().execute(updateUrl, "PATCH", item.GetJSON());
+        new DatabaseAsyncTask(myContext).execute(updateUrl, "PATCH", item.GetJSON());
     }
 
     @Override
     public void deleteItem(MaintenanceItem item) {
         String updateUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
         //String createUrl = FIREBASEURL + "items.json";
-        new DatabaseAsyncTask().execute(updateUrl, "DELETE", item.GetJSON());
+        new DatabaseAsyncTask(myContext).execute(updateUrl, "DELETE", item.GetJSON());
     }
 
     @Override
@@ -53,7 +59,7 @@ public class ItemFirebaseMgr implements IItemSvc {
         String updateUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
         //String createUrl = FIREBASEURL + "items.json";
 
-        new DatabaseAsyncTask().execute(updateUrl, "PATCH", item.GetJSON());
+        new DatabaseAsyncTask(myContext).execute(updateUrl, "PATCH", item.GetJSON());
         }
     }
 
@@ -64,7 +70,7 @@ public class ItemFirebaseMgr implements IItemSvc {
             String updateUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
             //String createUrl = FIREBASEURL + "items.json";
 
-            new DatabaseAsyncTask().execute(updateUrl, "PATCH", item.GetJSON());
+            new DatabaseAsyncTask(myContext).execute(updateUrl, "PATCH", item.GetJSON());
         }
     }
 
@@ -76,7 +82,7 @@ public class ItemFirebaseMgr implements IItemSvc {
             //String createUrl = FIREBASEURL + "items.json";
 
             item.Tasks.remove(task);
-            new DatabaseAsyncTask().execute(updateUrl, "PATCH", item.GetJSON());
+            new DatabaseAsyncTask(myContext).execute(updateUrl, "PATCH", item.GetJSON());
         }
     }
 }

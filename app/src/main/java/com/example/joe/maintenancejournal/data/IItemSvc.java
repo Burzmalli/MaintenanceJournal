@@ -1,5 +1,7 @@
 package com.example.joe.maintenancejournal.data;
 
+import android.content.Context;
+
 import com.example.joe.maintenancejournal.data.entities.MaintenanceItem;
 import com.example.joe.maintenancejournal.data.entities.MaintenanceTask;
 
@@ -10,11 +12,12 @@ import java.util.List;
  */
 
 public interface IItemSvc {
-    public List<MaintenanceItem> loadItems();
-    public void createItem(MaintenanceItem item);
-    public void updateItem(MaintenanceItem item);
-    public void deleteItem(MaintenanceItem item);
-    public void createTask(MaintenanceTask task);
-    public void updateTask(MaintenanceTask task);
-    public void deleteTask(MaintenanceTask task);
+
+    List<MaintenanceItem> loadItems();
+    void createItem(MaintenanceItem item);
+    void updateItem(MaintenanceItem item);
+    void deleteItem(MaintenanceItem item);
+    void createTask(MaintenanceTask task);
+    void updateTask(MaintenanceTask task);
+    void deleteTask(MaintenanceTask task);
 }
