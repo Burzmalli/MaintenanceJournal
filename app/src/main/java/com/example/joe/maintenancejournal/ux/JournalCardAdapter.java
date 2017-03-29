@@ -97,6 +97,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
         private Button mDeleteItemBtn;
         private FloatingActionButton mEditItemBtn;
         private Button mSaveChangesBtn;
+        private Button mCancelChangesBtn;
         //private Button mAddImgBtn;
 
         private boolean expanded = false;
@@ -118,6 +119,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
             mSaveChangesBtn = (Button) itemView.findViewById(R.id.button_save_changes);
             //mAddImgBtn = (Button) itemView.findViewById(R.id.button_add_image);
             mDeleteItemBtn = (Button) itemView.findViewById(R.id.button_delete_item);
+            mCancelChangesBtn = (Button) itemView.findViewById(R.id.button_cancel_item);
 
             mTaskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -251,11 +253,40 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                             DataMgr.deleteItem(mHeldItem);
                             DataMgr.Items.remove(mHeldItem);
                             mHeldItem = null;
+                            CollapseCard();
                             mParent.notifyDataSetChanged();
                         }
                     });
                     dg.setNegativeButton("No", null);
                     dg.show();
+                }
+            });
+
+            mCancelChangesBtn.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+
+                    if(editing) {
+                        AlertDialog.Builder dg = new AlertDialog.Builder(v.getContext());
+                        dg.setIcon(android.R.drawable.ic_dialog_alert);
+                        dg.setTitle("Cancel Edit");
+                        dg.setMessage("Are you sure you want to discard changes?");
+                        dg.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                CollapseCard();
+                            }
+
+                        });
+                        dg.setNegativeButton("No", null);
+                        dg.show();
+                    }
+                    else
+                    {
+                        if(expanded)
+                            CollapseCard();
+                        else
+                            ExpandCard();
+                    }
                 }
             });
         }
@@ -301,6 +332,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
             mAddTaskBtn.setVisibility(itemView.VISIBLE);
             //mAddImgBtn.setVisibility(itemView.VISIBLE);
             mDeleteItemBtn.setVisibility(itemView.VISIBLE);
+            mCancelChangesBtn.setVisibility(itemView.VISIBLE);
 
             if(mHeldItem.ItemName.isEmpty()) {
                 mEditName.setTextColor(Color.GRAY);
@@ -359,6 +391,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
             mEditItemBtn.setVisibility(itemView.VISIBLE);
             //mAddImgBtn.setVisibility(itemView.GONE);
             mDeleteItemBtn.setVisibility(itemView.GONE);
+            mCancelChangesBtn.setVisibility(itemView.GONE);
 
             editing = false;
         }
