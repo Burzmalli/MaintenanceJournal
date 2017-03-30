@@ -6,6 +6,12 @@ import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.joe.maintenancejournal.App;
 import com.example.joe.maintenancejournal.data.entities.MaintenanceItem;
 import com.example.joe.maintenancejournal.data.entities.MaintenanceTask;
@@ -36,56 +42,32 @@ import java.util.Date;
 
 public class DatabaseAsyncTask extends AsyncTask {
 
-    public DatabaseAsyncTask() {
 
-    }
 
     @Override
     protected Object doInBackground(Object[] params) {
-        String result = "";
+        // Instantiate the RequestQueue.
+        /*RequestQueue queue = Volley.newRequestQueue(this);
+        String url ="http://www.google.com";
 
-        HttpURLConnection urlConnection = null;
-
-        try {
-            URL url = new URL(params[0].toString());
-            String requestMethod = params[1].toString();
-
-
-            urlConnection = (HttpURLConnection) url.openConnection();
-
-            urlConnection.setRequestProperty("Accept", "application/json");
-            //urlConnection.setRequestProperty("Content-Type","application/json");
-            urlConnection.setRequestMethod(requestMethod);
-
-            if(params.length > 2) {
-                String requestJson = params[2].toString();
-
-                urlConnection.setDoInput(true);
-                urlConnection.setDoOutput(true);
-                urlConnection.connect();
-
-                DataOutputStream outstream = new DataOutputStream(urlConnection.getOutputStream());
-                outstream.writeBytes(requestJson);
-                outstream.flush();
-                outstream.close();
+// Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.
+                        //mTextView.setText("Response is: "+ response.substring(0,500));
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //mTextView.setText("That didn't work!");
             }
+        });
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);*/
 
-            InputStream is = new BufferedInputStream(urlConnection.getInputStream());
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
-
-            String str = "";
-
-            while((str = br.readLine()) != null) {
-                result += str;
-            }
-        } catch (IOException ex){
-            Log.i("DatabaseAsyncTask", "EXCEPTION: " + ex.getMessage());
-        } finally {
-            if(urlConnection != null)
-                urlConnection.disconnect();
-        }
-
-        return result;
+        return null;
     }
 
     @Override
