@@ -48,7 +48,6 @@ public class DataMgr {
 
     static {
         myManager = new ItemFirebaseMgr();
-        //myManager = new ItemDatabaseMgr(App.sharedInstance);
     }
 
     public static int GetItemPosition(MaintenanceItem itm) {

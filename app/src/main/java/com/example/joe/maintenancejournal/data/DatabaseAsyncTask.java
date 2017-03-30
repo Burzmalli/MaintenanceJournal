@@ -36,10 +36,8 @@ import java.util.Date;
 
 public class DatabaseAsyncTask extends AsyncTask {
 
-    private Context myContext;
+    public DatabaseAsyncTask() {
 
-    public DatabaseAsyncTask(Context context) {
-        myContext = context;
     }
 
     @Override
@@ -132,8 +130,6 @@ public class DatabaseAsyncTask extends AsyncTask {
                 }
             }
 
-            LocalBroadcastManager.getInstance(myContext)
-                    .sendBroadcast(new Intent(DataMgr.DATA_UPDATE_COMPLETE));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
