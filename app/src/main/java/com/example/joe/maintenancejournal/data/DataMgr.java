@@ -37,8 +37,6 @@ public class DataMgr {
     public static List<MaintenanceItem> Items = new ArrayList<>();
     public static JournalCardAdapter.MaintenanceItemHolder lastClicked = null;
     public static Activity mainActivity;
-    public static Bitmap selectedImage;
-    private static String saveFilename = "items.txt";
     public static ConfigMgr ConfigMgr = new ConfigMgr();
     private static boolean initialized = false;
     public static String DATA_UPDATE_COMPLETE = "data_updated";
@@ -76,71 +74,14 @@ public class DataMgr {
         }
     }
 
-    //Item reading method that uses the passed context for file IO
-    public static void ReadSerializedItems(Context context) {
-        FileInputStream fsr = null;
-        ObjectInputStream osr = null;
-
-        try {
-            //Clear the existing items
-            Items.clear();
-
-            //Attempt to open the save file into an object input stream
-            fsr = context.openFileInput(saveFilename);
-            osr = new ObjectInputStream(fsr);
-
-            //read the first object
-            MaintenanceItem item = (MaintenanceItem) osr.readObject();
-
-            //Read items until null
-            while(item != null)
-            {
-                Items.add(item);
-                item = (MaintenanceItem) osr.readObject();
-            }
-
-            //Close streams
-            osr.close();
-            fsr.close();
-        }
-        catch(Exception e)
-        {
-            try {
-                if (osr != null)
-                    osr.close();
-
-                if (fsr != null)
-                    fsr.close();
-            }
-            catch(Exception f)
-            {
-                return;
-            }
-        }
-    }
-
-    public static void NotifyDataChanged() {
-
-    }
-
     public static void LoadItems()
     {
         //Items = myManager.loadItems();
         myManager.loadItems();
     }
 
-    public static void addItem(MaintenanceItem item)
-    {
-        Items.add(item);
-
-        saveItem(item);
-    }
-
     public static void saveItem(MaintenanceItem item)
     {
-        if(mainActivity == null)
-            return;
-
         myManager.createItem(item);
     }
 
@@ -151,19 +92,6 @@ public class DataMgr {
             if(itm.ItemId == gap) gap++;
 
         return gap;
-    }
-
-    public static JSONArray getItemJSONArray() {
-        JSONArray array = new JSONArray();
-
-        for(MaintenanceItem itm : Items) {
-            JSONObject obj = itm.GetAsJSONObject();
-
-            if(obj != null)
-                array.put(obj);
-        }
-
-        return array;
     }
 
     public static MaintenanceItem findTaskOwner(MaintenanceTask task) {
@@ -187,14 +115,10 @@ public class DataMgr {
     public static void deleteItem(MaintenanceItem item)
     {
         myManager.deleteItem(item);
-        Items.remove(item);
     }
 
     public static void saveTask(MaintenanceTask task)
     {
-        if(mainActivity == null)
-            return;
-
         myManager.createTask(task);
     }
 
