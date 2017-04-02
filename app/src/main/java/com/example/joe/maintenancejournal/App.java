@@ -7,6 +7,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 
+import com.example.joe.maintenancejournal.data.DataMgr;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +22,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
-
+        DataMgr.SetContext(this);
     }
 
 

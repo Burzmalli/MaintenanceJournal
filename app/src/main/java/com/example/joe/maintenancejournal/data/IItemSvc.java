@@ -20,4 +20,5 @@ public interface IItemSvc {
     void createTask(MaintenanceTask task);
     void updateTask(MaintenanceTask task);
     void deleteTask(MaintenanceTask task);
+    void SetContext(Context context);
 }

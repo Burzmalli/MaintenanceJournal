@@ -18,26 +18,30 @@ import com.example.joe.maintenancejournal.data.DataMgr;
 
 public class BaseActivity extends AppCompatActivity {
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        DataMgr.SetContext(this);
+
         IntentFilter ifilter=new IntentFilter(DataMgr.DATA_UPDATE_COMPLETE);
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(onEvent, ifilter);
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(onEvent, ifilter);
     }
 
     @Override
     protected void onStop() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(onEvent);
+        DataMgr.CancelPendingRequests();
+
+        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(onEvent);
 
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
+        DataMgr.CancelPendingRequests();
+
         super.onDestroy();
     }
 
@@ -54,7 +58,7 @@ public class BaseActivity extends AppCompatActivity {
     private BroadcastReceiver onEvent=new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent i) {
 
-            Toast.makeText(getApplicationContext(), R.string.toast_download_complete,
+            Toast.makeText(ctxt, "Download Complete",
                     Toast.LENGTH_LONG).show();
         }
     };

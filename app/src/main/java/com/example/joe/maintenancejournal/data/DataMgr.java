@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -43,11 +44,20 @@ public class DataMgr {
     public static String DATA_UPDATE_COMPLETE = "data_updated";
 
     private static int mId;
+    private Service dataSvc;
 
     private static IItemSvc myManager;
 
     static {
         myManager = new ItemFirebaseMgr();
+    }
+
+    public static void SetContext( Context context ) {
+        myManager.SetContext(context);
+    }
+
+    public static void CancelPendingRequests() {
+
     }
 
     public static int GetItemPosition(MaintenanceItem itm) {
