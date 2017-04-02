@@ -1,12 +1,18 @@
 package com.example.joe.maintenancejournal.ux;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.joe.maintenancejournal.data.DataMgr;
 import com.example.joe.maintenancejournal.R;
@@ -40,18 +46,39 @@ public class MainActivityFragment extends Fragment {
 
         thingsListView.setAdapter(thingsArrayAdapter);
 
+        IntentFilter ifilter=new IntentFilter(DataMgr.DATA_UPDATE_COMPLETE);
+
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(onEvent, ifilter);
+
         return rootView;
     }
+
+    private BroadcastReceiver onEvent=new BroadcastReceiver() {
+        public void onReceive(Context ctxt, Intent i) {
+
+            UpdateList();
+        }
+    };
 
     @Override
     public void onResume()
     {
         //Update the list of items when the user comes back to this screen from creating an item
-        if(thingsArrayAdapter != null) {
-            //thingsArrayAdapter.notifyDataSetChanged();
-            ((JournalCardAdapter) thingsArrayAdapter).updateView();
-        }
+        UpdateList();
 
         super.onResume();
+    }
+
+    @Override
+    public void onStop() {
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(onEvent);
+
+        super.onStop();
+    }
+
+    public void UpdateList() {
+        if(thingsArrayAdapter != null) {
+            thingsArrayAdapter.notifyDataSetChanged();
+        }
     }
 }

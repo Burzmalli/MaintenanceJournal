@@ -45,58 +45,66 @@ public class ItemFirebaseMgr implements IItemSvc {
 
     @Override
     public void createItem(MaintenanceItem item) {
-        String createUrl = FIREBASEURL + "items/" + item.ItemId + "/.json";
-        //String createUrl = FIREBASEURL + "items/.json";
-        //String createUrl = FIREBASEURL + "items.json";
-        new DatabaseAsyncTask().execute(createUrl, "PUT", item.GetJSON());
+
+        if(mContext == null);
+
+        String putUrl = Constants.FIREBASEURL + "items/" + item.ItemId + "/.json";
+
+        Intent svcIntent = new Intent(mContext, DataSvc.class);
+        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.PUT);
+        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, putUrl);
+        mContext.bindService(svcIntent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     public void updateItem(MaintenanceItem item) {
-        String updateUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
-        //String createUrl = FIREBASEURL + "items.json";
-        new DatabaseAsyncTask().execute(updateUrl, "PATCH", item.GetJSON());
+        String patchUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
+        Intent svcIntent = new Intent(mContext, DataSvc.class);
+        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.PATCH);
+        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, patchUrl);
+        mContext.bindService(svcIntent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     public void deleteItem(MaintenanceItem item) {
-        String updateUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
-        //String createUrl = FIREBASEURL + "items.json";
-        new DatabaseAsyncTask().execute(updateUrl, "DELETE", item.GetJSON());
+        String deleteUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
+        Intent svcIntent = new Intent(mContext, DataSvc.class);
+        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.DELETE);
+        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, deleteUrl);
+        mContext.bindService(svcIntent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     public void createTask(MaintenanceTask task) {
         MaintenanceItem item = DataMgr.findTaskOwner(task);
-        if (item != null) {
+        if (item == null) return;
         String updateUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
-        //String createUrl = FIREBASEURL + "items.json";
-
-        new DatabaseAsyncTask().execute(updateUrl, "PATCH", item.GetJSON());
-        }
+        Intent svcIntent = new Intent(mContext, DataSvc.class);
+        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.PATCH);
+        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, updateUrl);
+        mContext.bindService(svcIntent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     public void updateTask(MaintenanceTask task) {
         MaintenanceItem item = DataMgr.findTaskOwner(task);
-        if(item != null){
-            String updateUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
-            //String createUrl = FIREBASEURL + "items.json";
-
-            new DatabaseAsyncTask().execute(updateUrl, "PATCH", item.GetJSON());
-        }
+        if (item == null) return;
+        String updateUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
+        Intent svcIntent = new Intent(mContext, DataSvc.class);
+        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.PATCH);
+        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, updateUrl);
+        mContext.bindService(svcIntent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     public void deleteTask(MaintenanceTask task) {
         MaintenanceItem item = DataMgr.findTaskOwner(task);
-        if(item != null) {
-            String updateUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
-            //String createUrl = FIREBASEURL + "items.json";
-
-            item.Tasks.remove(task);
-            new DatabaseAsyncTask().execute(updateUrl, "PATCH", item.GetJSON());
-        }
+        if (item == null) return;
+        String updateUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
+        Intent svcIntent = new Intent(mContext, DataSvc.class);
+        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.PATCH);
+        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, updateUrl);
+        mContext.bindService(svcIntent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override

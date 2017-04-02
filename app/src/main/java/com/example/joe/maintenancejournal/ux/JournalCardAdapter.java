@@ -60,7 +60,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
         holder.mItemName.setText(item.ItemName);
         holder.mItemSummary.setText(item.GetSummary());
 
-        thingsArrayAdapter = new ArrayAdapter<MaintenanceTask>(itemView.getContext(),
+        thingsArrayAdapter = new ArrayAdapter<>(itemView.getContext(),
                 android.R.layout.simple_list_item_1, item.Tasks);
 
         holder.mTaskList.setAdapter(thingsArrayAdapter);
@@ -79,6 +79,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
         }
         else
         {
+
             notifyDataSetChanged();
         }
     }

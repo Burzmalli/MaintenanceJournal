@@ -24,16 +24,16 @@ public class BaseActivity extends AppCompatActivity {
 
         DataMgr.SetContext(this);
 
-        IntentFilter ifilter=new IntentFilter(DataMgr.DATA_UPDATE_COMPLETE);
+        /*IntentFilter ifilter=new IntentFilter(DataMgr.DATA_UPDATE_COMPLETE);
 
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(onEvent, ifilter);
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(onEvent, ifilter);*/
     }
 
     @Override
     protected void onStop() {
         DataMgr.CancelPendingRequests();
 
-        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(onEvent);
+        //LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(onEvent);
 
         super.onStop();
     }
@@ -55,10 +55,10 @@ public class BaseActivity extends AppCompatActivity {
         super.onRestart();
     }
 
-    private BroadcastReceiver onEvent=new BroadcastReceiver() {
+    protected BroadcastReceiver onEvent=new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent i) {
 
-            Toast.makeText(ctxt, "Download Complete",
+            Toast.makeText(getApplicationContext(), "Download Complete",
                     Toast.LENGTH_LONG).show();
         }
     };

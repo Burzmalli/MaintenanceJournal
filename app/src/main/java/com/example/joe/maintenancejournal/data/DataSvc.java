@@ -134,7 +134,7 @@ public class DataSvc extends Service {
                             JSONArray jsonArray = new JSONArray(response);
                             final int length = jsonArray.length();
 
-                            DataMgr.Items = new ArrayList<>();
+                            DataMgr.Items.clear();
 
                             for( int i = 0; i < length; i++ ) {
                                 MaintenanceItem item = new MaintenanceItem();
@@ -170,7 +170,7 @@ public class DataSvc extends Service {
 
                             Intent intent = new Intent();
                             intent.setAction(DataMgr.DATA_UPDATE_COMPLETE);
-                            sendBroadcast(intent);
+                            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
 
                         } catch (Exception ex) {
                             ex.printStackTrace();
