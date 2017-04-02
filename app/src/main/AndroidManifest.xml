@@ -39,7 +39,10 @@
         <activity
             android:name=".ux.OptionsActivity"
             android:label="@string/title_activity_options"
-            android:theme="@style/MaintenanceTheme.NoActionBar"></activity>
+            android:theme="@style/MaintenanceTheme.NoActionBar"/>
+        <service
+            android:name=".data.DataSvc"
+            android:icon="@drawable/icon256"
+            android:label="Data_Service"/>
     </application>
-
 </manifest>
