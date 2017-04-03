@@ -44,5 +44,11 @@
             android:name=".controller.DataSvc"
             android:icon="@drawable/icon256"
             android:label="Data_Service"/>
+        <receiver android:name=".controller.DataUpdateReceiver">
+            <intent-filter>
+                <action android:name="com.example.joe.maintenancejournal.DATA_UPDATED">
+            </action>
+        </intent-filter>
+    </receiver>
     </application>
 </manifest>

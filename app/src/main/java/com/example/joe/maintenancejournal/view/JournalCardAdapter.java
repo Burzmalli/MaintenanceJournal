@@ -129,13 +129,13 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                         view.setSelected(true);
                         selectedTask = mHeldItem.Tasks.get(position);
                         mDeleteTaskBtn.setVisibility(View.VISIBLE);
-                    } else {
+                    } /*else {
                         Intent performIntent = new Intent(view.getContext(), PerformMaintenanceActivity.class);
                         int itmIdx = DataMgr.GetItemPosition(mHeldItem);
                         performIntent.putExtra("itemIndex", itmIdx);
                         performIntent.putExtra("taskIndex", position);
                         view.getContext().startActivity(performIntent);
-                    }
+                    }*/
                 }
             });
 

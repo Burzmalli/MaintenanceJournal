@@ -143,8 +143,10 @@ public class DataSvc extends Service {
 
                                 //Send broadcast that data has been received and parsed
                                 Intent intent = new Intent();
-                                intent.setAction(DataMgr.DATA_UPDATE_COMPLETE);
-                                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+                                intent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
+                                sendBroadcast(intent);
+                                //intent.setAction(DataMgr.DATA_UPDATE_COMPLETE);
+                                //LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
 
                             } catch (Exception ex) {
                                 ex.printStackTrace();
