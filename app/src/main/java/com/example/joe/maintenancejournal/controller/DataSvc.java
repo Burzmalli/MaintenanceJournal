@@ -6,6 +6,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -40,75 +41,6 @@ public class DataSvc extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        int requestType = intent.getIntExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.GET);
-        String requestUrl = intent.getStringExtra(Constants.INT_VOLLEY_REQ_URL);
-
-        String url ="http://www.google.com";
-
-// Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(requestType, requestUrl,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            //JSONObject itemsObj = new JSONObject((String) result);
-                            //JSONArray jsonArray = itemsObj.getJSONArray("items");
-                            JSONArray jsonArray = new JSONArray(response);
-                            final int length = jsonArray.length();
-
-                            DataMgr.Items = new ArrayList<>();
-
-                            for( int i = 0; i < length; i++ ) {
-                                MaintenanceItem item = new MaintenanceItem();
-
-                                if(!jsonArray.isNull(i)) {
-                                    JSONObject obj = jsonArray.getJSONObject(i);
-
-                                    item.ItemId = i;
-
-                                    item.ItemName = obj.getString("itemname");
-                                    item.ItemDescription = obj.getString("itemdescription");
-
-                                    for (int j = 0; j < obj.getJSONArray("itemtasks").length(); j++) {
-                                        JSONObject task = obj.getJSONArray("itemtasks").getJSONObject(j);
-
-                                        MaintenanceTask tsk = new MaintenanceTask();
-                                        tsk.TaskName = task.getString("taskname");
-                                        tsk.TaskCost = task.getDouble("taskcost");
-                                        tsk.FrequencyType = task.getString("frequencytype");
-                                        tsk.Frequency = task.getInt("frequency");
-                                        tsk.StartDate = Global.StrToDate(task.getString("startdate"));
-                                        tsk.Recurring = task.getBoolean("recurring");
-                                        tsk.TaskDescription = task.getString("taskdescription");
-                                        tsk.ItemId = item.ItemId;
-                                        tsk.TaskId = j + item.ItemId;
-
-                                        item.Tasks.add(tsk);
-                                    }
-
-                                    DataMgr.Items.add(item);
-                                }
-                            }
-
-                            Intent intent = new Intent();
-                            intent.setAction(DataMgr.DATA_UPDATE_COMPLETE);
-                            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
-
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-
-        mQueue.add(stringRequest);
-
         return START_STICKY;
     }
 
@@ -116,19 +48,19 @@ public class DataSvc extends Service {
     @Override
     public IBinder onBind(Intent intent) {
 
+        //Get the request type and URL from the intent
         int requestType = intent.getIntExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.GET);
         String requestUrl = intent.getStringExtra(Constants.INT_VOLLEY_REQ_URL);
 
         String url ="http://www.google.com";
 
-// Request a string response from the provided URL.
+        // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(requestType, requestUrl,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            //JSONObject itemsObj = new JSONObject((String) result);
-                            //JSONArray jsonArray = itemsObj.getJSONArray("items");
+                            //Parse the jsonArray
                             JSONArray jsonArray = new JSONArray(response);
                             final int length = jsonArray.length();
 
@@ -166,6 +98,7 @@ public class DataSvc extends Service {
                                 }
                             }
 
+                            //Send broadcast that data has been received and parsed
                             Intent intent = new Intent();
                             intent.setAction(DataMgr.DATA_UPDATE_COMPLETE);
                             LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
@@ -179,7 +112,9 @@ public class DataSvc extends Service {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Toast.makeText(getApplicationContext(),
+                        "Data Operation Failed: " + error.getMessage(),
+                        Toast.LENGTH_LONG).show();
             }
         });
 
