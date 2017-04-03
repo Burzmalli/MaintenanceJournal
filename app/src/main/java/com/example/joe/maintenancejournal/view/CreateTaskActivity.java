@@ -1,7 +1,6 @@
-package com.example.joe.maintenancejournal.ux;
+package com.example.joe.maintenancejournal.view;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.example.joe.maintenancejournal.R;

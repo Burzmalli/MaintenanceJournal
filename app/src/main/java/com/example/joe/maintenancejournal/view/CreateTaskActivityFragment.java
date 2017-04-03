@@ -1,4 +1,4 @@
-package com.example.joe.maintenancejournal.ux;
+package com.example.joe.maintenancejournal.view;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -15,9 +15,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.joe.maintenancejournal.data.DataMgr;
-import com.example.joe.maintenancejournal.data.entities.MaintenanceItem;
-import com.example.joe.maintenancejournal.data.entities.MaintenanceTask;
+import com.example.joe.maintenancejournal.controller.DataMgr;
+import com.example.joe.maintenancejournal.model.MaintenanceItem;
+import com.example.joe.maintenancejournal.model.MaintenanceTask;
 import com.example.joe.maintenancejournal.R;
 
 import java.text.NumberFormat;

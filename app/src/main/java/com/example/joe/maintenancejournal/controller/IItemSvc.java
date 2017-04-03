@@ -1,9 +1,9 @@
-package com.example.joe.maintenancejournal.data;
+package com.example.joe.maintenancejournal.controller;
 
 import android.content.Context;
 
-import com.example.joe.maintenancejournal.data.entities.MaintenanceItem;
-import com.example.joe.maintenancejournal.data.entities.MaintenanceTask;
+import com.example.joe.maintenancejournal.model.MaintenanceItem;
+import com.example.joe.maintenancejournal.model.MaintenanceTask;
 
 import java.util.List;
 

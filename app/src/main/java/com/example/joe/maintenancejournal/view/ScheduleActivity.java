@@ -1,4 +1,4 @@
-package com.example.joe.maintenancejournal.ux;
+package com.example.joe.maintenancejournal.view;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,7 +19,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.joe.maintenancejournal.data.DataMgr;
+import com.example.joe.maintenancejournal.controller.DataMgr;
 import com.example.joe.maintenancejournal.R;
 
 import java.text.SimpleDateFormat;

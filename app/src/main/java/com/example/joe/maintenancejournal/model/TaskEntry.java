@@ -1,4 +1,4 @@
-package com.example.joe.maintenancejournal.data.entities;
+package com.example.joe.maintenancejournal.model;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/MaintenanceTheme">
         <activity
-            android:name=".ux.MainActivity"
+            android:name=".view.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/MaintenanceTheme.NoActionBar">
             <intent-filter>
@@ -25,23 +25,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ux.CreateItemActivity"
+            android:name=".view.CreateItemActivity"
             android:label="@string/title_activity_create_item"
             android:theme="@style/MaintenanceTheme.NoActionBar" />
         <activity
-            android:name=".ux.CreateTaskActivity"
+            android:name=".view.CreateTaskActivity"
             android:label="@string/title_activity_create_task"
             android:theme="@style/MaintenanceTheme.NoActionBar" />
         <activity
-            android:name=".ux.ScheduleActivity"
+            android:name=".view.ScheduleActivity"
             android:label="@string/title_activity_schedule"
             android:theme="@style/MaintenanceTheme.NoActionBar" />
         <activity
-            android:name=".ux.OptionsActivity"
+            android:name=".view.OptionsActivity"
             android:label="@string/title_activity_options"
             android:theme="@style/MaintenanceTheme.NoActionBar"/>
         <service
-            android:name=".data.DataSvc"
+            android:name=".controller.DataSvc"
             android:icon="@drawable/icon256"
             android:label="Data_Service"/>
     </application>

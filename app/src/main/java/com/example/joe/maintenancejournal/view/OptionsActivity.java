@@ -1,69 +1,38 @@
-package com.example.joe.maintenancejournal.ux;
+package com.example.joe.maintenancejournal.view;
 
-import android.Manifest;
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.Fragment;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuInflater;
-import android.view.View;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.joe.maintenancejournal.data.DataMgr;
-import com.example.joe.maintenancejournal.data.entities.MaintenanceItem;
-import com.example.joe.maintenancejournal.data.entities.MaintenanceTask;
+import com.example.joe.maintenancejournal.controller.DataMgr;
 import com.example.joe.maintenancejournal.R;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Calendar;
-
-public class MainActivity extends BaseActivity {
+public class OptionsActivity extends BaseActivity {
 
     private String[] drawerListViewItems;
     private ListView drawerListView;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
-    private MainActivityFragment mainActivityFragment;
+    private Switch mNotificationsSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        DataMgr.mainActivity = this;
-
-        DataMgr.InitialLoad();
-
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_options);
 
         //Get list of items for navigation drawer menu
         drawerListViewItems = getResources().getStringArray(R.array.screens);
@@ -72,7 +41,7 @@ public class MainActivity extends BaseActivity {
         drawerListView = (ListView) findViewById(R.id.left_drawer);
 
         //Set the adapter for the navigation drawer's list
-        drawerListView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, drawerListViewItems));
+        drawerListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, drawerListViewItems));
 
         //Get the drawer layout
         drawerLayout = (DrawerLayout) findViewById(R.id.main_drawer);
@@ -86,7 +55,7 @@ public class MainActivity extends BaseActivity {
         );
 
         //Create the listener for the items in the navigation drawer
-        drawerListView.setOnItemClickListener(new DrawerItemClickListener());
+        drawerListView.setOnItemClickListener(new OptionsActivity.DrawerItemClickListener());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -97,30 +66,22 @@ public class MainActivity extends BaseActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        //Set button functionality for adding items
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), CreateItemActivity.class);
+        mNotificationsSwitch = (Switch) findViewById(R.id.switch_notifications);
 
-                startActivity(intent);
+        mNotificationsSwitch.setChecked(DataMgr.ConfigMgr.Configuration.EnableNotifications);
+
+        mNotificationsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,
+                                         boolean isChecked) {
+
+                DataMgr.ConfigMgr.Configuration.EnableNotifications = isChecked;
+
+                DataMgr.ConfigMgr.saveConfiguration();
+
             }
         });
-    }
-
-    @Override
-    protected void onStop() {
-        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(onEvent);
-
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        DataMgr.CancelPendingRequests();
-
-        super.onDestroy();
     }
 
     @Override
@@ -144,15 +105,15 @@ public class MainActivity extends BaseActivity {
         {
             String selectedText = (String)((TextView) view).getText();
 
-            if (selectedText == drawerListViewItems[1]){
-
-                Intent intent = new Intent(view.getContext(), ScheduleActivity.class);
+            if(selectedText == drawerListViewItems[0])
+            {
+                Intent intent = new Intent(view.getContext(), MainActivity.class);
 
                 startActivity(intent);
             }
-            else if(selectedText == drawerListViewItems[2])
-            {
-                Intent intent = new Intent(view.getContext(), OptionsActivity.class);
+            else if (selectedText == drawerListViewItems[1]){
+
+                Intent intent = new Intent(view.getContext(), ScheduleActivity.class);
 
                 startActivity(intent);
             }

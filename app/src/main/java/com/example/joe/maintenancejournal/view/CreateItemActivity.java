@@ -1,11 +1,10 @@
-package com.example.joe.maintenancejournal.ux;
+package com.example.joe.maintenancejournal.view;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import com.example.joe.maintenancejournal.data.DataMgr;
-import com.example.joe.maintenancejournal.data.entities.MaintenanceItem;
+import com.example.joe.maintenancejournal.controller.DataMgr;
+import com.example.joe.maintenancejournal.model.MaintenanceItem;
 import com.example.joe.maintenancejournal.R;
 
 public class CreateItemActivity extends BaseActivity {

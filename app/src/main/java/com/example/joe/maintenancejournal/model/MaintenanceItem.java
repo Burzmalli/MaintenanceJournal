@@ -1,9 +1,8 @@
-package com.example.joe.maintenancejournal.data.entities;
+package com.example.joe.maintenancejournal.model;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 

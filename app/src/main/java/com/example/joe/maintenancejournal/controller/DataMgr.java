@@ -1,4 +1,4 @@
-package com.example.joe.maintenancejournal.data;
+package com.example.joe.maintenancejournal.controller;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -7,23 +7,15 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.support.v7.widget.RecyclerView;
 
-import com.example.joe.maintenancejournal.App;
 import com.example.joe.maintenancejournal.R;
-import com.example.joe.maintenancejournal.data.entities.MaintenanceItem;
-import com.example.joe.maintenancejournal.data.entities.MaintenanceTask;
-import com.example.joe.maintenancejournal.ux.JournalCardAdapter;
-import com.example.joe.maintenancejournal.ux.MainActivity;
+import com.example.joe.maintenancejournal.model.MaintenanceItem;
+import com.example.joe.maintenancejournal.model.MaintenanceTask;
+import com.example.joe.maintenancejournal.view.JournalCardAdapter;
+import com.example.joe.maintenancejournal.view.MainActivity;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;

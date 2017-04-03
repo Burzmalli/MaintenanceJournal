@@ -1,4 +1,4 @@
-package com.example.joe.maintenancejournal.ux;
+package com.example.joe.maintenancejournal.view;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;

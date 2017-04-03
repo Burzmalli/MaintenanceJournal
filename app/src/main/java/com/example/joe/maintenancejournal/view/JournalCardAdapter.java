@@ -1,8 +1,7 @@
-package com.example.joe.maintenancejournal.ux;
+package com.example.joe.maintenancejournal.view;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -18,11 +17,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.joe.maintenancejournal.App;
-import com.example.joe.maintenancejournal.data.DataMgr;
+import com.example.joe.maintenancejournal.controller.DataMgr;
 import com.example.joe.maintenancejournal.R;
-import com.example.joe.maintenancejournal.data.entities.MaintenanceItem;
-import com.example.joe.maintenancejournal.data.entities.MaintenanceTask;
+import com.example.joe.maintenancejournal.model.MaintenanceItem;
+import com.example.joe.maintenancejournal.model.MaintenanceTask;
 
 import java.util.ArrayList;
 import java.util.List;
