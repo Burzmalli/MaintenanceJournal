@@ -34,7 +34,6 @@ public class DataMgr {
     public static String DATA_UPDATE_COMPLETE = "data_updated";
 
     private static int mId;
-    private Service dataSvc;
 
     private static IItemSvc myManager;
 

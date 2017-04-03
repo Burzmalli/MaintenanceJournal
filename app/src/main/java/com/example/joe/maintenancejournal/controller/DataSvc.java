@@ -12,6 +12,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.joe.maintenancejournal.Constants;
@@ -52,75 +53,116 @@ public class DataSvc extends Service {
         int requestType = intent.getIntExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.GET);
         String requestUrl = intent.getStringExtra(Constants.INT_VOLLEY_REQ_URL);
 
-        String url ="http://www.google.com";
+        SendRest(requestType, requestUrl, null);
 
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(requestType, requestUrl,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            //Parse the jsonArray
-                            JSONArray jsonArray = new JSONArray(response);
-                            final int length = jsonArray.length();
+        return new DataBinder();
+    }
 
-                            DataMgr.Items.clear();
+    public void SendRest(int type, String url, JSONObject item) {
 
-                            for( int i = 0; i < length; i++ ) {
-                                MaintenanceItem item = new MaintenanceItem();
+        //Get the request type and URL from the intent
+        final int requestType = type;
+        String requestUrl = url;
 
-                                if(!jsonArray.isNull(i)) {
-                                    JSONObject obj = jsonArray.getJSONObject(i);
+        //If JSONObject not null
+        if(item != null ) {
 
-                                    item.ItemId = i;
+            //Post item to database and toast success
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(requestType, requestUrl, item,
+                    new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
 
-                                    item.ItemName = obj.getString("itemname");
-                                    item.ItemDescription = obj.getString("itemdescription");
+                    String toastTxt = "";
 
-                                    for (int j = 0; j < obj.getJSONArray("itemtasks").length(); j++) {
-                                        JSONObject task = obj.getJSONArray("itemtasks").getJSONObject(j);
+                    if(requestType == Request.Method.PUT) {
+                        toastTxt = "Item successfully put.";
+                    } else if (requestType == Request.Method.PATCH ) {
+                        toastTxt = "Item successfully updated";
+                    }
 
-                                        MaintenanceTask tsk = new MaintenanceTask();
-                                        tsk.TaskName = task.getString("taskname");
-                                        tsk.TaskCost = task.getDouble("taskcost");
-                                        tsk.FrequencyType = task.getString("frequencytype");
-                                        tsk.Frequency = task.getInt("frequency");
-                                        tsk.StartDate = Global.StrToDate(task.getString("startdate"));
-                                        tsk.Recurring = task.getBoolean("recurring");
-                                        tsk.TaskDescription = task.getString("taskdescription");
-                                        tsk.ItemId = item.ItemId;
-                                        tsk.TaskId = j + item.ItemId;
+                    Toast.makeText(getApplicationContext(),
+                            toastTxt,
+                            Toast.LENGTH_LONG).show();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(getApplicationContext(),
+                            "Data Operation Failed: " + error.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
+            });
 
-                                        item.Tasks.add(tsk);
+            mQueue.add(jsonObjectRequest);
+        } else {
+
+            // Request a string response from the provided URL.
+            StringRequest stringRequest = new StringRequest(requestType, requestUrl,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                //Parse the jsonArray
+                                JSONArray jsonArray = new JSONArray(response);
+                                final int length = jsonArray.length();
+
+                                DataMgr.Items.clear();
+
+                                for (int i = 0; i < length; i++) {
+                                    MaintenanceItem item = new MaintenanceItem();
+
+                                    if (!jsonArray.isNull(i)) {
+                                        JSONObject obj = jsonArray.getJSONObject(i);
+
+                                        item.ItemId = i;
+
+                                        item.ItemName = obj.getString("itemname");
+                                        item.ItemDescription = obj.getString("itemdescription");
+
+                                        for (int j = 0; j < obj.getJSONArray("itemtasks").length(); j++) {
+                                            JSONObject task = obj.getJSONArray("itemtasks").getJSONObject(j);
+
+                                            MaintenanceTask tsk = new MaintenanceTask();
+                                            tsk.TaskName = task.getString("taskname");
+                                            tsk.TaskCost = task.getDouble("taskcost");
+                                            tsk.FrequencyType = task.getString("frequencytype");
+                                            tsk.Frequency = task.getInt("frequency");
+                                            tsk.StartDate = Global.StrToDate(task.getString("startdate"));
+                                            tsk.Recurring = task.getBoolean("recurring");
+                                            tsk.TaskDescription = task.getString("taskdescription");
+                                            tsk.ItemId = item.ItemId;
+                                            tsk.TaskId = j + item.ItemId;
+
+                                            item.Tasks.add(tsk);
+                                        }
+
+                                        DataMgr.Items.add(item);
                                     }
-
-                                    DataMgr.Items.add(item);
                                 }
+
+                                //Send broadcast that data has been received and parsed
+                                Intent intent = new Intent();
+                                intent.setAction(DataMgr.DATA_UPDATE_COMPLETE);
+                                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
                             }
 
-                            //Send broadcast that data has been received and parsed
-                            Intent intent = new Intent();
-                            intent.setAction(DataMgr.DATA_UPDATE_COMPLETE);
-                            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
 
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
                         }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(getApplicationContext(),
+                            "Data Operation Failed: " + error.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
+            });
 
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(),
-                        "Data Operation Failed: " + error.getMessage(),
-                        Toast.LENGTH_LONG).show();
-            }
-        });
-
-        mQueue.add(stringRequest);
-
-        return null;
+            mQueue.add(stringRequest);
+        }
     }
 
     public class DataBinder extends Binder {

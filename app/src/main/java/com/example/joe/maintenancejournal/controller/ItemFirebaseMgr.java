@@ -33,11 +33,20 @@ public class ItemFirebaseMgr implements IItemSvc {
         //Build URL for GET request
         String getUrl = Constants.FIREBASEURL + Constants.BASE_ARRAY_FILE;
 
-        //Create service intent, put GET type and target URL, and bind service
-        Intent svcIntent = new Intent(mContext, DataSvc.class);
-        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.GET);
-        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, getUrl);
-        mContext.bindService(svcIntent, mConnection, Context.BIND_AUTO_CREATE);
+        //Bind to service if not yet bound;
+        if(!mBound) {
+
+            //Create service intent, put GET type and target URL, and bind service
+            Intent svcIntent = new Intent(mContext, DataSvc.class);
+            svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.GET);
+            svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, getUrl);
+            mContext.bindService(svcIntent, mConnection, Context.BIND_AUTO_CREATE);
+
+            return;
+        }
+
+        //Otherwise, kick off rest request
+        mService.SendRest(Request.Method.GET, getUrl, null);
     }
 
     @Override
@@ -48,11 +57,18 @@ public class ItemFirebaseMgr implements IItemSvc {
         //Build URL for PUT request
         String putUrl = Constants.FIREBASEURL + "items/" + item.ItemId + "/.json";
 
-        //Create service intent, put PUT type and target URL, and bind service
-        Intent svcIntent = new Intent(mContext, DataSvc.class);
-        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.PUT);
-        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, putUrl);
-        mContext.bindService(svcIntent, mConnection, Context.BIND_AUTO_CREATE);
+        //Bind to service if not yet bound
+        if(!mBound) {
+            //Create service intent, put PUT type and target URL, and bind service
+            Intent svcIntent = new Intent(mContext, DataSvc.class);
+            svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.PUT);
+            svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, putUrl);
+            mContext.bindService(svcIntent, mConnection, Context.BIND_AUTO_CREATE);
+            return;
+        }
+
+        //Otherwise, kick off rest request
+        mService.SendRest(Request.Method.PUT, putUrl, item.GetAsJSONObject());
     }
 
     @Override
@@ -62,11 +78,18 @@ public class ItemFirebaseMgr implements IItemSvc {
         //Build URL for PATCH request
         String patchUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
 
-        //Create service intent, put PATCH type and target URL, and bind service
-        Intent svcIntent = new Intent(mContext, DataSvc.class);
-        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.PATCH);
-        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, patchUrl);
-        mContext.bindService(svcIntent, mConnection, Context.BIND_AUTO_CREATE);
+        //Bind to service if not yet bound
+        if(!mBound) {
+            //Create service intent, put PATCH type and target URL, and bind service
+            Intent svcIntent = new Intent(mContext, DataSvc.class);
+            svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.PATCH);
+            svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, patchUrl);
+            mContext.bindService(svcIntent, mConnection, Context.BIND_AUTO_CREATE);
+            return;
+        }
+
+        //Otherwise, kick off rest request
+        mService.SendRest(Request.Method.PATCH, patchUrl, item.GetAsJSONObject());
     }
 
     @Override
@@ -77,11 +100,17 @@ public class ItemFirebaseMgr implements IItemSvc {
         //Build URL for delete request
         String deleteUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
 
-        //Create service intent, put DELETE type and target URL, and bind service
-        Intent svcIntent = new Intent(mContext, DataSvc.class);
-        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.DELETE);
-        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, deleteUrl);
-        mContext.bindService(svcIntent, mConnection, Context.BIND_AUTO_CREATE);
+        if(!mBound) {
+            //Create service intent, put DELETE type and target URL, and bind service
+            Intent svcIntent = new Intent(mContext, DataSvc.class);
+            svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.DELETE);
+            svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, deleteUrl);
+            mContext.bindService(svcIntent, mConnection, Context.BIND_AUTO_CREATE);
+            return;
+        }
+
+        //Otherwise, kick off rest request
+        mService.SendRest(Request.Method.DELETE, deleteUrl, null);
     }
 
     @Override
@@ -95,11 +124,18 @@ public class ItemFirebaseMgr implements IItemSvc {
         //Build URL for PATCH request
         String updateUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
 
-        //Create service intent, put PATCH type and target URL, and bind service
-        Intent svcIntent = new Intent(mContext, DataSvc.class);
-        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.PATCH);
-        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, updateUrl);
-        mContext.bindService(svcIntent, mConnection, Context.BIND_AUTO_CREATE);
+        //Bind to service if not yet bound
+        if(!mBound) {
+            //Create service intent, put PATCH type and target URL, and bind service
+            Intent svcIntent = new Intent(mContext, DataSvc.class);
+            svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.PATCH);
+            svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, updateUrl);
+            mContext.bindService(svcIntent, mConnection, Context.BIND_AUTO_CREATE);
+            return;
+        }
+
+        //Otherwise, kick off rest request
+        mService.SendRest(Request.Method.PATCH, updateUrl, item.GetAsJSONObject());
     }
 
     @Override
@@ -113,11 +149,18 @@ public class ItemFirebaseMgr implements IItemSvc {
         //Build URL for PATCH request
         String updateUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
 
-        //Create service intent, put PATCH type and target URL, and bind service
-        Intent svcIntent = new Intent(mContext, DataSvc.class);
-        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.PATCH);
-        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, updateUrl);
-        mContext.bindService(svcIntent, mConnection, Context.BIND_AUTO_CREATE);
+        //Bind to service if not yet bound
+        if(!mBound) {
+            //Create service intent, put PATCH type and target URL, and bind service
+            Intent svcIntent = new Intent(mContext, DataSvc.class);
+            svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.PATCH);
+            svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, updateUrl);
+            mContext.bindService(svcIntent, mConnection, Context.BIND_AUTO_CREATE);
+            return;
+        }
+
+        //Otherwise, kick off rest request
+        mService.SendRest(Request.Method.PATCH, updateUrl, item.GetAsJSONObject());
     }
 
     @Override
@@ -131,11 +174,18 @@ public class ItemFirebaseMgr implements IItemSvc {
         //Build URL for PATCH request
         String updateUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
 
-        //Create service intent, put PATCH type and target URL, and bind service
-        Intent svcIntent = new Intent(mContext, DataSvc.class);
-        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.PATCH);
-        svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, updateUrl);
-        mContext.bindService(svcIntent, mConnection, Context.BIND_AUTO_CREATE);
+        //Bind to service if not yet bound
+        if(!mBound) {
+            //Create service intent, put PATCH type and target URL, and bind service
+            Intent svcIntent = new Intent(mContext, DataSvc.class);
+            svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.PATCH);
+            svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, updateUrl);
+            mContext.bindService(svcIntent, mConnection, Context.BIND_AUTO_CREATE);
+            return;
+        }
+
+        //Otherwise, kick off rest request
+        mService.SendRest(Request.Method.PATCH, updateUrl, item.GetAsJSONObject());
     }
 
     @Override
