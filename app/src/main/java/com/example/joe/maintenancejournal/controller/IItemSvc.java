@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface IItemSvc {
 
-    void loadItems();
+    List<MaintenanceItem> loadItems();
     void createItem(MaintenanceItem item);
     void updateItem(MaintenanceItem item);
     void deleteItem(MaintenanceItem item);

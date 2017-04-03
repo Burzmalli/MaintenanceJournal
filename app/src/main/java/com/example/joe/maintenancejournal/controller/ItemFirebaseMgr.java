@@ -26,29 +26,27 @@ public class ItemFirebaseMgr implements IItemSvc {
     private boolean mBound = false;
 
     @Override
-    public void loadItems() {
+    public List<MaintenanceItem> loadItems() {
 
-        if(mContext == null) return;
+        if(mContext == null) return null;
 
-        //Build URL for GET request
         String getUrl = Constants.FIREBASEURL + Constants.BASE_ARRAY_FILE;
 
-        //Create service intent, put GET type and target URL, and bind service
         Intent svcIntent = new Intent(mContext, DataSvc.class);
         svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.GET);
         svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, getUrl);
         mContext.bindService(svcIntent, mConnection, Context.BIND_AUTO_CREATE);
+
+        return null;
     }
 
     @Override
     public void createItem(MaintenanceItem item) {
 
-        if(mContext == null) return;
+        if(mContext == null);
 
-        //Build URL for PUT request
         String putUrl = Constants.FIREBASEURL + "items/" + item.ItemId + "/.json";
 
-        //Create service intent, put PUT type and target URL, and bind service
         Intent svcIntent = new Intent(mContext, DataSvc.class);
         svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.PUT);
         svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, putUrl);
@@ -57,12 +55,7 @@ public class ItemFirebaseMgr implements IItemSvc {
 
     @Override
     public void updateItem(MaintenanceItem item) {
-        if(mContext == null) return;
-
-        //Build URL for PATCH request
         String patchUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
-
-        //Create service intent, put PATCH type and target URL, and bind service
         Intent svcIntent = new Intent(mContext, DataSvc.class);
         svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.PATCH);
         svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, patchUrl);
@@ -71,13 +64,7 @@ public class ItemFirebaseMgr implements IItemSvc {
 
     @Override
     public void deleteItem(MaintenanceItem item) {
-
-        if(mContext == null) return;
-
-        //Build URL for delete request
         String deleteUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
-
-        //Create service intent, put DELETE type and target URL, and bind service
         Intent svcIntent = new Intent(mContext, DataSvc.class);
         svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.DELETE);
         svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, deleteUrl);
@@ -86,16 +73,9 @@ public class ItemFirebaseMgr implements IItemSvc {
 
     @Override
     public void createTask(MaintenanceTask task) {
-
-        if(mContext == null) return;
-
         MaintenanceItem item = DataMgr.findTaskOwner(task);
         if (item == null) return;
-
-        //Build URL for PATCH request
         String updateUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
-
-        //Create service intent, put PATCH type and target URL, and bind service
         Intent svcIntent = new Intent(mContext, DataSvc.class);
         svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.PATCH);
         svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, updateUrl);
@@ -104,16 +84,9 @@ public class ItemFirebaseMgr implements IItemSvc {
 
     @Override
     public void updateTask(MaintenanceTask task) {
-
-        if(mContext == null) return;
-
         MaintenanceItem item = DataMgr.findTaskOwner(task);
         if (item == null) return;
-
-        //Build URL for PATCH request
         String updateUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
-
-        //Create service intent, put PATCH type and target URL, and bind service
         Intent svcIntent = new Intent(mContext, DataSvc.class);
         svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.PATCH);
         svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, updateUrl);
@@ -122,16 +95,9 @@ public class ItemFirebaseMgr implements IItemSvc {
 
     @Override
     public void deleteTask(MaintenanceTask task) {
-
-        if(mContext == null) return;
-
         MaintenanceItem item = DataMgr.findTaskOwner(task);
         if (item == null) return;
-
-        //Build URL for PATCH request
         String updateUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
-
-        //Create service intent, put PATCH type and target URL, and bind service
         Intent svcIntent = new Intent(mContext, DataSvc.class);
         svcIntent.putExtra(Constants.INT_VOLLEY_REQ_TYPE, Request.Method.PATCH);
         svcIntent.putExtra(Constants.INT_VOLLEY_REQ_URL, updateUrl);
@@ -146,7 +112,7 @@ public class ItemFirebaseMgr implements IItemSvc {
         @Override
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
-
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
             DataSvc.DataBinder binder = (DataSvc.DataBinder) service;
             mService = binder.getService();
             mBound = true;
