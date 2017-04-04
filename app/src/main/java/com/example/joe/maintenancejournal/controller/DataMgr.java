@@ -5,8 +5,14 @@ import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ContentProvider;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
@@ -25,7 +31,7 @@ import java.util.List;
  * Created by Joe on 9/08/2016.
  * A global item master for storing the app's maintenance items
  */
-public class DataMgr {
+public class DataMgr extends ContentProvider{
     public static List<MaintenanceItem> Items = new ArrayList<>();
     public static JournalCardAdapter.MaintenanceItemHolder lastClicked = null;
     public static Activity mainActivity;
@@ -247,5 +253,38 @@ public class DataMgr {
         AlarmManager mgr = (AlarmManager) mainActivity.getSystemService(Context.ALARM_SERVICE);
 
         mNotificationManager.notify(mId, mBuilder.build());
+    }
+
+    @Override
+    public boolean onCreate() {
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public String getType(@NonNull Uri uri) {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
+        return null;
+    }
+
+    @Override
+    public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+        return 0;
+    }
+
+    @Override
+    public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
+        return 0;
     }
 }
