@@ -6,6 +6,6 @@ package com.example.joe.maintenancejournal.controller;
 
 public interface IConfigMgr {
 
-    public void saveConfiguration();
-    public void loadConfiguration();
+    void saveConfiguration();
+    void loadConfiguration();
 }

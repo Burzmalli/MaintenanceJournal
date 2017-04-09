@@ -220,40 +220,40 @@ public class DataMgr extends ContentProvider{
         return nextTask;
     }
 
-    //Test code from developer.android.com. Not yet customized and implemented.
-    public static void SetNotification(String title, String text, Date date)
-    {
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(mainActivity)
-                        .setSmallIcon(R.drawable.icon128)
-                        .setContentTitle(title)
-                        .setContentText(text);
-        // Creates an explicit intent for an Activity in your app
-        Intent resultIntent = new Intent(mainActivity, MainActivity.class);
-
-        // The stack builder object will contain an artificial back stack for the
-        // started Activity.
-        // This ensures that navigating backward from the Activity leads out of
-        // your application to the Home screen.
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(mainActivity);
-        // Adds the back stack for the Intent (but not the Intent itself)
-        stackBuilder.addParentStack(MainActivity.class);
-        // Adds the Intent that starts the Activity to the top of the stack
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(
-                        0,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
-        mBuilder.setContentIntent(resultPendingIntent);
-        NotificationManager mNotificationManager =
-                (NotificationManager) mainActivity.getSystemService(Context.NOTIFICATION_SERVICE);
-        // mId allows you to update the notification later on.
-
-        AlarmManager mgr = (AlarmManager) mainActivity.getSystemService(Context.ALARM_SERVICE);
-
-        mNotificationManager.notify(mId, mBuilder.build());
-    }
+//    //Test code from developer.android.com. Not yet customized and implemented.
+//    public static void SetNotification(String title, String text, Date date)
+//    {
+//        NotificationCompat.Builder mBuilder =
+//                new NotificationCompat.Builder(mainActivity)
+//                        .setSmallIcon(R.drawable.icon128)
+//                        .setContentTitle(title)
+//                        .setContentText(text);
+//        // Creates an explicit intent for an Activity in your app
+//        Intent resultIntent = new Intent(mainActivity, MainActivity.class);
+//
+//        // The stack builder object will contain an artificial back stack for the
+//        // started Activity.
+//        // This ensures that navigating backward from the Activity leads out of
+//        // your application to the Home screen.
+//        TaskStackBuilder stackBuilder = TaskStackBuilder.create(mainActivity);
+//        // Adds the back stack for the Intent (but not the Intent itself)
+//        stackBuilder.addParentStack(MainActivity.class);
+//        // Adds the Intent that starts the Activity to the top of the stack
+//        stackBuilder.addNextIntent(resultIntent);
+//        PendingIntent resultPendingIntent =
+//                stackBuilder.getPendingIntent(
+//                        0,
+//                        PendingIntent.FLAG_UPDATE_CURRENT
+//                );
+//        mBuilder.setContentIntent(resultPendingIntent);
+//        NotificationManager mNotificationManager =
+//                (NotificationManager) mainActivity.getSystemService(Context.NOTIFICATION_SERVICE);
+//        // mId allows you to update the notification later on.
+//
+//        AlarmManager mgr = (AlarmManager) mainActivity.getSystemService(Context.ALARM_SERVICE);
+//
+//        mNotificationManager.notify(mId, mBuilder.build());
+//    }
 
     @Override
     public boolean onCreate() {

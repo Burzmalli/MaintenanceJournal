@@ -10,6 +10,7 @@ import com.android.volley.Request;
 import com.example.joe.maintenancejournal.Constants;
 import com.example.joe.maintenancejournal.model.MaintenanceItem;
 import com.example.joe.maintenancejournal.model.MaintenanceTask;
+import com.example.joe.maintenancejournal.model.TaskEntry;
 
 import java.util.List;
 
@@ -186,6 +187,21 @@ public class ItemFirebaseMgr implements IItemSvc {
 
         //Otherwise, kick off rest request
         mService.SendRest(Request.Method.PATCH, updateUrl, item.GetAsJSONObject());
+    }
+
+    @Override
+    public void createEntry(TaskEntry entry) {
+
+    }
+
+    @Override
+    public void updateEntry(TaskEntry entry) {
+
+    }
+
+    @Override
+    public void deleteEntry(TaskEntry entry) {
+
     }
 
     @Override

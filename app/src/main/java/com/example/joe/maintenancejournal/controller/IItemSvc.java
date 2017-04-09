@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.joe.maintenancejournal.model.MaintenanceItem;
 import com.example.joe.maintenancejournal.model.MaintenanceTask;
+import com.example.joe.maintenancejournal.model.TaskEntry;
 
 import java.util.List;
 
@@ -20,5 +21,8 @@ public interface IItemSvc {
     void createTask(MaintenanceTask task);
     void updateTask(MaintenanceTask task);
     void deleteTask(MaintenanceTask task);
+    void createEntry(TaskEntry entry);
+    void updateEntry(TaskEntry entry);
+    void deleteEntry(TaskEntry entry);
     void SetContext(Context context);
 }
