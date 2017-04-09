@@ -31,15 +31,14 @@ import java.util.List;
  * Created by Joe on 9/08/2016.
  * A global item master for storing the app's maintenance items
  */
-public class DataMgr extends ContentProvider{
+public class DataMgr{
     public static List<MaintenanceItem> Items = new ArrayList<>();
     public static JournalCardAdapter.MaintenanceItemHolder lastClicked = null;
     public static Activity mainActivity;
     public static ConfigMgr ConfigMgr = new ConfigMgr();
     private static boolean initialized = false;
     public static String DATA_UPDATE_COMPLETE = "data_updated";
-
-    private static int mId;
+    public DatabaseMgr DbMgr;
 
     private static IItemSvc myManager;
 
@@ -254,37 +253,4 @@ public class DataMgr extends ContentProvider{
 //
 //        mNotificationManager.notify(mId, mBuilder.build());
 //    }
-
-    @Override
-    public boolean onCreate() {
-        return false;
-    }
-
-    @Nullable
-    @Override
-    public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public String getType(@NonNull Uri uri) {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        return null;
-    }
-
-    @Override
-    public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
-    }
-
-    @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
-    }
 }

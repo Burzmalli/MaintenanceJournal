@@ -8,7 +8,6 @@ import java.util.Date;
  */
 
 public class TaskEntry {
-    public MaintenanceTask Parent;
     public String TaskName;
     public Date EntryDate;
     public double EntryCost;

@@ -85,7 +85,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onStop() {
-        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(onEvent);
 
         super.onStop();
     }

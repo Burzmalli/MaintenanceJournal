@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.example.joe.maintenancejournal.controller.DataMgr;
 import com.example.joe.maintenancejournal.R;
+import com.example.joe.maintenancejournal.controller.DataUpdateReceiver;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -23,6 +24,7 @@ public class MainActivityFragment extends Fragment {
 
     private RecyclerView thingsListView = null;
     private RecyclerView.Adapter<JournalCardAdapter.MaintenanceItemHolder> thingsArrayAdapter;
+    private BroadcastReceiver br = new DataUpdateReceiver();
 
     public MainActivityFragment() {
     }
@@ -45,14 +47,14 @@ public class MainActivityFragment extends Fragment {
 
         thingsListView.setAdapter(thingsArrayAdapter);
 
-        IntentFilter ifilter=new IntentFilter(DataMgr.DATA_UPDATE_COMPLETE);
+        IntentFilter ifilter = new IntentFilter("com.example.joe.maintenancejournal.DATA_UPDATED");
 
-        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(onEvent, ifilter);
+        getActivity().registerReceiver(onEvent, ifilter);
 
         return rootView;
     }
 
-    private BroadcastReceiver onEvent=new BroadcastReceiver() {
+    private DataUpdateReceiver onEvent=new DataUpdateReceiver() {
         public void onReceive(Context ctxt, Intent i) {
 
             UpdateList();
@@ -70,8 +72,8 @@ public class MainActivityFragment extends Fragment {
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(onEvent);
-
+        //LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(onEvent);
+        getActivity().unregisterReceiver(onEvent);
         super.onStop();
     }
 

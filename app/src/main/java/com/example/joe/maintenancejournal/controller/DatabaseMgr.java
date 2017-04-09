@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.joe.maintenancejournal.model.MaintenanceItem;
 import com.example.joe.maintenancejournal.model.MaintenanceTask;
+import com.example.joe.maintenancejournal.model.TaskEntry;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,20 +33,25 @@ public class DatabaseMgr extends SQLiteOpenHelper{
                 "name text not null, cost real, date real, recurring integer, " +
                 "itemId integer, foreign key(itemId) references item(id))";
 
+        String createEntryTable = "create table entry (id integer primary key autoincrement, " +
+                "name text, cost real, date real, itemId integer, taskId integer, " +
+                "foreign key(taskId) references task(id))";
+
         db.execSQL(createItemTable);
         db.execSQL(createTaskTable);
-
+        db.execSQL(createEntryTable);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("drop table if exists task");
         db.execSQL("drop table if exists item");
+        db.execSQL("drop table if exists entry");
         onCreate(db);
     }
 
     public List<MaintenanceItem> loadItems() {
-        List<MaintenanceItem> items = new ArrayList<MaintenanceItem>();
+        List<MaintenanceItem> items = new ArrayList<>();
 
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query("item",
@@ -110,8 +116,47 @@ public class DatabaseMgr extends SQLiteOpenHelper{
         task.StartDate = new Date(cursor.getLong(3));
         task.Recurring = cursor.getInt(4) == 1;
         task.ItemId = cursor.getInt(5);
+        task.Entries = getEntriesForTask(task.TaskId);
 
         return task;
+    }
+
+    private List<TaskEntry> getEntriesForTask(int taskId)
+    {
+        List<TaskEntry> entries = new ArrayList();
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query("task",
+                new String[] {"id", "name", "cost", "date", "notes", "itemId", "taskId"},
+                "taskId = ?", new String[] { String.valueOf(taskId)}, null, null, null);
+
+        cursor.moveToFirst();
+
+        while(!cursor.isAfterLast())
+        {
+            TaskEntry entry = getEntry(cursor);
+            entries.add(entry);
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+
+        return entries;
+    }
+
+    private TaskEntry getEntry(Cursor cursor)
+    {
+        TaskEntry entry = new TaskEntry();
+
+        entry.TaskId = cursor.getInt(0);
+        entry.TaskName = cursor.getString(1);
+        entry.EntryCost = cursor.getDouble(2);
+        entry.EntryDate = new Date(cursor.getLong(3));
+        entry.Notes = cursor.getString(4);
+        entry.ItemId = cursor.getInt(5);
+        entry.TaskId = cursor.getInt(6);
+
+        return entry;
     }
 
     public void createItem(MaintenanceItem item)
@@ -214,4 +259,48 @@ public class DatabaseMgr extends SQLiteOpenHelper{
         db.close();
     }
 
+    public void createEntry( TaskEntry entry)
+    {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        values.put("name", entry.TaskName);
+        values.put("cost", entry.EntryCost);
+        values.put("date", entry.EntryDate.getTime());
+        values.put("notes", entry.Notes);
+        values.put("itemId", entry.ItemId);
+        values.put("taskId", entry.TaskId);
+
+        entry.EntryId = (int)db.insert("entry", null, values);
+
+        db.close();
+    }
+
+    public void updateEntry(TaskEntry entry) {
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        values.put("name", entry.TaskName);
+        values.put("cost", entry.EntryCost);
+        values.put("date", entry.EntryDate.getTime());
+        values.put("notes", entry.Notes);
+        values.put("itemId", entry.ItemId);
+        values.put("taskId", entry.TaskId);
+
+        db.update("entry", values,
+                "id = ?", new String[] {String.valueOf(entry.EntryId)});
+
+        db.close();
+    }
+
+    public void deleteEntry(TaskEntry entry) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        db.delete("entry", "id = ?", new String[] {String.valueOf(entry.EntryId)});
+
+        db.close();
+    }
 }
