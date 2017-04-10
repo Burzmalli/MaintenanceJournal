@@ -226,6 +226,8 @@ public class DataMgr{
 
                 item.Synced = true;
 
+                DataMgr.Items.add(item);
+
                 mdp.updateItem(item, MaintenanceDataProvider.SyncType.LOCAL);
             }
         }

@@ -36,4 +36,15 @@ public class MaintenanceTask implements java.io.Serializable{
         SimpleDateFormat sd =  new SimpleDateFormat("MM/dd/yyyy");
         return sd.format(StartDate);
     }
+
+    public int GetEntryGapIndex() {
+        int gap = 0;
+
+        for(TaskEntry entry : Entries) {
+            if(entry.OnlineId == gap)
+                gap++;
+        }
+
+        return gap;
+    }
 }

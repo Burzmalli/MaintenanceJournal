@@ -47,6 +47,17 @@ public class MaintenanceItem implements java.io.Serializable{
         return str;
     }
 
+    public int GetTaskGapIndex() {
+        int gap = 0;
+
+        for(MaintenanceTask task : Tasks) {
+            if(task.OnlineId == gap)
+                gap++;
+        }
+
+        return gap;
+    }
+
     public JSONObject GetAsJSONObject() {
         JSONObject obj = new JSONObject();
         try {

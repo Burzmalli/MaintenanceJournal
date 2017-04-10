@@ -67,6 +67,7 @@ public class CreateTaskActivityFragment extends Fragment {
                 MaintenanceTask task = new MaintenanceTask();
                 task.TaskName = tv.getText().toString();
                 task.Uuid = UUID.randomUUID().toString();
+                task.OnlineId = myItem.GetTaskGapIndex();
 
                 String cleanString = costText.getText().toString().replaceAll("[$,]", "");
 

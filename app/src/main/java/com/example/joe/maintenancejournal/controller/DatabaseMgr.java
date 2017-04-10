@@ -363,7 +363,7 @@ public class DatabaseMgr extends SQLiteOpenHelper implements IItemSvc {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query("task",
                 new String[] {"id", "name", "cost", "date", "recurring", "itemId", "synced",
-                        "frequencyType", "frequency", "uuid"},
+                        "frequencyType", "frequency", "uuid", "onlineid"},
                 null, null, null, null, null);
 
         cursor.moveToFirst();
@@ -386,7 +386,7 @@ public class DatabaseMgr extends SQLiteOpenHelper implements IItemSvc {
 
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query("entry",
-                new String[] {"id", "name", "cost", "date", "notes", "itemId", "taskId", "synced", "uuid"},
+                new String[] {"id", "name", "cost", "date", "notes", "itemId", "taskId", "synced", "uuid", "onlineid"},
                 null, null, null, null, null);
 
         cursor.moveToFirst();
