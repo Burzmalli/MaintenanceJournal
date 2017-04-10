@@ -25,6 +25,7 @@ public class MainActivityFragment extends Fragment {
     private RecyclerView thingsListView = null;
     private RecyclerView.Adapter<JournalCardAdapter.MaintenanceItemHolder> thingsArrayAdapter;
     private BroadcastReceiver br = new DataUpdateReceiver();
+    private boolean Registered = false;
 
     public MainActivityFragment() {
     }
@@ -47,11 +48,21 @@ public class MainActivityFragment extends Fragment {
 
         thingsListView.setAdapter(thingsArrayAdapter);
 
+        RegisterForUpdate();
+
+        return rootView;
+    }
+
+    private void RegisterForUpdate() {
         IntentFilter ifilter = new IntentFilter("com.example.joe.maintenancejournal.DATA_UPDATED");
 
         getActivity().registerReceiver(onEvent, ifilter);
+        Registered = true;
+    }
 
-        return rootView;
+    private void UnregisterForUpdate() {
+        if(Registered)
+            getActivity().unregisterReceiver(onEvent);
     }
 
     private DataUpdateReceiver onEvent=new DataUpdateReceiver() {
@@ -64,6 +75,8 @@ public class MainActivityFragment extends Fragment {
     @Override
     public void onResume()
     {
+        RegisterForUpdate();
+
         //Update the list of items when the user comes back to this screen from creating an item
         UpdateList();
 
@@ -73,7 +86,7 @@ public class MainActivityFragment extends Fragment {
     @Override
     public void onStop() {
         //LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(onEvent);
-        getActivity().unregisterReceiver(onEvent);
+        UnregisterForUpdate();
         super.onStop();
     }
 

@@ -22,6 +22,7 @@ import com.example.joe.maintenancejournal.model.TaskEntry;
 
 import java.text.NumberFormat;
 import java.util.Calendar;
+import java.util.UUID;
 
 /**
  * Created by Joe on 3/26/2017.
@@ -69,6 +70,7 @@ public class PerformMaintenanceActivityFragment extends Fragment {
 
                 TaskEntry entry = new TaskEntry();
                 entry.TaskName = myTask.TaskName;
+                entry.Uuid = UUID.randomUUID().toString();
 
                 String cleanString = costText.getText().toString().replaceAll("[$,]", "");
 

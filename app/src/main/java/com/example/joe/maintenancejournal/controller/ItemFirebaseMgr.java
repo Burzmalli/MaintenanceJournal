@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 
 import com.android.volley.Request;
+import com.example.joe.maintenancejournal.App;
 import com.example.joe.maintenancejournal.Constants;
 import com.example.joe.maintenancejournal.model.MaintenanceItem;
 import com.example.joe.maintenancejournal.model.MaintenanceTask;
@@ -29,7 +30,7 @@ public class ItemFirebaseMgr implements IItemSvc {
     @Override
     public void loadItems() {
 
-        if(mContext == null) return;
+        if(mContext == null) mContext = App.sharedInstance.getApplicationContext();
 
         //Build URL for GET request
         String getUrl = Constants.FIREBASEURL + Constants.BASE_ARRAY_FILE;
@@ -53,10 +54,10 @@ public class ItemFirebaseMgr implements IItemSvc {
     @Override
     public void createItem(MaintenanceItem item) {
 
-        if(mContext == null) return;
+        if(mContext == null) mContext = App.sharedInstance.getApplicationContext();
 
         //Build URL for PUT request
-        String putUrl = Constants.FIREBASEURL + "items/" + item.ItemId + "/.json";
+        String putUrl = Constants.FIREBASEURL + "items/" + (item.OnlineId) + "/.json";
 
         //Bind to service if not yet bound
         if(!mBound) {
@@ -74,10 +75,10 @@ public class ItemFirebaseMgr implements IItemSvc {
 
     @Override
     public void updateItem(MaintenanceItem item) {
-        if(mContext == null) return;
+        if(mContext == null) mContext = App.sharedInstance.getApplicationContext();
 
         //Build URL for PATCH request
-        String patchUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
+        String patchUrl = FIREBASEURL + "items/" + item.OnlineId + "/.json";
 
         //Bind to service if not yet bound
         if(!mBound) {
@@ -96,10 +97,10 @@ public class ItemFirebaseMgr implements IItemSvc {
     @Override
     public void deleteItem(MaintenanceItem item) {
 
-        if(mContext == null) return;
+        if(mContext == null) mContext = App.sharedInstance.getApplicationContext();
 
         //Build URL for delete request
-        String deleteUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
+        String deleteUrl = FIREBASEURL + "items/" + item.OnlineId + "/.json";
 
         if(!mBound) {
             //Create service intent, put DELETE type and target URL, and bind service
@@ -117,13 +118,13 @@ public class ItemFirebaseMgr implements IItemSvc {
     @Override
     public void createTask(MaintenanceTask task) {
 
-        if(mContext == null) return;
+        if(mContext == null) mContext = App.sharedInstance.getApplicationContext();
 
         MaintenanceItem item = DataMgr.findTaskOwner(task);
         if (item == null) return;
 
         //Build URL for PATCH request
-        String updateUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
+        String updateUrl = FIREBASEURL + "items/" + item.OnlineId + "/.json";
 
         //Bind to service if not yet bound
         if(!mBound) {
@@ -142,13 +143,13 @@ public class ItemFirebaseMgr implements IItemSvc {
     @Override
     public void updateTask(MaintenanceTask task) {
 
-        if(mContext == null) return;
+        if(mContext == null) mContext = App.sharedInstance.getApplicationContext();
 
         MaintenanceItem item = DataMgr.findTaskOwner(task);
         if (item == null) return;
 
         //Build URL for PATCH request
-        String updateUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
+        String updateUrl = FIREBASEURL + "items/" + item.OnlineId + "/.json";
 
         //Bind to service if not yet bound
         if(!mBound) {
@@ -167,13 +168,13 @@ public class ItemFirebaseMgr implements IItemSvc {
     @Override
     public void deleteTask(MaintenanceTask task) {
 
-        if(mContext == null) return;
+        if(mContext == null) mContext = App.sharedInstance.getApplicationContext();
 
         MaintenanceItem item = DataMgr.findTaskOwner(task);
         if (item == null) return;
 
         //Build URL for PATCH request
-        String updateUrl = FIREBASEURL + "items/" + (DataMgr.Items.indexOf(item)) + "/.json";
+        String updateUrl = FIREBASEURL + "items/" + item.OnlineId + "/.json";
 
         //Bind to service if not yet bound
         if(!mBound) {
@@ -206,6 +207,21 @@ public class ItemFirebaseMgr implements IItemSvc {
 
     @Override
     public void SetContext(Context context) { mContext = context; }
+
+    @Override
+    public List<MaintenanceItem> getAllItems() {
+        return null;
+    }
+
+    @Override
+    public List<MaintenanceTask> getAllTasks() {
+        return null;
+    }
+
+    @Override
+    public List<TaskEntry> getAllEntries() {
+        return null;
+    }
 
     private ServiceConnection mConnection = new ServiceConnection() {
 

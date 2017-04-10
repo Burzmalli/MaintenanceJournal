@@ -25,4 +25,7 @@ public interface IItemSvc {
     void updateEntry(TaskEntry entry);
     void deleteEntry(TaskEntry entry);
     void SetContext(Context context);
+    List<MaintenanceItem> getAllItems();
+    List<MaintenanceTask> getAllTasks();
+    List<TaskEntry> getAllEntries();
 }

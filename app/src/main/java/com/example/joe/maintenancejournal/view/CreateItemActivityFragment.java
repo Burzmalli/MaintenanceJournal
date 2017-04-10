@@ -19,6 +19,7 @@ import com.example.joe.maintenancejournal.model.MaintenanceTask;
 import com.example.joe.maintenancejournal.R;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -100,6 +101,9 @@ public class CreateItemActivityFragment extends Fragment {
 
                 if(myItem != null)
                     myItem.ItemName = tv.getText().toString();
+
+                if(myItem.Uuid == null || myItem.Uuid.isEmpty())
+                    myItem.Uuid = UUID.randomUUID().toString();
 
                 DataMgr.saveItem(myItem);
 

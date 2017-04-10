@@ -49,8 +49,5 @@
                 <action android:name="com.example.joe.maintenancejournal.DATA_UPDATED"/>
              </intent-filter>
          </receiver>
-        <provider
-            android:authorities="com.example.joe.maintenancejournal.datamgr"
-            android:name="com.example.joe.maintenancejournal.controller.DataMgr"/>
         </application>
 </manifest>

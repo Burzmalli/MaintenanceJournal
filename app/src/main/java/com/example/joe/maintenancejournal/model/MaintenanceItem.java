@@ -13,8 +13,12 @@ public class MaintenanceItem implements java.io.Serializable{
     public String ItemName = "";
     public String ItemDescription = "";
     public List<MaintenanceTask> Tasks = new ArrayList<>();
+    public boolean Synced = false;
     public int ImgId = 0;
+    public String Uuid;
     public int ItemId = -1; //Value for ID in database. -1 indicates unsaved item.
+    public boolean inDb = false;
+    public int OnlineId = -1;
 
     //Set the string value for display in lists
     public String toString()
@@ -48,6 +52,9 @@ public class MaintenanceItem implements java.io.Serializable{
         try {
             obj.put("itemname", ItemName);
             obj.put("itemdescription", ItemDescription);
+            obj.put("uuid", Uuid);
+            obj.put("itemid", ItemId);
+            obj.put("onlineid", OnlineId);
 
             if(Tasks.size() > 0) {
                 JSONArray tskArray = new JSONArray();
@@ -63,8 +70,11 @@ public class MaintenanceItem implements java.io.Serializable{
                     tskObj.put("frequencytype", task.FrequencyType);
                     tskObj.put("frequency", task.Frequency);
                     tskObj.put("recurring", task.Recurring);
+                    tskObj.put("uuid", task.Uuid);
+                    tskObj.put("taskid", task.TaskId);
+                    tskObj.put("onlineid", task.OnlineId);
 
-                    task.TaskId = ItemId + idStart;
+                    task.TaskId = idStart;
                     idStart++;
 
                     if(task.Entries.size() > 0) {
@@ -75,6 +85,9 @@ public class MaintenanceItem implements java.io.Serializable{
                             entryObj.put("cost", entry.EntryCost);
                             entryObj.put("entrydate", entry.getShortDate());
                             entryObj.put("note", entry.Notes);
+                            entryObj.put("uuid", entry.Uuid);
+                            entryObj.put("entryid", entry.EntryId);
+                            entryObj.put("onlineid", entry.OnlineId);
 
                             entryArray.put(entryObj);
                         }

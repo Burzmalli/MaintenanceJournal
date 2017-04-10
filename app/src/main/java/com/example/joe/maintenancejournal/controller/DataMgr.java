@@ -1,26 +1,11 @@
 package com.example.joe.maintenancejournal.controller;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.Service;
-import android.content.ContentProvider;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 
-import com.example.joe.maintenancejournal.R;
 import com.example.joe.maintenancejournal.model.MaintenanceItem;
 import com.example.joe.maintenancejournal.model.MaintenanceTask;
+import com.example.joe.maintenancejournal.model.TaskEntry;
 import com.example.joe.maintenancejournal.view.JournalCardAdapter;
-import com.example.joe.maintenancejournal.view.MainActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,17 +22,10 @@ public class DataMgr{
     public static Activity mainActivity;
     public static ConfigMgr ConfigMgr = new ConfigMgr();
     private static boolean initialized = false;
-    public static String DATA_UPDATE_COMPLETE = "data_updated";
-    public DatabaseMgr DbMgr;
-
-    private static IItemSvc myManager;
+    private static MaintenanceDataProvider myProvider;
 
     static {
-        myManager = new ItemFirebaseMgr();
-    }
-
-    public static void SetContext( Context context ) {
-        myManager.SetContext(context);
+        myProvider = MaintenanceDataProvider.sharedInstance;
     }
 
     public static void CancelPendingRequests() {
@@ -73,19 +51,19 @@ public class DataMgr{
     public static void LoadItems()
     {
         //Items = myManager.loadItems();
-        myManager.loadItems();
+        myProvider.loadItems();
     }
 
     public static void saveItem(MaintenanceItem item)
     {
-        myManager.createItem(item);
+        myProvider.createItem(item, MaintenanceDataProvider.SyncType.BOTH);
     }
 
     public static int GetGapIndex() {
         int gap = 0;
 
         for(MaintenanceItem itm : Items)
-            if(itm.ItemId == gap) gap++;
+            if(itm.OnlineId == gap) gap++;
 
         return gap;
     }
@@ -105,27 +83,27 @@ public class DataMgr{
 
     public static void updateItem(MaintenanceItem item)
     {
-        myManager.updateItem(item);
+        myProvider.updateItem(item, MaintenanceDataProvider.SyncType.BOTH);
     }
 
     public static void deleteItem(MaintenanceItem item)
     {
-        myManager.deleteItem(item);
+        myProvider.deleteItem(item, MaintenanceDataProvider.SyncType.BOTH);
     }
 
     public static void saveTask(MaintenanceTask task)
     {
-        myManager.createTask(task);
+        myProvider.createTask(task, MaintenanceDataProvider.SyncType.BOTH);
     }
 
     public static void updateTask(MaintenanceTask task)
     {
-        myManager.updateTask(task);
+        myProvider.updateTask(task, MaintenanceDataProvider.SyncType.BOTH);
     }
 
     public static void deleteTask(MaintenanceTask task)
     {
-        myManager.deleteTask(task);
+        myProvider.deleteTask(task, MaintenanceDataProvider.SyncType.BOTH);
     }
 
     public static boolean isNameUnique( String testName)
@@ -219,38 +197,104 @@ public class DataMgr{
         return nextTask;
     }
 
-//    //Test code from developer.android.com. Not yet customized and implemented.
-//    public static void SetNotification(String title, String text, Date date)
-//    {
-//        NotificationCompat.Builder mBuilder =
-//                new NotificationCompat.Builder(mainActivity)
-//                        .setSmallIcon(R.drawable.icon128)
-//                        .setContentTitle(title)
-//                        .setContentText(text);
-//        // Creates an explicit intent for an Activity in your app
-//        Intent resultIntent = new Intent(mainActivity, MainActivity.class);
-//
-//        // The stack builder object will contain an artificial back stack for the
-//        // started Activity.
-//        // This ensures that navigating backward from the Activity leads out of
-//        // your application to the Home screen.
-//        TaskStackBuilder stackBuilder = TaskStackBuilder.create(mainActivity);
-//        // Adds the back stack for the Intent (but not the Intent itself)
-//        stackBuilder.addParentStack(MainActivity.class);
-//        // Adds the Intent that starts the Activity to the top of the stack
-//        stackBuilder.addNextIntent(resultIntent);
-//        PendingIntent resultPendingIntent =
-//                stackBuilder.getPendingIntent(
-//                        0,
-//                        PendingIntent.FLAG_UPDATE_CURRENT
-//                );
-//        mBuilder.setContentIntent(resultPendingIntent);
-//        NotificationManager mNotificationManager =
-//                (NotificationManager) mainActivity.getSystemService(Context.NOTIFICATION_SERVICE);
-//        // mId allows you to update the notification later on.
-//
-//        AlarmManager mgr = (AlarmManager) mainActivity.getSystemService(Context.ALARM_SERVICE);
-//
-//        mNotificationManager.notify(mId, mBuilder.build());
-//    }
+    public static void SyncLocalCache() {
+
+        MaintenanceDataProvider mdp = MaintenanceDataProvider.sharedInstance;
+
+        List<MaintenanceItem> dbItems = mdp.getLocalItems();
+        List<MaintenanceTask> dbTasks = mdp.getLocalTasks();
+        List<TaskEntry> dbEntries = mdp.getLocalEntries();
+
+        //Sync local to online
+        for(MaintenanceItem item : dbItems) {
+
+            for(MaintenanceItem itm : DataMgr.Items) {
+
+                if (itm.Uuid.equals(item.Uuid) && !item.Synced) {
+
+                    mdp.updateItem(item, MaintenanceDataProvider.SyncType.ONLINE);
+
+                    item.Synced = true;
+
+                    mdp.updateItem(item, MaintenanceDataProvider.SyncType.LOCAL);
+                }
+            }
+
+            if(!item.Synced) {
+
+                mdp.createItem(item, MaintenanceDataProvider.SyncType.ONLINE);
+
+                item.Synced = true;
+
+                mdp.updateItem(item, MaintenanceDataProvider.SyncType.LOCAL);
+            }
+        }
+
+        //Sync online to local
+        for(MaintenanceItem item : Items) {
+
+            for(MaintenanceItem dbItem : dbItems) {
+                if( item.Uuid.equals(dbItem.Uuid)) {
+                    item.inDb = true;
+                }
+            }
+
+            if(!item.inDb) {
+                mdp.createItem(item, MaintenanceDataProvider.SyncType.LOCAL);
+                item.inDb = true;
+            }
+
+            for(MaintenanceTask tsk : item.Tasks) {
+
+                for(MaintenanceTask dbTsk : dbTasks) {
+                    if(tsk.Uuid.equals(dbTsk.Uuid)) {
+                        tsk.inDb = true;
+                    }
+                }
+
+                if(!tsk.inDb) {
+                    mdp.createTask(tsk, MaintenanceDataProvider.SyncType.LOCAL);
+                    tsk.inDb = true;
+                }
+
+                for(TaskEntry entry : tsk.Entries) {
+
+                    for(TaskEntry dbEntry : dbEntries) {
+                        if(entry.Uuid.equals(dbEntry.Uuid)) {
+                            entry.inDb = true;
+                        }
+                    }
+
+                    if(!entry.inDb) {
+                        mdp.createEntry(entry, MaintenanceDataProvider.SyncType.LOCAL);
+                        entry.inDb = true;
+                    }
+                }
+            }
+        }
+    }
+
+    public static void MarkLocalSyncedByUuid(String uuid) {
+        for(MaintenanceItem item : MaintenanceDataProvider.sharedInstance.getLocalItems()) {
+            if(item.Uuid.equals(uuid)) {
+                item.Synced = true;
+
+                MaintenanceDataProvider.sharedInstance.updateItem(item, MaintenanceDataProvider.SyncType.LOCAL);
+
+                for(MaintenanceTask task : item.Tasks) {
+                    task.Synced = true;
+
+                    MaintenanceDataProvider.sharedInstance.updateTask(task, MaintenanceDataProvider.SyncType.LOCAL);
+
+                    for(TaskEntry entry : task.Entries) {
+                        entry.Synced = true;
+
+                        MaintenanceDataProvider.sharedInstance.updateEntry(entry, MaintenanceDataProvider.SyncType.LOCAL);
+                    }
+                }
+
+                return;
+            }
+        }
+    }
 }

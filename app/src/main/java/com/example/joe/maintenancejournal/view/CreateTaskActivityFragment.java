@@ -22,6 +22,7 @@ import com.example.joe.maintenancejournal.R;
 
 import java.text.NumberFormat;
 import java.util.Calendar;
+import java.util.UUID;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -65,6 +66,7 @@ public class CreateTaskActivityFragment extends Fragment {
 
                 MaintenanceTask task = new MaintenanceTask();
                 task.TaskName = tv.getText().toString();
+                task.Uuid = UUID.randomUUID().toString();
 
                 String cleanString = costText.getText().toString().replaceAll("[$,]", "");
 

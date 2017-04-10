@@ -17,8 +17,12 @@ public class MaintenanceTask implements java.io.Serializable{
     public int Frequency;
     public int ItemId;
     public int TaskId = -1;
+    public boolean Synced = false;
     public String TaskDescription = "";
+    public String Uuid;
     public List<TaskEntry> Entries = new ArrayList<>();
+    public boolean inDb = false;
+    public int OnlineId = -1;
 
     //Set the string value for display in lists
     public String toString()

@@ -10,6 +10,10 @@ public final class Constants {
     public static String DATE_FORMAT = "MM/dd/yyyy";
     public static String FIREBASEURL = "https://maintenance-journal.firebaseio.com/";
     public static String BASE_ARRAY_FILE = "items.json";
+    public static String FREQUENCY_TYPE_DAY = "Day";
+    public static String FREQUENCY_TYPE_MONTH = "Month";
+    public static String FREQUENCY_TYPE_WEEK = "Week";
+    public static String FREQUENCY_TYPE_YEAR = "Year";
     public static String ITEM_VALUE_NAME = "item name";
     public static String ITEM_VALUE_DESCRIPTION = "item description";
     public static String TASK_VALUE_NAME = "task name";

@@ -14,7 +14,11 @@ public class TaskEntry {
     public int TaskId;
     public int ItemId;
     public int EntryId = -1;
+    public boolean Synced = false;
+    public String Uuid;
     public String Notes;
+    public boolean inDb = false;
+    public int OnlineId = -1;
 
     //Set the string value for display in lists
     public String toString()

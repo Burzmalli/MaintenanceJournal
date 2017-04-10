@@ -7,6 +7,8 @@ import com.example.joe.maintenancejournal.controller.DataMgr;
 import com.example.joe.maintenancejournal.model.MaintenanceItem;
 import com.example.joe.maintenancejournal.R;
 
+import java.util.UUID;
+
 public class CreateItemActivity extends BaseActivity {
 
     protected MaintenanceItem myItem;
@@ -18,10 +20,14 @@ public class CreateItemActivity extends BaseActivity {
         myItem = new MaintenanceItem();
 
         myItem.ItemName = "temp";
+        myItem.Uuid = UUID.randomUUID().toString();
 
-        myItem.ItemId = DataMgr.GetGapIndex();
+        myItem.OnlineId = DataMgr.GetGapIndex();
 
-        DataMgr.Items.add(myItem.ItemId, myItem);
+        if(myItem.OnlineId <= DataMgr.Items.size())
+            DataMgr.Items.add(myItem.OnlineId, myItem);
+        else
+            DataMgr.Items.add(myItem);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_item);

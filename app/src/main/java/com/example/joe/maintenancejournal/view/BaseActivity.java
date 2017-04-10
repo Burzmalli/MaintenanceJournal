@@ -19,7 +19,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DataMgr.SetContext(this);
+        //DataMgr.SetContext(this);
 
         /*IntentFilter ifilter=new IntentFilter(DataMgr.DATA_UPDATE_COMPLETE);
 

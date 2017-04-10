@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,11 +17,10 @@ import com.example.joe.maintenancejournal.Constants;
 import com.example.joe.maintenancejournal.Global;
 import com.example.joe.maintenancejournal.model.MaintenanceItem;
 import com.example.joe.maintenancejournal.model.MaintenanceTask;
+import com.example.joe.maintenancejournal.model.TaskEntry;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 /**
  * Created by jowillia on 3/30/2017.
@@ -64,6 +61,18 @@ public class DataSvc extends Service {
         final int requestType = type;
         String requestUrl = url;
 
+        String tempUuid = "";
+
+        if( item != null ) {
+            try {
+                tempUuid = item.getString("uuid");
+            } catch (Exception ex) {
+                tempUuid = "";
+            }
+        }
+
+        final String itemUuid = tempUuid;
+
         //If JSONObject not null
         if(item != null ) {
 
@@ -81,16 +90,11 @@ public class DataSvc extends Service {
                         toastTxt = "Item successfully updated";
                     }
 
-                    Toast.makeText(getApplicationContext(),
-                            toastTxt,
-                            Toast.LENGTH_LONG).show();
+                    DataMgr.MarkLocalSyncedByUuid(itemUuid);
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(getApplicationContext(),
-                            "Data Operation Failed: " + error.getMessage(),
-                            Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -115,29 +119,61 @@ public class DataSvc extends Service {
                                     if (!jsonArray.isNull(i)) {
                                         JSONObject obj = jsonArray.getJSONObject(i);
 
-                                        item.ItemId = i;
+                                        item.ItemId = obj.getInt("itemid");
+                                        item.OnlineId = obj.getInt("onlineid");
 
                                         item.ItemName = obj.getString("itemname");
                                         item.ItemDescription = obj.getString("itemdescription");
+                                        item.Synced = true;
+                                        item.Uuid = obj.getString("uuid");
 
-                                        for (int j = 0; j < obj.getJSONArray("itemtasks").length(); j++) {
-                                            JSONObject task = obj.getJSONArray("itemtasks").getJSONObject(j);
+                                        try {
+                                            for (int j = 0; j < obj.getJSONArray("itemtasks").length(); j++) {
+                                                JSONObject task = obj.getJSONArray("itemtasks").getJSONObject(j);
 
-                                            MaintenanceTask tsk = new MaintenanceTask();
-                                            tsk.TaskName = task.getString("taskname");
-                                            tsk.TaskCost = task.getDouble("taskcost");
-                                            tsk.FrequencyType = task.getString("frequencytype");
-                                            tsk.Frequency = task.getInt("frequency");
-                                            tsk.StartDate = Global.StrToDate(task.getString("startdate"));
-                                            tsk.Recurring = task.getBoolean("recurring");
-                                            tsk.TaskDescription = task.getString("taskdescription");
-                                            tsk.ItemId = item.ItemId;
-                                            tsk.TaskId = j + item.ItemId;
+                                                MaintenanceTask tsk = new MaintenanceTask();
+                                                tsk.TaskName = task.getString("taskname");
+                                                tsk.TaskCost = task.getDouble("taskcost");
+                                                tsk.FrequencyType = task.getString("frequencytype");
+                                                tsk.Frequency = task.getInt("frequency");
+                                                tsk.StartDate = Global.StrToDate(task.getString("startdate"));
+                                                tsk.Recurring = task.getBoolean("recurring");
+                                                tsk.TaskDescription = task.getString("taskdescription");
+                                                tsk.Uuid = task.getString("uuid");
+                                                tsk.ItemId = item.ItemId;
+                                                tsk.TaskId = task.getInt("taskid");
+                                                tsk.OnlineId = task.getInt("onlineid");
+                                                tsk.Synced = true;
 
-                                            item.Tasks.add(tsk);
+                                                try {
+                                                    for (int k = 0; k < task.getJSONArray("taskentries").length(); k++) {
+                                                        JSONObject entry = task.getJSONArray("taskentries").getJSONObject(k);
+
+                                                        TaskEntry ent = new TaskEntry();
+                                                        ent.TaskName = tsk.TaskName;
+                                                        ent.EntryCost = entry.getDouble("cost");
+                                                        ent.EntryDate = Global.StrToDate(entry.getString("entrydate"));
+                                                        ent.Notes = entry.getString("note");
+                                                        ent.Uuid = entry.getString("uuid");
+                                                        ent.Synced = true;
+                                                        ent.TaskId = tsk.TaskId;
+                                                        ent.ItemId = tsk.ItemId;
+                                                        ent.OnlineId = entry.getInt("onlineid)");
+                                                        ent.TaskId = entry.getInt("entryid");
+                                                    }
+                                                } catch(Exception ex) {
+
+                                                }
+
+                                                item.Tasks.add(tsk);
+                                            }
+                                        } catch( Exception ex) {
+
                                         }
 
                                         DataMgr.Items.add(item);
+
+                                        DataMgr.SyncLocalCache();
                                     }
                                 }
 
@@ -157,9 +193,14 @@ public class DataSvc extends Service {
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(getApplicationContext(),
-                            "Data Operation Failed: " + error.getMessage(),
-                            Toast.LENGTH_LONG).show();
+                    if(requestType == Request.Method.GET) {
+                        MaintenanceDataProvider mdp = MaintenanceDataProvider.sharedInstance;
+                        DataMgr.Items.addAll(mdp.getLocalItems());
+
+                        Intent intent = new Intent();
+                        intent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
+                        sendBroadcast(intent);
+                    }
                 }
             });
 
