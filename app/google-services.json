@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "973884907144",
+    "firebase_url": "https://maintenance-journal-2.firebaseio.com",
+    "project_id": "maintenance-journal-2",
+    "storage_bucket": "maintenance-journal-2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:973884907144:android:8f3fdcb6f27dd594",
+        "android_client_info": {
+          "package_name": "com.example.joe.maintenancejournal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "973884907144-tol27h9pulhbneou5vfq136kvtp0eou5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArW4ERu954-gCMVSwiSfy1cP3KGQ9-ZBk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
