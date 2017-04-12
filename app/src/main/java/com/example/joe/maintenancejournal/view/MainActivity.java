@@ -34,7 +34,6 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         ItemFirebaseMgr mgr = new ItemFirebaseMgr();
-        mgr.startDb();
 
         DataMgr.mainActivity = this;
 

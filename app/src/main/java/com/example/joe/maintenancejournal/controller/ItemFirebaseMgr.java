@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.example.joe.maintenancejournal.App;
@@ -12,7 +13,11 @@ import com.example.joe.maintenancejournal.Constants;
 import com.example.joe.maintenancejournal.model.MaintenanceItem;
 import com.example.joe.maintenancejournal.model.MaintenanceTask;
 import com.example.joe.maintenancejournal.model.TaskEntry;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -27,15 +32,34 @@ public class ItemFirebaseMgr implements IItemSvc {
 
     private DataSvc mService;
     private boolean mBound = false;
+    private FirebaseDatabase mDatabase;
+    private DatabaseReference ref;
 
-    public void startDb() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+    public void startDatabase() {
+        mDatabase = FirebaseDatabase.getInstance();
+
+        ref = mDatabase.getReference("items");
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                String value = dataSnapshot.getValue(String.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("", "Failed to read value.", error.toException());
+            }
+        });
     }
 
     @Override
     public void loadItems() {
 
-        if(mContext == null) mContext = App.sharedInstance.getApplicationContext();
+        /*if(mContext == null) mContext = App.sharedInstance.getApplicationContext();
 
         //Build URL for GET request
         String getUrl = Constants.FIREBASEURL + Constants.BASE_ARRAY_FILE;
@@ -53,7 +77,25 @@ public class ItemFirebaseMgr implements IItemSvc {
         }
 
         //Otherwise, kick off rest request
-        mService.SendRest(Request.Method.GET, getUrl, null);
+        mService.SendRest(Request.Method.GET, getUrl, null);*/
+
+        DatabaseReference ref = mDatabase.getReference("items");
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                String value = dataSnapshot.getValue(String.class);
+                Log.d("", "Value is: " + value);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("", "Failed to read value.", error.toException());
+            }
+        });
     }
 
     @Override

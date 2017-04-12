@@ -15,8 +15,6 @@ public class App extends Application {
         super.onCreate();
 
         sharedInstance = this;
-
-        //DataMgr.SetContext(this);
     }
 
 

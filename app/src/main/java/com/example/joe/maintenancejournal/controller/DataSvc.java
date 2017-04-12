@@ -18,6 +18,7 @@ import com.example.joe.maintenancejournal.Global;
 import com.example.joe.maintenancejournal.model.MaintenanceItem;
 import com.example.joe.maintenancejournal.model.MaintenanceTask;
 import com.example.joe.maintenancejournal.model.TaskEntry;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -29,11 +30,13 @@ import org.json.JSONObject;
 public class DataSvc extends Service {
 
     private RequestQueue mQueue;
+    private FirebaseDatabase mDatabase;
 
     @Override
     public void onCreate() {
 
         mQueue = Volley.newRequestQueue(this);
+        mDatabase = FirebaseDatabase.getInstance();
     }
 
     @Override
