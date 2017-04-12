@@ -2,8 +2,6 @@ package com.example.joe.maintenancejournal;
 
 import android.app.Application;
 
-import com.example.joe.maintenancejournal.controller.DataMgr;
-
 /**
  * Created by Joe on 3/26/2017.
  */

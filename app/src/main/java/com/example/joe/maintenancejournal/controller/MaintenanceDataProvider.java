@@ -12,7 +12,6 @@ import com.example.joe.maintenancejournal.model.MaintenanceItem;
 import com.example.joe.maintenancejournal.model.MaintenanceTask;
 import com.example.joe.maintenancejournal.model.TaskEntry;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

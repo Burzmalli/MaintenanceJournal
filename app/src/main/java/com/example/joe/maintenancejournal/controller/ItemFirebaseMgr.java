@@ -12,6 +12,7 @@ import com.example.joe.maintenancejournal.Constants;
 import com.example.joe.maintenancejournal.model.MaintenanceItem;
 import com.example.joe.maintenancejournal.model.MaintenanceTask;
 import com.example.joe.maintenancejournal.model.TaskEntry;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -26,6 +27,10 @@ public class ItemFirebaseMgr implements IItemSvc {
 
     private DataSvc mService;
     private boolean mBound = false;
+
+    public void startDb() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+    }
 
     @Override
     public void loadItems() {
