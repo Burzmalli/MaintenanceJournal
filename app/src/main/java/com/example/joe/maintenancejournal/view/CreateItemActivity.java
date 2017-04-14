@@ -22,7 +22,7 @@ public class CreateItemActivity extends BaseActivity {
         myItem.ItemName = "temp";
         myItem.Uuid = UUID.randomUUID().toString();
 
-        myItem.OnlineId = DataMgr.GetGapIndex();
+        //myItem.OnlineId = DataMgr.GetGapIndex();
 
         DataMgr.Items.add(myItem);
 

@@ -63,7 +63,7 @@ public class DataMgr{
         int gap = 0;
 
         for(MaintenanceItem itm : Items)
-            if(itm.OnlineId == gap) gap++;
+            if(itm.ItemId == gap) gap++;
 
         return gap;
     }
@@ -195,108 +195,5 @@ public class DataMgr{
         }
 
         return nextTask;
-    }
-
-    public static void SyncLocalCache() {
-
-        MaintenanceDataProvider mdp = MaintenanceDataProvider.sharedInstance;
-
-        List<MaintenanceItem> dbItems = mdp.getLocalItems();
-        List<MaintenanceTask> dbTasks = mdp.getLocalTasks();
-        List<TaskEntry> dbEntries = mdp.getLocalEntries();
-
-        //Sync local to online
-        for(MaintenanceItem item : dbItems) {
-
-            for(MaintenanceItem itm : DataMgr.Items) {
-
-                if (itm.Uuid.equals(item.Uuid) && !item.Synced) {
-
-                    mdp.updateItem(item, MaintenanceDataProvider.SyncType.ONLINE);
-
-                    item.Synced = true;
-
-                    mdp.updateItem(item, MaintenanceDataProvider.SyncType.LOCAL);
-                }
-            }
-
-            if(!item.Synced) {
-
-                mdp.createItem(item, MaintenanceDataProvider.SyncType.ONLINE);
-
-                item.Synced = true;
-
-                DataMgr.Items.add(item);
-
-                mdp.updateItem(item, MaintenanceDataProvider.SyncType.LOCAL);
-            }
-        }
-
-        //Sync online to local
-        for(MaintenanceItem item : Items) {
-
-            for(MaintenanceItem dbItem : dbItems) {
-                if( item.Uuid.equals(dbItem.Uuid)) {
-                    item.inDb = true;
-                }
-            }
-
-            if(!item.inDb) {
-                mdp.createItem(item, MaintenanceDataProvider.SyncType.LOCAL);
-                item.inDb = true;
-            }
-
-            for(MaintenanceTask tsk : item.Tasks) {
-
-                for(MaintenanceTask dbTsk : dbTasks) {
-                    if(tsk.Uuid.equals(dbTsk.Uuid)) {
-                        tsk.inDb = true;
-                    }
-                }
-
-                if(!tsk.inDb) {
-                    mdp.createTask(tsk, MaintenanceDataProvider.SyncType.LOCAL);
-                    tsk.inDb = true;
-                }
-
-                for(TaskEntry entry : tsk.Entries) {
-
-                    for(TaskEntry dbEntry : dbEntries) {
-                        if(entry.Uuid.equals(dbEntry.Uuid)) {
-                            entry.inDb = true;
-                        }
-                    }
-
-                    if(!entry.inDb) {
-                        mdp.createEntry(entry, MaintenanceDataProvider.SyncType.LOCAL);
-                        entry.inDb = true;
-                    }
-                }
-            }
-        }
-    }
-
-    public static void MarkLocalSyncedByUuid(String uuid) {
-        for(MaintenanceItem item : MaintenanceDataProvider.sharedInstance.getLocalItems()) {
-            if(item.Uuid.equals(uuid)) {
-                item.Synced = true;
-
-                MaintenanceDataProvider.sharedInstance.updateItem(item, MaintenanceDataProvider.SyncType.LOCAL);
-
-                for(MaintenanceTask task : item.Tasks) {
-                    task.Synced = true;
-
-                    MaintenanceDataProvider.sharedInstance.updateTask(task, MaintenanceDataProvider.SyncType.LOCAL);
-
-                    for(TaskEntry entry : task.Entries) {
-                        entry.Synced = true;
-
-                        MaintenanceDataProvider.sharedInstance.updateEntry(entry, MaintenanceDataProvider.SyncType.LOCAL);
-                    }
-                }
-
-                return;
-            }
-        }
     }
 }

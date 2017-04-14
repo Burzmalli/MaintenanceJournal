@@ -27,34 +27,13 @@ import java.util.List;
 
 public class ItemFirebaseMgr implements IItemSvc {
 
-    private final String FIREBASEURL = "https://maintenance-journal.firebaseio.com/";
+    private final String FIREBASEURL = "https://maintenance-journal2.firebaseio.com/";
     private Context mContext;
 
     private DataSvc mService;
     private boolean mBound = false;
     private FirebaseDatabase mDatabase;
     private DatabaseReference ref;
-
-    public void startDatabase() {
-        mDatabase = FirebaseDatabase.getInstance();
-
-        ref = mDatabase.getReference("items");
-
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                String value = dataSnapshot.getValue(String.class);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("", "Failed to read value.", error.toException());
-            }
-        });
-    }
 
     @Override
     public void loadItems() {
@@ -104,7 +83,7 @@ public class ItemFirebaseMgr implements IItemSvc {
         if(mContext == null) mContext = App.sharedInstance.getApplicationContext();
 
         //Build URL for PUT request
-        String putUrl = Constants.FIREBASEURL + "items/" + (item.OnlineId) + "/.json";
+        String putUrl = "";// = Constants.FIREBASEURL + "items/" + (item.OnlineId) + "/.json";
 
         //Bind to service if not yet bound
         if(!mBound) {
@@ -117,7 +96,7 @@ public class ItemFirebaseMgr implements IItemSvc {
         }
 
         //Otherwise, kick off rest request
-        mService.SendRest(Request.Method.PUT, putUrl, item.GetAsJSONObject());
+        //mService.SendRest(Request.Method.PUT, putUrl, item.GetAsJSONObject());
     }
 
     @Override
@@ -125,7 +104,7 @@ public class ItemFirebaseMgr implements IItemSvc {
         if(mContext == null) mContext = App.sharedInstance.getApplicationContext();
 
         //Build URL for PATCH request
-        String patchUrl = FIREBASEURL + "items/" + item.OnlineId + "/.json";
+        String patchUrl = "";// = FIREBASEURL + "items/" + item.OnlineId + "/.json";
 
         //Bind to service if not yet bound
         if(!mBound) {
@@ -138,7 +117,7 @@ public class ItemFirebaseMgr implements IItemSvc {
         }
 
         //Otherwise, kick off rest request
-        mService.SendRest(Request.Method.PATCH, patchUrl, item.GetAsJSONObject());
+        //mService.SendRest(Request.Method.PATCH, patchUrl, item.GetAsJSONObject());
     }
 
     @Override
@@ -147,7 +126,7 @@ public class ItemFirebaseMgr implements IItemSvc {
         if(mContext == null) mContext = App.sharedInstance.getApplicationContext();
 
         //Build URL for delete request
-        String deleteUrl = FIREBASEURL + "items/" + item.OnlineId + "/.json";
+        String deleteUrl = "";// = FIREBASEURL + "items/" + item.OnlineId + "/.json";
 
         if(!mBound) {
             //Create service intent, put DELETE type and target URL, and bind service
@@ -159,7 +138,7 @@ public class ItemFirebaseMgr implements IItemSvc {
         }
 
         //Otherwise, kick off rest request
-        mService.SendRest(Request.Method.DELETE, deleteUrl, null);
+        //mService.SendRest(Request.Method.DELETE, deleteUrl, null);
     }
 
     @Override
@@ -171,7 +150,7 @@ public class ItemFirebaseMgr implements IItemSvc {
         if (item == null) return;
 
         //Build URL for PATCH request
-        String updateUrl = FIREBASEURL + "items/" + item.OnlineId + "/.json";
+        String updateUrl = "";// = FIREBASEURL + "items/" + item.OnlineId + "/.json";
 
         //Bind to service if not yet bound
         if(!mBound) {
@@ -184,7 +163,7 @@ public class ItemFirebaseMgr implements IItemSvc {
         }
 
         //Otherwise, kick off rest request
-        mService.SendRest(Request.Method.PATCH, updateUrl, item.GetAsJSONObject());
+        //mService.SendRest(Request.Method.PATCH, updateUrl, item.GetAsJSONObject());
     }
 
     @Override
@@ -196,7 +175,7 @@ public class ItemFirebaseMgr implements IItemSvc {
         if (item == null) return;
 
         //Build URL for PATCH request
-        String updateUrl = FIREBASEURL + "items/" + item.OnlineId + "/.json";
+        String updateUrl = "";// = FIREBASEURL + "items/" + item.OnlineId + "/.json";
 
         //Bind to service if not yet bound
         if(!mBound) {
@@ -209,7 +188,7 @@ public class ItemFirebaseMgr implements IItemSvc {
         }
 
         //Otherwise, kick off rest request
-        mService.SendRest(Request.Method.PATCH, updateUrl, item.GetAsJSONObject());
+        //mService.SendRest(Request.Method.PATCH, updateUrl, item.GetAsJSONObject());
     }
 
     @Override
@@ -221,7 +200,7 @@ public class ItemFirebaseMgr implements IItemSvc {
         if (item == null) return;
 
         //Build URL for PATCH request
-        String updateUrl = FIREBASEURL + "items/" + item.OnlineId + "/.json";
+        String updateUrl = "";// = FIREBASEURL + "items/" + item.OnlineId + "/.json";
 
         //Bind to service if not yet bound
         if(!mBound) {
@@ -234,7 +213,7 @@ public class ItemFirebaseMgr implements IItemSvc {
         }
 
         //Otherwise, kick off rest request
-        mService.SendRest(Request.Method.PATCH, updateUrl, item.GetAsJSONObject());
+        //mService.SendRest(Request.Method.PATCH, updateUrl, item.GetAsJSONObject());
     }
 
     @Override

@@ -63,11 +63,8 @@ public class DatabaseMgr extends SQLiteOpenHelper implements IItemSvc {
         item.ItemId = cursor.getInt(0);
         item.ItemName = cursor.getString(1);
         item.ItemDescription = cursor.getString(2);
-        item.Synced = cursor.getInt(3) == 1;
         item.Uuid = cursor.getString(4);
-        item.OnlineId = cursor.getInt(5);
         item.Tasks.addAll(getTasksForItem(item.ItemId));
-        item.inDb = true;
 
         return item;
     }
@@ -106,13 +103,10 @@ public class DatabaseMgr extends SQLiteOpenHelper implements IItemSvc {
         task.StartDate = new Date(cursor.getLong(3));
         task.Recurring = cursor.getInt(4) == 1;
         task.ItemId = cursor.getInt(5);
-        task.Synced = cursor.getInt(6) == 1;
         task.FrequencyType = cursor.getString(7);
         task.Frequency = cursor.getInt(8);
         task.Uuid = cursor.getString(9);
-        task.OnlineId = cursor.getInt(10);
         task.Entries = getEntriesForTask(task.TaskId);
-        task.inDb = true;
 
         return task;
     }
@@ -151,10 +145,7 @@ public class DatabaseMgr extends SQLiteOpenHelper implements IItemSvc {
         entry.Notes = cursor.getString(4);
         entry.ItemId = cursor.getInt(5);
         entry.TaskId = cursor.getInt(6);
-        entry.Synced = cursor.getInt(7) == 1;
         entry.Uuid = cursor.getString(8);
-        entry.OnlineId = cursor.getInt(9);
-        entry.inDb = true;
 
         return entry;
     }
@@ -167,9 +158,7 @@ public class DatabaseMgr extends SQLiteOpenHelper implements IItemSvc {
 
         values.put("name", item.ItemName);
         values.put("description", item.ItemDescription);
-        values.put("synced", item.Synced ? 1 : 0);
         values.put("uuid", item.Uuid);
-        values.put("onlineid", item.OnlineId);
 
         item.ItemId = (int)db.insert("item", null, values);
 
@@ -194,9 +183,7 @@ public class DatabaseMgr extends SQLiteOpenHelper implements IItemSvc {
 
         values.put("name", item.ItemName);
         values.put("description", item.ItemDescription);
-        values.put("synced", item.Synced ? 1 : 0);
         values.put("uuid", item.Uuid);
-        values.put("onlineid", item.OnlineId);
 
         db.update("item", values,
                 "id = ?", new String[] {String.valueOf(item.ItemId)});
@@ -235,9 +222,7 @@ public class DatabaseMgr extends SQLiteOpenHelper implements IItemSvc {
         values.put("date", task.StartDate.getTime());
         values.put("recurring", task.Recurring ? 1 : 0);
         values.put("itemId", task.ItemId);
-        values.put("synced", task.Synced ? 1 : 0);
         values.put("uuid", task.Uuid);
-        values.put("onlineid", task.OnlineId);
 
         task.TaskId = (int)db.insert("task", null, values);
 
@@ -255,9 +240,7 @@ public class DatabaseMgr extends SQLiteOpenHelper implements IItemSvc {
         values.put("date", task.StartDate.getTime());
         values.put("recurring", task.Recurring ? 1 : 0);
         values.put("itemId", task.ItemId);
-        values.put("synced", task.Synced ? 1 : 0);
         values.put("uuid", task.Uuid);
-        values.put("onlineid", task.OnlineId);
 
         db.update("task", values,
                 "id = ?", new String[] {String.valueOf(task.TaskId)});
@@ -289,9 +272,7 @@ public class DatabaseMgr extends SQLiteOpenHelper implements IItemSvc {
         values.put("notes", entry.Notes);
         values.put("itemId", entry.ItemId);
         values.put("taskId", entry.TaskId);
-        values.put("synced", entry.Synced ? 1 : 0);
         values.put("uuid", entry.Uuid);
-        values.put("onlineid", entry.OnlineId);
 
         entry.EntryId = (int)db.insert("entry", null, values);
 
@@ -310,9 +291,7 @@ public class DatabaseMgr extends SQLiteOpenHelper implements IItemSvc {
         values.put("notes", entry.Notes);
         values.put("itemId", entry.ItemId);
         values.put("taskId", entry.TaskId);
-        values.put("synced", entry.Synced ? 1 : 0);
         values.put("uuid", entry.Uuid);
-        values.put("onlineid", entry.OnlineId);
 
         db.update("entry", values,
                 "id = ?", new String[] {String.valueOf(entry.EntryId)});
