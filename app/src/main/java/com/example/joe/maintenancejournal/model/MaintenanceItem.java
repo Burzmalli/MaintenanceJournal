@@ -18,18 +18,15 @@ public class MaintenanceItem implements java.io.Serializable{
     public List<MaintenanceTask> Tasks = new ArrayList<>();
     public int ImgId = 0;
     public String Uuid;
-    public int ItemId = -1; //Value for ID in database. -1 indicates unsaved item.
 
     public MaintenanceItem() {
 
     }
 
-    public MaintenanceItem(String name, String description, int imgId, String uuid, int id) {
-        ItemName = name;
-        ItemDescription = description;
-        ImgId = imgId;
+    public MaintenanceItem(String itemname, String itemdescription, String uuid) {
+        ItemName = itemname;
+        ItemDescription = itemdescription;
         Uuid = uuid;
-        ItemId = id;
     }
 
     //Set the string value for display in lists
@@ -59,24 +56,12 @@ public class MaintenanceItem implements java.io.Serializable{
         return str;
     }
 
-    public int GetTaskGapIndex() {
-        int gap = 0;
-
-        for(MaintenanceTask task : Tasks) {
-            if(task.TaskId == gap)
-                gap++;
-        }
-
-        return gap;
-    }
-
     public JSONObject GetAsJSONObject() {
         JSONObject obj = new JSONObject();
         try {
             obj.put("itemname", ItemName);
             obj.put("itemdescription", ItemDescription);
             obj.put("uuid", Uuid);
-            obj.put("itemid", ItemId);
 
             if(Tasks.size() > 0) {
                 JSONArray tskArray = new JSONArray();
@@ -93,9 +78,7 @@ public class MaintenanceItem implements java.io.Serializable{
                     tskObj.put("frequency", task.Frequency);
                     tskObj.put("recurring", task.Recurring);
                     tskObj.put("uuid", task.Uuid);
-                    tskObj.put("taskid", task.TaskId);
 
-                    task.TaskId = idStart;
                     idStart++;
 
                     if(task.Entries.size() > 0) {
@@ -107,7 +90,6 @@ public class MaintenanceItem implements java.io.Serializable{
                             entryObj.put("entrydate", entry.getShortDate());
                             entryObj.put("note", entry.Notes);
                             entryObj.put("uuid", entry.Uuid);
-                            entryObj.put("entryid", entry.EntryId);
 
                             entryArray.put(entryObj);
                         }

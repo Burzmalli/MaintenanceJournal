@@ -17,8 +17,12 @@ import com.example.joe.maintenancejournal.R;
 import com.example.joe.maintenancejournal.controller.DataMgr;
 import com.example.joe.maintenancejournal.model.MaintenanceItem;
 import com.example.joe.maintenancejournal.model.MaintenanceTask;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -105,7 +109,17 @@ public class CreateItemActivityFragment extends Fragment {
                 if(myItem.Uuid == null || myItem.Uuid.isEmpty())
                     myItem.Uuid = UUID.randomUUID().toString();
 
-                DataMgr.saveItem(myItem);
+                //DataMgr.saveItem(myItem);
+
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("items");
+
+                Map<String, MaintenanceItem> items = new HashMap<>();
+                DataMgr.Items.add(myItem);
+                for(MaintenanceItem item : DataMgr.Items) {
+                    items.put(item.Uuid, item);
+                }
+
+                ref.setValue(items);
 
                 //Close the screen to return to the item list
                 getActivity().finish();

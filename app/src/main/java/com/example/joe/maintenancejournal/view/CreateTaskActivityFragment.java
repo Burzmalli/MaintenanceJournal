@@ -83,7 +83,9 @@ public class CreateTaskActivityFragment extends Fragment {
                 cal.set(picker.getYear(), picker.getMonth(), picker.getDayOfMonth());
 
                 task.StartDate = cal.getTime();
-                task.ItemId = myItem.ItemId;
+                //task.ItemId = myItem.ItemId;
+                //TODO: Assign parent item based on item uuid
+                task.ParentItem = myItem;
 
                 CheckedTextView ctv = (CheckedTextView) myView.findViewById(R.id.checkbox_recurring);
                 task.Recurring = ctv.isChecked();

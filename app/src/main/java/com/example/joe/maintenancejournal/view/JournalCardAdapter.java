@@ -21,6 +21,7 @@ import com.example.joe.maintenancejournal.R;
 import com.example.joe.maintenancejournal.controller.DataMgr;
 import com.example.joe.maintenancejournal.model.MaintenanceItem;
 import com.example.joe.maintenancejournal.model.MaintenanceTask;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -226,7 +227,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             mHeldItem.Tasks.remove(selectedTask);
-                            DataMgr.deleteTask(selectedTask);
+                            //DataMgr.deleteTask(selectedTask);
                             mParent.notifyDataSetChanged();
                         }
 
@@ -249,7 +250,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //CollapseCard();
-                            DataMgr.deleteItem(mHeldItem);
+                            //DataMgr.deleteItem(mHeldItem);
                             DataMgr.Items.remove(mHeldItem);
                             mHeldItem = null;
                             CollapseCard();
@@ -294,13 +295,13 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
         {
             mHeldItem = DataMgr.GetItemFromName(mItemName.getText().toString());
 
-            if(DataMgr.lastClicked != null && DataMgr.lastClicked != this)
-                DataMgr.lastClicked.CollapseCard();
+            /*if(DataMgr.lastClicked != null && DataMgr.lastClicked != this)
+                DataMgr.lastClicked.CollapseCard();*/
 
             mTaskList.setVisibility(View.VISIBLE);
             mEditItemBtn.setVisibility(View.VISIBLE);
 
-            DataMgr.lastClicked = this;
+            //DataMgr.lastClicked = this;
 
             expanded = true;
         }
@@ -358,7 +359,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                 mHeldItem.ItemName = mEditName.getText().toString();
                 mItemName.setText(mHeldItem.ItemName);
 
-                DataMgr.updateItem(mHeldItem);
+                //DataMgr.updateItem(mHeldItem);
             }
             else
             {
@@ -366,7 +367,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                     ArrayList<MaintenanceTask> removeTasks = new ArrayList<MaintenanceTask>();
 
                     for (MaintenanceTask task : mHeldItem.Tasks) {
-                        if (task.TaskId < 0)
+                        if (task.Uuid == null)
                             removeTasks.add(task);
                     }
 

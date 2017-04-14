@@ -2,6 +2,8 @@ package com.example.joe.maintenancejournal.controller;
 
 import android.content.Context;
 
+import com.example.joe.maintenancejournal.App;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -25,10 +27,7 @@ public class ConfigMgr implements IConfigMgr{
 
         try {
 
-            if(DataMgr.mainActivity == null)
-                return;
-
-            Context context = DataMgr.mainActivity.getBaseContext();
+            Context context = App.sharedInstance.getApplicationContext();
 
             //Clear the existing items
             Configuration = new Configuration();
@@ -66,10 +65,7 @@ public class ConfigMgr implements IConfigMgr{
         ObjectOutputStream osw = null;
 
         try {
-            if(DataMgr.mainActivity == null)
-                return;
-
-            Context context = DataMgr.mainActivity.getBaseContext();
+            Context context = App.sharedInstance.getApplicationContext();
 
             //Open a fileoutputstream for writing
             fsw = context.openFileOutput(configFile, Context.MODE_PRIVATE);

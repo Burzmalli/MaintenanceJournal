@@ -1,7 +1,6 @@
 package com.example.joe.maintenancejournal.view;
 
 import android.app.Fragment;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -14,68 +13,46 @@ import android.view.ViewGroup;
 
 import com.example.joe.maintenancejournal.R;
 import com.example.joe.maintenancejournal.controller.DataMgr;
-import com.example.joe.maintenancejournal.controller.DataUpdateReceiver;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class MainActivityFragment extends Fragment {
 
-    private RecyclerView thingsListView = null;
-    private RecyclerView.Adapter<JournalCardAdapter.MaintenanceItemHolder> thingsArrayAdapter;
-    private BroadcastReceiver br = new DataUpdateReceiver();
-    private boolean Registered = false;
-
+    private RecyclerView itemCardRecycler = null;
+    private RecyclerView.Adapter<JournalCardAdapter.MaintenanceItemHolder> itemHolderAdapter;
     public MainActivityFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        DataMgr.LoadItems();
+
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         //Create and set adapter for cardview in recyclerview
-        thingsListView = (RecyclerView) rootView.findViewById(R.id.list_of_things);
+        itemCardRecycler = (RecyclerView) rootView.findViewById(R.id.list_of_things);
 
-        thingsListView.setHasFixedSize(true);
+        itemCardRecycler.setHasFixedSize(true);
 
         LinearLayoutManager mgr = new LinearLayoutManager(getActivity());
         mgr.setOrientation(LinearLayoutManager.VERTICAL);
-        thingsListView.setLayoutManager(mgr);
+        itemCardRecycler.setLayoutManager(mgr);
 
-        thingsArrayAdapter = new JournalCardAdapter(DataMgr.Items);
+        itemHolderAdapter = new JournalCardAdapter(DataMgr.Items);
 
-        thingsListView.setAdapter(thingsArrayAdapter);
-
-        RegisterForUpdate();
+        itemCardRecycler.setAdapter(itemHolderAdapter);
 
         return rootView;
     }
 
-    private void RegisterForUpdate() {
-        IntentFilter ifilter = new IntentFilter("com.example.joe.maintenancejournal.DATA_UPDATED");
-
-        getActivity().registerReceiver(onEvent, ifilter);
-        Registered = true;
-    }
-
-    private void UnregisterForUpdate() {
-        if(Registered)
-            getActivity().unregisterReceiver(onEvent);
-    }
-
-    private DataUpdateReceiver onEvent=new DataUpdateReceiver() {
-        public void onReceive(Context ctxt, Intent i) {
-
-            UpdateList();
-        }
-    };
-
     @Override
     public void onResume()
     {
-        RegisterForUpdate();
-
         //Update the list of items when the user comes back to this screen from creating an item
         UpdateList();
 
@@ -84,14 +61,13 @@ public class MainActivityFragment extends Fragment {
 
     @Override
     public void onStop() {
-        //LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(onEvent);
-        UnregisterForUpdate();
+
         super.onStop();
     }
 
     public void UpdateList() {
-        if(thingsArrayAdapter != null) {
-            thingsArrayAdapter.notifyDataSetChanged();
+        if(itemHolderAdapter != null) {
+            itemHolderAdapter.notifyDataSetChanged();
         }
     }
 }

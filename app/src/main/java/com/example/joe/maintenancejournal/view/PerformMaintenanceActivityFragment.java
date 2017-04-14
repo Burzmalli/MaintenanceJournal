@@ -87,8 +87,8 @@ public class PerformMaintenanceActivityFragment extends Fragment {
 
                 entry.EntryDate = cal.getTime();
                 entry.Notes = notesText.getText().toString();
-                entry.ItemId = myItem.ItemId;
-                entry.TaskId = myTask.TaskId;
+                //entry.TaskId = myTask.TaskId;
+                //TODO: Assign parent task based on task UUID
 
                 //Add the task to the selected item's task list
                 myTask.Entries.add(entry);

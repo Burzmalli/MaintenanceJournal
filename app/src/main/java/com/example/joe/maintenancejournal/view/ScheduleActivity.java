@@ -87,7 +87,7 @@ public class ScheduleActivity extends BaseActivity {
         //Update the list view with a list adapter
         thingsListView = (ListView) findViewById(R.id.list_of_tasks);
 
-        thingsArrayAdapter = new ArrayAdapter<String>(getBaseContext(),
+        thingsArrayAdapter = new ArrayAdapter<>(getBaseContext(),
                 android.R.layout.simple_list_item_1, thingsList);
 
         thingsListView.setAdapter(thingsArrayAdapter);

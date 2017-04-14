@@ -28,7 +28,7 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        DataMgr.CancelPendingRequests();
+        //DataMgr.CancelPendingRequests();
 
         //LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(onEvent);
 
@@ -37,7 +37,7 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        DataMgr.CancelPendingRequests();
+        //DataMgr.CancelPendingRequests();
 
         super.onDestroy();
     }

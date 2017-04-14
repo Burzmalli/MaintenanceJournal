@@ -18,8 +18,7 @@ public class MaintenanceTask implements java.io.Serializable{
     public boolean Recurring;
     public String FrequencyType = "";
     public int Frequency;
-    public int ItemId;
-    public int TaskId = -1;
+    public MaintenanceItem ParentItem;
     public String TaskDescription = "";
     public String Uuid;
     public List<TaskEntry> Entries = new ArrayList<>();
@@ -29,15 +28,14 @@ public class MaintenanceTask implements java.io.Serializable{
     }
 
     public MaintenanceTask(String name, Date date, double cost, boolean recurring, String frequencyType,
-                           int frequency, int itemId, int id, String description, String uuid) {
+                           int frequency, String parentId, String description, String uuid) {
         TaskName = name;
         StartDate = date;
         TaskCost = cost;
         Recurring = recurring;
         FrequencyType = frequencyType;
         Frequency = frequency;
-        ItemId = itemId;
-        TaskId = id;
+        //TODO: Assign ParentItem based on parentId
         TaskDescription = description;
         Uuid = uuid;
     }

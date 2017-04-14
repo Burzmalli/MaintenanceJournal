@@ -18,8 +18,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.joe.maintenancejournal.R;
-import com.example.joe.maintenancejournal.controller.DataMgr;
-import com.example.joe.maintenancejournal.controller.ItemFirebaseMgr;
 
 public class MainActivity extends BaseActivity {
 
@@ -32,12 +30,6 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        ItemFirebaseMgr mgr = new ItemFirebaseMgr();
-
-        DataMgr.mainActivity = this;
-
-        DataMgr.InitialLoad();
 
         setContentView(R.layout.activity_main);
 
@@ -93,7 +85,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        DataMgr.CancelPendingRequests();
 
         super.onDestroy();
     }

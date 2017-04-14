@@ -24,7 +24,7 @@ public class CreateItemActivity extends BaseActivity {
 
         //myItem.OnlineId = DataMgr.GetGapIndex();
 
-        DataMgr.Items.add(myItem);
+        //DataMgr.Items.add(myItem);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_item);

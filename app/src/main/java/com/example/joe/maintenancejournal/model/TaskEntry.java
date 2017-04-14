@@ -15,9 +15,7 @@ public class TaskEntry {
     public String TaskName;
     public Date EntryDate;
     public double EntryCost;
-    public int TaskId;
-    public int ItemId;
-    public int EntryId = -1;
+    public MaintenanceTask ParentTask;
     public String Uuid;
     public String Notes;
 
@@ -25,11 +23,14 @@ public class TaskEntry {
 
     }
 
-    public TaskEntry(String name, Date date, double cost, int taskId, int itemId, int id, String uuid,
+    public TaskEntry(String name, Date date, double cost, String taskId, String uuid,
                      String notes) {
         TaskName = name;
         EntryDate = date;
         EntryCost = cost;
+        Uuid = uuid;
+        Notes = notes;
+        //TODO: Assign ParentTask based on taskId
     }
 
     //Set the string value for display in lists
