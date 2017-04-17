@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.joe.maintenancejournal.Constants;
 import com.example.joe.maintenancejournal.R;
 import com.example.joe.maintenancejournal.controller.DataMgr;
 import com.example.joe.maintenancejournal.controller.DataUpdateReceiver;
@@ -76,7 +77,7 @@ public class CreateItemActivityFragment extends Fragment {
                 Intent intent = new Intent(view.getContext(), CreateTaskActivity.class);
 
                 //Pass the index for the item that will get the new task
-                intent.putExtra("itemIndex", DataMgr.Items.indexOf(myItem));
+                intent.putExtra(Constants.ITEM_KEY, myItem.Key);
 
                 //Open the screen
                 startActivity(intent);

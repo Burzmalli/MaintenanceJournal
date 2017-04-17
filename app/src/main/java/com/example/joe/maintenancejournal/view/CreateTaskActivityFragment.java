@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.joe.maintenancejournal.Constants;
 import com.example.joe.maintenancejournal.R;
 import com.example.joe.maintenancejournal.controller.DataMgr;
 import com.example.joe.maintenancejournal.model.MaintenanceItem;
@@ -42,10 +43,10 @@ public class CreateTaskActivityFragment extends Fragment {
         //Get the index, from the intent, of the item that will be getting the new task
         Intent intent = getActivity().getIntent();
 
-        int itemIndex = intent.getIntExtra("itemIndex", 0);
+        String itemKey = intent.getStringExtra(Constants.ITEM_KEY);
 
         //Get the item based on the index
-        myItem = DataMgr.Items.get(itemIndex);
+        myItem = DataMgr.GetItemFromKey(itemKey);
 
         //Get the view for later use
         myView = inflater.inflate(R.layout.fragment_create_task, container, false);

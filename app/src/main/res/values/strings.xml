@@ -20,7 +20,8 @@
     <string name="button_save_task">Save Task</string>
     <string name="button_save_entry">Save Maintenance Entry</string>
     <string name="button_delete_task">Delete Task</string>
-    <string name="title_activity_create_task">CreateTaskActivity</string>
+    <string name="title_activity_create_task">Create Task Activity</string>
+    <string name="title_activity_perform_maintenance">Perform Maintenance Activity</string>
     <string name="title_add_item">Create Item</string>
     <string name="title_create_task">Create Task</string>
     <string name="title_perform_maintenance">Perform Maintenance</string>

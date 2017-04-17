@@ -33,6 +33,10 @@
             android:label="@string/title_activity_create_task"
             android:theme="@style/MaintenanceTheme.NoActionBar" />
         <activity
+            android:name=".view.PerformMaintenanceActivity"
+            android:label="@string/title_activity_perform_maintenance"
+            android:theme="@style/MaintenanceTheme.NoActionBar" />
+        <activity
             android:name=".view.ScheduleActivity"
             android:label="@string/title_activity_schedule"
             android:theme="@style/MaintenanceTheme.NoActionBar" />

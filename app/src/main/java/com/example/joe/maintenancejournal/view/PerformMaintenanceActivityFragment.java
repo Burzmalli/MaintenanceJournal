@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.joe.maintenancejournal.Constants;
 import com.example.joe.maintenancejournal.R;
 import com.example.joe.maintenancejournal.controller.DataMgr;
 import com.example.joe.maintenancejournal.model.MaintenanceItem;
@@ -43,12 +44,12 @@ public class PerformMaintenanceActivityFragment extends Fragment {
         //Get the index, from the intent, of the item that will be getting the new task
         Intent intent = getActivity().getIntent();
 
-        int itemIndex = intent.getIntExtra("itemIndex", 0);
-        int taskIndex = intent.getIntExtra("taskIndex", 0);
+        String itemKey = intent.getStringExtra(Constants.ITEM_KEY);
+        String taskKey = intent.getStringExtra(Constants.TASK_KEY);
 
         //Get the item based on the index
-        myItem = DataMgr.Items.get(itemIndex);
-        myTask = DataMgr.GetItemTasks(myItem.Key).get(taskIndex);
+        myItem = DataMgr.GetItemFromKey(itemKey);
+        myTask = DataMgr.GetTaskFromKey(taskKey);
 
         //Get the view for later use
         myView = inflater.inflate(R.layout.fragment_perform_maintenance, container, false);
@@ -62,10 +63,7 @@ public class PerformMaintenanceActivityFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                //Get the textview with the task name and set the name to it
-                TextView tv = (TextView)myView.findViewById(R.id.text_entry_name);
-
-                if(tv.getText().toString().isEmpty() || costText.getText().toString().isEmpty())
+                if(costText.getText().toString().isEmpty())
                     return;
 
                 TaskEntry entry = new TaskEntry();
@@ -80,7 +78,7 @@ public class PerformMaintenanceActivityFragment extends Fragment {
                 entry.EntryCost = parsed;
 
                 //Get the date from the date picker and set the task date to it
-                DatePicker picker = (DatePicker) myView.findViewById(R.id.picker_task_date);
+                DatePicker picker = (DatePicker) myView.findViewById(R.id.picker_entry_date);
 
                 Calendar cal = Calendar.getInstance();
                 cal.set(picker.getYear(), picker.getMonth(), picker.getDayOfMonth());
@@ -88,8 +86,7 @@ public class PerformMaintenanceActivityFragment extends Fragment {
                 entry.EntryDate = cal.getTime();
                 entry.Notes = notesText.getText().toString();
 
-                //Add the task to the selected item's task list
-                //myTask.Entries.add(entry);
+                DataMgr.CreateEntry(entry);
 
                 //Close the screen
                 getActivity().finish();

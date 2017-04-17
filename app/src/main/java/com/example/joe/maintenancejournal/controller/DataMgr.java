@@ -124,6 +124,22 @@ public class DataMgr {
         });
     }
 
+    public static MaintenanceItem GetItemFromKey(String Key) {
+        for(MaintenanceItem item : Items) {
+            if(item.Key.equals(Key)) return item;
+        }
+
+        return null;
+    }
+
+    public static MaintenanceTask GetTaskFromKey(String Key) {
+        for(MaintenanceTask task : Tasks) {
+            if(task.Key.equals(Key)) return task;
+        }
+
+        return null;
+    }
+
     public static List<MaintenanceTask> GetItemTasks(String itemUuid) {
         List<MaintenanceTask> tasks = new ArrayList<>();
 

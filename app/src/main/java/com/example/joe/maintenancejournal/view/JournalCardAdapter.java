@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.joe.maintenancejournal.App;
+import com.example.joe.maintenancejournal.Constants;
 import com.example.joe.maintenancejournal.R;
 import com.example.joe.maintenancejournal.controller.DataMgr;
 import com.example.joe.maintenancejournal.controller.DataUpdateReceiver;
@@ -157,17 +158,17 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                    selectedTask = DataMgr.GetItemTasks(mHeldItem.Key).get(position);
+
                     if(editing) {
                         view.setSelected(true);
-                        selectedTask = DataMgr.GetItemTasks(mHeldItem.Key).get(position);
                         mDeleteTaskBtn.setVisibility(View.VISIBLE);
-                    } /*else {
+                    } else {
                         Intent performIntent = new Intent(view.getContext(), PerformMaintenanceActivity.class);
-                        int itmIdx = DataMgr.GetItemPosition(mHeldItem);
-                        performIntent.putExtra("itemIndex", itmIdx);
-                        performIntent.putExtra("taskIndex", position);
+                        performIntent.putExtra(Constants.ITEM_KEY, mHeldItem.Key);
+                        performIntent.putExtra(Constants.TASK_KEY, selectedTask.Key);
                         view.getContext().startActivity(performIntent);
-                    }*/
+                    }
                 }
             });
 
@@ -223,7 +224,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                         mHeldItem = DataMgr.GetItemFromName(mItemName.getText().toString());
 
                     //Pass the index for the item that will get the new task
-                    intent.putExtra("itemIndex", DataMgr.Items.indexOf(mHeldItem));
+                    intent.putExtra(Constants.ITEM_KEY, mHeldItem.Key);
 
                     //Open the screen
                     v.getContext().startActivity(intent);
@@ -258,7 +259,6 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             DataMgr.DeleteTask(selectedTask);
-                            mParent.notifyDataSetChanged();
                         }
 
                     });
@@ -279,12 +279,9 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                     {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            //CollapseCard();
-                            //DataMgr.deleteItem(mHeldItem);
-                            DataMgr.Items.remove(mHeldItem);
+                            DataMgr.DeleteItem(mHeldItem);
                             mHeldItem = null;
                             CollapseCard();
-                            mParent.notifyDataSetChanged();
                         }
                     });
                     dg.setNegativeButton("No", null);
@@ -388,22 +385,30 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
 
                 mHeldItem.ItemName = mEditName.getText().toString();
                 mItemName.setText(mHeldItem.ItemName);
+                DataMgr.UpdateItem(mHeldItem);
 
-                //DataMgr.updateItem(mHeldItem);
+                List<MaintenanceTask> tasks = DataMgr.GetItemTasks(mHeldItem.Key);
+
+                for(MaintenanceTask task : tasks) {
+                    if(!task.Saved) {
+                        task.Saved = true;
+                        DataMgr.UpdateTask(task);
+                    }
+                }
             }
             else
             {
                 if(mHeldItem != null) {
-                    ArrayList<MaintenanceTask> removeTasks = new ArrayList<MaintenanceTask>();
+                    ArrayList<MaintenanceTask> removeTasks = new ArrayList<>();
 
-                    for (MaintenanceTask task : DataMgr.Tasks) {
-                        if (task.Key == null)
+                    for (MaintenanceTask task : DataMgr.GetItemTasks(mHeldItem.Key)) {
+                        if (!task.Saved)
                             removeTasks.add(task);
                     }
 
                     for (MaintenanceTask task : removeTasks) {
 
-                        DataMgr.Tasks.remove(task);
+                        DataMgr.DeleteTask(task);
                     }
 
                     removeTasks.clear();
