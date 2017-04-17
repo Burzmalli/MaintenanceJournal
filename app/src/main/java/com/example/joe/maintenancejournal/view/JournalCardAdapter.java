@@ -322,15 +322,6 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
         {
             mHeldItem = DataMgr.GetItemFromName(mItemName.getText().toString());
 
-            if(lastClickedPos >= 0) {
-
-            }
-
-            if( lastClickedPos == getAdapterPosition())
-                lastClickedPos = -1;
-            else
-                lastClickedPos = getAdapterPosition();
-
             if(DataMgr.LastClicked != null && DataMgr.LastClicked != this)
                 DataMgr.LastClicked.CollapseCard();
 
@@ -438,10 +429,6 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
             mCancelChangesBtn.setVisibility(itemView.GONE);
 
             editing = false;
-        }
-
-        public boolean IsExpanded() {
-            return expanded;
         }
     }
 }
