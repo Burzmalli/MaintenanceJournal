@@ -6,8 +6,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -130,6 +133,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
         private FloatingActionButton mEditItemBtn;
         private Button mSaveChangesBtn;
         private Button mCancelChangesBtn;
+        private TextInputLayout mItemNameInput;
         //private Button mAddImgBtn;
 
         private boolean expanded = false;
@@ -152,6 +156,26 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
             //mAddImgBtn = (Button) itemView.findViewById(R.id.button_add_image);
             mDeleteItemBtn = (Button) itemView.findViewById(R.id.button_delete_item);
             mCancelChangesBtn = (Button) itemView.findViewById(R.id.button_cancel_item);
+            mItemNameInput = (TextInputLayout) itemView.findViewById(R.id.item_name_layout);
+
+            mEditName.addTextChangedListener(new TextWatcher() {
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if(!s.toString().matches("[a-zA-Z0-9 ]*")) mItemNameInput.setError(App.sharedInstance.getString(R.string.item_name_nospecial));
+                    else mItemNameInput.setError(null);
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
 
             mTaskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -210,6 +234,11 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
 
             mSaveChangesBtn.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
+
+                    if(mItemNameInput.getError() != null) {
+                        return;
+                    }
+
                     EndEdit(false);
                 }
             });
@@ -355,7 +384,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
             mSaveChangesBtn.setVisibility(itemView.VISIBLE);
             mEditItemBtn.setVisibility(itemView.GONE);
             mItemName.setVisibility(itemView.GONE);
-            mEditName.setVisibility(itemView.VISIBLE);
+            mItemNameInput.setVisibility(itemView.VISIBLE);
             mAddTaskBtn.setVisibility(itemView.VISIBLE);
             //mAddImgBtn.setVisibility(itemView.VISIBLE);
             mDeleteItemBtn.setVisibility(itemView.VISIBLE);
@@ -421,7 +450,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
 
             mAddTaskBtn.setVisibility(itemView.GONE);
             mSaveChangesBtn.setVisibility(itemView.GONE);
-            mEditName.setVisibility(itemView.GONE);
+            mItemNameInput.setVisibility(itemView.GONE);
             mItemName.setVisibility(itemView.VISIBLE);
             mEditItemBtn.setVisibility(itemView.VISIBLE);
             //mAddImgBtn.setVisibility(itemView.GONE);

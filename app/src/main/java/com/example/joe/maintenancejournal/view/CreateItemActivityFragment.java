@@ -5,13 +5,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -36,6 +40,8 @@ public class CreateItemActivityFragment extends Fragment {
     private List<MaintenanceTask> thingsList = null;
     private ListView thingsListView = null;
     private ArrayAdapter<MaintenanceTask> thingsArrayAdapter;
+    private TextInputLayout itemNameLayout;
+    private EditText itemName;
 
     private boolean Registered = false;
 
@@ -49,8 +55,31 @@ public class CreateItemActivityFragment extends Fragment {
         //Store the view for later access
         myView = inflater.inflate(R.layout.fragment_create_item, container, false);
 
+        itemNameLayout = (TextInputLayout) myView.findViewById(R.id.item_name_layout);
+
         //Get the item created by the parent activity
         myItem = ((CreateItemActivity)getActivity()).myItem;
+
+        itemName = (EditText) myView.findViewById(R.id.text_item_name);
+
+        itemName.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(!s.toString().matches("[a-zA-Z0-9 ]*")) itemNameLayout.setError(getString(R.string.item_name_nospecial));
+                else itemNameLayout.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         //Set the list source to the item's tasks
         thingsList = DataMgr.GetItemTasks(myItem.Key);
@@ -85,7 +114,9 @@ public class CreateItemActivityFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //Find the name text view and assign the text to the created item
-                TextView tv = (TextView)myView.findViewById(R.id.text_item_name);
+                EditText tv = itemName;
+
+                if(itemNameLayout.getError() != null) return;
 
                 if(!DataMgr.isNameUnique(tv.getText().toString()))
                 {
