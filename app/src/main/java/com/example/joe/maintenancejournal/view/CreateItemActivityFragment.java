@@ -21,13 +21,8 @@ import com.example.joe.maintenancejournal.controller.DataMgr;
 import com.example.joe.maintenancejournal.controller.DataUpdateReceiver;
 import com.example.joe.maintenancejournal.model.MaintenanceItem;
 import com.example.joe.maintenancejournal.model.MaintenanceTask;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 /**
  * A placeholder fragment containing a simple view.

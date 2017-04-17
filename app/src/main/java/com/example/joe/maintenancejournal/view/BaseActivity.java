@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.example.joe.maintenancejournal.controller.DataMgr;
-
 /**
  * Created by Joe on 3/26/2017.
  */

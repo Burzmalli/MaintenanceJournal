@@ -6,11 +6,6 @@ import android.support.v7.widget.Toolbar;
 import com.example.joe.maintenancejournal.R;
 import com.example.joe.maintenancejournal.controller.DataMgr;
 import com.example.joe.maintenancejournal.model.MaintenanceItem;
-import com.example.joe.maintenancejournal.model.MaintenanceTask;
-import com.example.joe.maintenancejournal.model.TaskEntry;
-
-import java.util.List;
-import java.util.UUID;
 
 public class CreateItemActivity extends BaseActivity {
 

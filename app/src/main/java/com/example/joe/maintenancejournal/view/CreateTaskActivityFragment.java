@@ -23,7 +23,6 @@ import com.example.joe.maintenancejournal.model.MaintenanceTask;
 
 import java.text.NumberFormat;
 import java.util.Calendar;
-import java.util.UUID;
 
 /**
  * A placeholder fragment containing a simple view.

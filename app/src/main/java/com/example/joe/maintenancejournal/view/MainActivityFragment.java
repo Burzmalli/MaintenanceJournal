@@ -1,7 +1,6 @@
 package com.example.joe.maintenancejournal.view;
 
 import android.app.Fragment;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -15,8 +14,6 @@ import android.view.ViewGroup;
 import com.example.joe.maintenancejournal.R;
 import com.example.joe.maintenancejournal.controller.DataMgr;
 import com.example.joe.maintenancejournal.controller.DataUpdateReceiver;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * A placeholder fragment containing a simple view.
