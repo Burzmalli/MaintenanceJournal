@@ -1,12 +1,16 @@
 package com.example.joe.maintenancejournal.model;
 
+import android.support.annotation.NonNull;
+
 import com.google.firebase.database.IgnoreExtraProperties;
+
+import java.util.Comparator;
 
 /**
  * Created by Joe on 9/08/2016.
  */
 @IgnoreExtraProperties
-public class MaintenanceItem implements java.io.Serializable{
+public class MaintenanceItem implements java.io.Serializable, Comparable<MaintenanceItem>{
     public String ItemName = "";
     public String ItemDescription = "";
     public int ImgId = 0;
@@ -34,5 +38,10 @@ public class MaintenanceItem implements java.io.Serializable{
     public String GetSummary()
     {
         return "";
+    }
+
+    @Override
+    public int compareTo(@NonNull MaintenanceItem o) {
+        return ItemName.toLowerCase().compareTo(o.ItemName.toLowerCase());
     }
 }

@@ -68,7 +68,7 @@ public class PerformMaintenanceActivityFragment extends Fragment {
                 TaskEntry entry = new TaskEntry();
                 entry.TaskName = myTask.TaskName;
                 entry.Key = UUID.randomUUID().toString();
-
+                entry.ParentKey = myTask.Key;
                 String cleanString = costText.getText().toString().replaceAll("[$,]", "");
 
                 double parsed = Double.parseDouble(cleanString);

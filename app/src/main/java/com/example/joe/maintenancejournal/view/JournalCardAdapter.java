@@ -39,6 +39,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
     private View itemView;
     private ArrayAdapter<MaintenanceTask> thingsArrayAdapter;
     private boolean Registered;
+    private static int lastClickedPos = -1;
 
     public JournalCardAdapter(List<MaintenanceItem> itemList)
     {
@@ -51,8 +52,6 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
         itemView = LayoutInflater.
                 from(parent.getContext()).
                 inflate(R.layout.card_layout, parent, false);
-
-        JournalCardAdapter.MaintenanceItemHolder.mParent = this;
 
         RegisterForUpdate();
 
@@ -122,7 +121,8 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
         private ListView mTaskList;
         private EditText mEditName;
         private MaintenanceItem mHeldItem;
-        public static RecyclerView.Adapter mParent;
+
+        private static int lastSelected = -1;
 
         private Button mAddTaskBtn;
         private Button mDeleteTaskBtn;
@@ -322,13 +322,22 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
         {
             mHeldItem = DataMgr.GetItemFromName(mItemName.getText().toString());
 
-            /*if(DataMgr.lastClicked != null && DataMgr.lastClicked != this)
-                DataMgr.lastClicked.CollapseCard();*/
+            if(lastClickedPos >= 0) {
+
+            }
+
+            if( lastClickedPos == getAdapterPosition())
+                lastClickedPos = -1;
+            else
+                lastClickedPos = getAdapterPosition();
+
+            if(DataMgr.LastClicked != null && DataMgr.LastClicked != this)
+                DataMgr.LastClicked.CollapseCard();
 
             mTaskList.setVisibility(View.VISIBLE);
             mEditItemBtn.setVisibility(View.VISIBLE);
 
-            //DataMgr.lastClicked = this;
+            DataMgr.LastClicked = this;
 
             expanded = true;
         }
@@ -340,7 +349,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
             mAddTaskBtn.setVisibility(View.GONE);
             mDeleteTaskBtn.setVisibility(View.GONE);
             mEditItemBtn.setVisibility(View.GONE);
-
+            DataMgr.LastClicked = null;
             expanded = false;
         }
 
@@ -429,6 +438,10 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
             mCancelChangesBtn.setVisibility(itemView.GONE);
 
             editing = false;
+        }
+
+        public boolean IsExpanded() {
+            return expanded;
         }
     }
 }

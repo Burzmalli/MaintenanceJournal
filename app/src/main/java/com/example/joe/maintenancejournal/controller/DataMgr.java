@@ -6,6 +6,7 @@ import com.example.joe.maintenancejournal.App;
 import com.example.joe.maintenancejournal.model.MaintenanceItem;
 import com.example.joe.maintenancejournal.model.MaintenanceTask;
 import com.example.joe.maintenancejournal.model.TaskEntry;
+import com.example.joe.maintenancejournal.view.JournalCardAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -14,6 +15,7 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +34,7 @@ public class DataMgr {
     private static DatabaseReference mItemRef;
     private static DatabaseReference mTaskRef;
     private static DatabaseReference mEntryRef;
+    public static JournalCardAdapter.MaintenanceItemHolder LastClicked;
 
     static {
         mInstance = FirebaseDatabase.getInstance();
@@ -60,6 +63,8 @@ public class DataMgr {
                     Items.add(entry.getValue());
                 }
 
+                Collections.sort(Items);
+
                 Intent broadcastIntent = new Intent();
                 broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
                 App.sharedInstance.sendBroadcast(broadcastIntent);
@@ -81,7 +86,6 @@ public class DataMgr {
                 Map<String, MaintenanceTask> tasks = dataSnapshot.getValue(taskList);
 
                 if(tasks == null) return;
-                //MaintenanceItem item = dataSnapshot.getValue(MaintenanceItem.class);
                 for(Map.Entry<String, MaintenanceTask> entry : tasks.entrySet()) {
                     Tasks.add(entry.getValue());
                 }
@@ -107,7 +111,6 @@ public class DataMgr {
                 Map<String, TaskEntry> entries = dataSnapshot.getValue(entryList);
 
                 if(entries == null) return;
-                //MaintenanceItem item = dataSnapshot.getValue(MaintenanceItem.class);
                 for(Map.Entry<String, TaskEntry> entry : entries.entrySet()) {
                     Entries.add(entry.getValue());
                 }
