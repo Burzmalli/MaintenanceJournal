@@ -48,7 +48,7 @@ public class PerformMaintenanceActivityFragment extends Fragment {
 
         //Get the item based on the index
         myItem = DataMgr.Items.get(itemIndex);
-        myTask = myItem.Tasks.get(taskIndex);
+        myTask = DataMgr.GetItemTasks(myItem.Key).get(taskIndex);
 
         //Get the view for later use
         myView = inflater.inflate(R.layout.fragment_perform_maintenance, container, false);
@@ -70,7 +70,7 @@ public class PerformMaintenanceActivityFragment extends Fragment {
 
                 TaskEntry entry = new TaskEntry();
                 entry.TaskName = myTask.TaskName;
-                entry.Uuid = UUID.randomUUID().toString();
+                entry.Key = UUID.randomUUID().toString();
 
                 String cleanString = costText.getText().toString().replaceAll("[$,]", "");
 
@@ -87,11 +87,9 @@ public class PerformMaintenanceActivityFragment extends Fragment {
 
                 entry.EntryDate = cal.getTime();
                 entry.Notes = notesText.getText().toString();
-                //entry.TaskId = myTask.TaskId;
-                //TODO: Assign parent task based on task UUID
 
                 //Add the task to the selected item's task list
-                myTask.Entries.add(entry);
+                //myTask.Entries.add(entry);
 
                 //Close the screen
                 getActivity().finish();

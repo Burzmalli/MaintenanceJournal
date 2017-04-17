@@ -1,11 +1,9 @@
 package com.example.joe.maintenancejournal.model;
 
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Map;
 
 /**
  * Created by Joe on 3/25/2017.
@@ -15,22 +13,24 @@ public class TaskEntry {
     public String TaskName;
     public Date EntryDate;
     public double EntryCost;
-    public MaintenanceTask ParentTask;
-    public String Uuid;
+    public String ParentKey;
+    public String Key;
     public String Notes;
+    public boolean Saved;
 
     public TaskEntry() {
 
     }
 
-    public TaskEntry(String name, Date date, double cost, String taskId, String uuid,
-                     String notes) {
+    public TaskEntry(String name, Date date, double cost, String taskKey, String key,
+                     String notes, boolean saved) {
         TaskName = name;
         EntryDate = date;
         EntryCost = cost;
-        Uuid = uuid;
+        Key = key;
         Notes = notes;
-        //TODO: Assign ParentTask based on taskId
+        ParentKey = taskKey;
+        Saved = saved;
     }
 
     //Set the string value for display in lists

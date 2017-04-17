@@ -1,6 +1,7 @@
 package com.example.joe.maintenancejournal.view;
 
 import android.app.Fragment;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.joe.maintenancejournal.R;
 import com.example.joe.maintenancejournal.controller.DataMgr;
+import com.example.joe.maintenancejournal.controller.DataUpdateReceiver;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -23,6 +25,9 @@ public class MainActivityFragment extends Fragment {
 
     private RecyclerView itemCardRecycler = null;
     private RecyclerView.Adapter<JournalCardAdapter.MaintenanceItemHolder> itemHolderAdapter;
+
+    boolean Registered = false;
+
     public MainActivityFragment() {
     }
 
@@ -47,7 +52,32 @@ public class MainActivityFragment extends Fragment {
 
         itemCardRecycler.setAdapter(itemHolderAdapter);
 
+        RegisterForUpdate();
+
         return rootView;
+    }
+
+    private DataUpdateReceiver onEvent=new DataUpdateReceiver() {
+        public void onReceive(Context ctxt, Intent i) {
+
+            UpdateList();
+        }
+    };
+
+    private void RegisterForUpdate() {
+        if(!Registered) {
+            IntentFilter ifilter = new IntentFilter("com.example.joe.maintenancejournal.DATA_UPDATED");
+
+            getActivity().registerReceiver(onEvent, ifilter);
+            Registered = true;
+        }
+    }
+
+    private void UnregisterForUpdate() {
+        if(Registered) {
+            getActivity().unregisterReceiver(onEvent);
+            Registered = false;
+        }
     }
 
     @Override
@@ -56,13 +86,25 @@ public class MainActivityFragment extends Fragment {
         //Update the list of items when the user comes back to this screen from creating an item
         UpdateList();
 
+        RegisterForUpdate();
+
         super.onResume();
     }
 
     @Override
     public void onStop() {
 
+        UnregisterForUpdate();
+
         super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+
+        UnregisterForUpdate();
+
+        super.onDestroy();
     }
 
     public void UpdateList() {

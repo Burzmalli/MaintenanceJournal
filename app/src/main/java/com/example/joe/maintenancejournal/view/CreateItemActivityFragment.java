@@ -1,7 +1,9 @@
 package com.example.joe.maintenancejournal.view;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.joe.maintenancejournal.R;
 import com.example.joe.maintenancejournal.controller.DataMgr;
+import com.example.joe.maintenancejournal.controller.DataUpdateReceiver;
 import com.example.joe.maintenancejournal.model.MaintenanceItem;
 import com.example.joe.maintenancejournal.model.MaintenanceTask;
 import com.google.firebase.database.DatabaseReference;
@@ -38,6 +41,8 @@ public class CreateItemActivityFragment extends Fragment {
     private ListView thingsListView = null;
     private ArrayAdapter<MaintenanceTask> thingsArrayAdapter;
 
+    private boolean Registered = false;
+
     public CreateItemActivityFragment() {
     }
 
@@ -52,7 +57,7 @@ public class CreateItemActivityFragment extends Fragment {
         myItem = ((CreateItemActivity)getActivity()).myItem;
 
         //Set the list source to the item's tasks
-        thingsList = myItem.Tasks;
+        thingsList = DataMgr.GetItemTasks(myItem.Key);
 
         //Update the list view with a list adapter
         thingsListView = (ListView) myView.findViewById(R.id.list_of_tasks);
@@ -103,39 +108,86 @@ public class CreateItemActivityFragment extends Fragment {
                     return;
                 }
 
-                if(myItem != null)
+                if(myItem != null) {
                     myItem.ItemName = tv.getText().toString();
-
-                if(myItem.Uuid == null || myItem.Uuid.isEmpty())
-                    myItem.Uuid = UUID.randomUUID().toString();
-
-                //DataMgr.saveItem(myItem);
-
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("items");
-
-                Map<String, MaintenanceItem> items = new HashMap<>();
-                DataMgr.Items.add(myItem);
-                for(MaintenanceItem item : DataMgr.Items) {
-                    items.put(item.Uuid, item);
+                    myItem.Saved = true;
                 }
 
-                ref.setValue(items);
+                for(MaintenanceTask task : DataMgr.GetItemTasks(myItem.Key)) {
+                    if(!task.Saved) {
+                        task.Saved = true;
+                        DataMgr.UpdateTask(task);
+                    }
+                }
+
+                DataMgr.UpdateItem(myItem);
 
                 //Close the screen to return to the item list
                 getActivity().finish();
             }
         });
 
+        RegisterForUpdate();
+
         return myView;
+    }
+
+    private void RegisterForUpdate() {
+        if(!Registered) {
+            IntentFilter ifilter = new IntentFilter("com.example.joe.maintenancejournal.DATA_UPDATED");
+
+            getActivity().registerReceiver(onEvent, ifilter);
+            Registered = true;
+        }
+    }
+
+    private DataUpdateReceiver onEvent=new DataUpdateReceiver() {
+        public void onReceive(Context ctxt, Intent i) {
+
+            UpdateTaskList();
+        }
+    };
+
+    private void UnregisterForUpdate() {
+        if(Registered) {
+            getActivity().unregisterReceiver(onEvent);
+            Registered = false;
+        }
+    }
+
+    private void UpdateTaskList() {
+
+        if(thingsList != null) {
+            thingsList.clear();
+            thingsList.addAll(DataMgr.GetItemTasks(myItem.Key));
+        }
+
+        if(thingsArrayAdapter != null)
+            thingsArrayAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onResume()
     {
-        //Update the list of tasks when the user comes back to this screen
-        if(thingsArrayAdapter != null)
-            thingsArrayAdapter.notifyDataSetChanged();
-
         super.onResume();
+
+        RegisterForUpdate();
+
+        //Update the list of tasks when the user comes back to this screen
+        UpdateTaskList();
+    }
+
+    @Override
+    public void onStop() {
+        UnregisterForUpdate();
+
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        UnregisterForUpdate();
+
+        super.onDestroy();
     }
 }

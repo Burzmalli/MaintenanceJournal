@@ -1,7 +1,9 @@
 package com.example.joe.maintenancejournal.view;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -17,11 +19,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.joe.maintenancejournal.App;
 import com.example.joe.maintenancejournal.R;
 import com.example.joe.maintenancejournal.controller.DataMgr;
+import com.example.joe.maintenancejournal.controller.DataUpdateReceiver;
 import com.example.joe.maintenancejournal.model.MaintenanceItem;
 import com.example.joe.maintenancejournal.model.MaintenanceTask;
-import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +37,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
     private List<MaintenanceItem> itemList;
     private View itemView;
     private ArrayAdapter<MaintenanceTask> thingsArrayAdapter;
+    private boolean Registered;
 
     public JournalCardAdapter(List<MaintenanceItem> itemList)
     {
@@ -49,6 +53,8 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
 
         JournalCardAdapter.MaintenanceItemHolder.mParent = this;
 
+        RegisterForUpdate();
+
         return new MaintenanceItemHolder(itemView);
     }
 
@@ -60,14 +66,39 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
         holder.mItemSummary.setText(item.GetSummary());
 
         thingsArrayAdapter = new ArrayAdapter<>(itemView.getContext(),
-                android.R.layout.simple_list_item_1, item.Tasks);
+                android.R.layout.simple_list_item_1, DataMgr.GetItemTasks(item.Key));
 
         holder.mTaskList.setAdapter(thingsArrayAdapter);
+
+        RegisterForUpdate();
     }
 
     @Override
     public int getItemCount() {
         return itemList.size();
+    }
+
+    private void RegisterForUpdate() {
+        if(!Registered) {
+            IntentFilter ifilter = new IntentFilter("com.example.joe.maintenancejournal.DATA_UPDATED");
+
+            App.sharedInstance.registerReceiver(onEvent, ifilter);
+            Registered = true;
+        }
+    }
+
+    private DataUpdateReceiver onEvent=new DataUpdateReceiver() {
+        public void onReceive(Context ctxt, Intent i) {
+
+            updateView();
+        }
+    };
+
+    private void UnregisterForUpdate() {
+        if(Registered) {
+            App.sharedInstance.unregisterReceiver(onEvent);
+            Registered = false;
+        }
     }
 
     public void updateView()
@@ -128,7 +159,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
 
                     if(editing) {
                         view.setSelected(true);
-                        selectedTask = mHeldItem.Tasks.get(position);
+                        selectedTask = DataMgr.GetItemTasks(mHeldItem.Key).get(position);
                         mDeleteTaskBtn.setVisibility(View.VISIBLE);
                     } /*else {
                         Intent performIntent = new Intent(view.getContext(), PerformMaintenanceActivity.class);
@@ -226,8 +257,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                     {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            mHeldItem.Tasks.remove(selectedTask);
-                            //DataMgr.deleteTask(selectedTask);
+                            DataMgr.DeleteTask(selectedTask);
                             mParent.notifyDataSetChanged();
                         }
 
@@ -366,14 +396,14 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                 if(mHeldItem != null) {
                     ArrayList<MaintenanceTask> removeTasks = new ArrayList<MaintenanceTask>();
 
-                    for (MaintenanceTask task : mHeldItem.Tasks) {
-                        if (task.Uuid == null)
+                    for (MaintenanceTask task : DataMgr.Tasks) {
+                        if (task.Key == null)
                             removeTasks.add(task);
                     }
 
                     for (MaintenanceTask task : removeTasks) {
 
-                        mHeldItem.Tasks.remove(task);
+                        DataMgr.Tasks.remove(task);
                     }
 
                     removeTasks.clear();

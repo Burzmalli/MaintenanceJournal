@@ -66,8 +66,7 @@ public class CreateTaskActivityFragment extends Fragment {
 
                 MaintenanceTask task = new MaintenanceTask();
                 task.TaskName = tv.getText().toString();
-                task.Uuid = UUID.randomUUID().toString();
-                //task.OnlineId = myItem.GetTaskGapIndex();
+                task.ParentKey = myItem.Key;
 
                 String cleanString = costText.getText().toString().replaceAll("[$,]", "");
 
@@ -84,14 +83,12 @@ public class CreateTaskActivityFragment extends Fragment {
 
                 task.StartDate = cal.getTime();
                 //task.ItemId = myItem.ItemId;
-                //TODO: Assign parent item based on item uuid
-                task.ParentItem = myItem;
+                task.ParentKey = myItem.Key;
 
                 CheckedTextView ctv = (CheckedTextView) myView.findViewById(R.id.checkbox_recurring);
                 task.Recurring = ctv.isChecked();
 
-                //Add the task to the selected item's task list
-                myItem.Tasks.add(task);
+                DataMgr.CreateTask(task);
 
                 //Close the screen
                 getActivity().finish();

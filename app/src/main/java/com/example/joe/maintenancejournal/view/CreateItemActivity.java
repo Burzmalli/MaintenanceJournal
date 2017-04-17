@@ -6,7 +6,10 @@ import android.support.v7.widget.Toolbar;
 import com.example.joe.maintenancejournal.R;
 import com.example.joe.maintenancejournal.controller.DataMgr;
 import com.example.joe.maintenancejournal.model.MaintenanceItem;
+import com.example.joe.maintenancejournal.model.MaintenanceTask;
+import com.example.joe.maintenancejournal.model.TaskEntry;
 
+import java.util.List;
 import java.util.UUID;
 
 public class CreateItemActivity extends BaseActivity {
@@ -20,11 +23,8 @@ public class CreateItemActivity extends BaseActivity {
         myItem = new MaintenanceItem();
 
         myItem.ItemName = "temp";
-        myItem.Uuid = UUID.randomUUID().toString();
 
-        //myItem.OnlineId = DataMgr.GetGapIndex();
-
-        DataMgr.Items.add(myItem);
+        DataMgr.CreateItem(myItem);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_item);
@@ -35,8 +35,10 @@ public class CreateItemActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         //Remove temporary new item if creation is canceled by pressing Back
-        if(DataMgr.Items.contains(myItem))
-            DataMgr.Items.remove(myItem);
+        if(!myItem.Saved) {
+
+            DataMgr.DeleteItem(myItem);
+        }
 
         super.onBackPressed();
     }
