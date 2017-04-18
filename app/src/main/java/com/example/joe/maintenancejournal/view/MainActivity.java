@@ -1,5 +1,6 @@
 package com.example.joe.maintenancejournal.view;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.joe.maintenancejournal.App;
 import com.example.joe.maintenancejournal.R;
 
 public class MainActivity extends BaseActivity {
@@ -72,7 +74,7 @@ public class MainActivity extends BaseActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), CreateItemActivity.class);
 
-                startActivity(intent);
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
             }
         });
     }

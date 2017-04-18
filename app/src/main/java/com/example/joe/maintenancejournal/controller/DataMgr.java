@@ -36,6 +36,8 @@ public class DataMgr {
     private static DatabaseReference mEntryRef;
     public static JournalCardAdapter.MaintenanceItemHolder LastClicked;
 
+    private static MaintenanceItem tempItem;
+
     static {
         mInstance = FirebaseDatabase.getInstance();
         mDatabase = mInstance.getReference();
@@ -167,10 +169,17 @@ public class DataMgr {
         return entries;
     }
 
+    public static void ClearTempData() {
+        if(tempItem != null) {
+            if(tempItem.ItemName.equals("temp")) DeleteItem(tempItem);
+        }
+    }
+
     public static void CreateItem(MaintenanceItem item) {
         String key = mItemRef.push().getKey();
         item.Key = key;
         mItemRef.child(item.Key).setValue(item);
+        if(item.ItemName.equals("temp")) tempItem = item;
     }
 
     public static void CreateTask(MaintenanceTask task) {
