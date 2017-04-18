@@ -32,10 +32,6 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        DataMgr.LoadItems();
-
-
-
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         //Create and set adapter for cardview in recyclerview

@@ -44,6 +44,8 @@
             android:name=".view.OptionsActivity"
             android:label="@string/title_activity_options"
             android:theme="@style/MaintenanceTheme.NoActionBar"/>
+        <activity android:name=".view.SyncSpinner" />
+
         <receiver android:name=".controller.DataUpdateReceiver">
             <intent-filter>
                 <action android:name="com.example.joe.maintenancejournal.DATA_UPDATED"/>

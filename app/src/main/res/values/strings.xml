@@ -59,4 +59,5 @@
     </string-array>
     <string name="title_activity_options">Options</string>
     <string name="item_name_nospecial">Item names can only contain letters, numbers, and spaces</string>
+    <string name="download_data_msg">Downloading data...\nPlease wait.</string>
 </resources>

@@ -7,6 +7,7 @@ import com.example.joe.maintenancejournal.model.MaintenanceItem;
 import com.example.joe.maintenancejournal.model.MaintenanceTask;
 import com.example.joe.maintenancejournal.model.TaskEntry;
 import com.example.joe.maintenancejournal.view.JournalCardAdapter;
+import com.example.joe.maintenancejournal.view.SyncSpinner;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,6 +36,7 @@ public class DataMgr {
     private static DatabaseReference mTaskRef;
     private static DatabaseReference mEntryRef;
     public static JournalCardAdapter.MaintenanceItemHolder LastClicked;
+    public static boolean mSyncing;
 
     private static MaintenanceItem tempItem;
 
@@ -51,9 +53,14 @@ public class DataMgr {
 
     public static void LoadItems() {
 
+        Intent spinnerIntent = new Intent(App.sharedInstance.getApplicationContext(), SyncSpinner.class);
+        App.sharedInstance.startActivity(spinnerIntent);
+
         mItemRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                mSyncing = true;
+
                 Items.clear();
 
                 GenericTypeIndicator<Map<String, MaintenanceItem>> itemList = new GenericTypeIndicator<Map<String, MaintenanceItem>>() {};
@@ -67,6 +74,8 @@ public class DataMgr {
 
                 Collections.sort(Items);
 
+                mSyncing = false;
+
                 Intent broadcastIntent = new Intent();
                 broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
                 App.sharedInstance.sendBroadcast(broadcastIntent);
@@ -75,12 +84,20 @@ public class DataMgr {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("Read failed: " + databaseError.getCode());
+
+                mSyncing = false;
+
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
+                App.sharedInstance.sendBroadcast(broadcastIntent);
             }
         });
 
         mTaskRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                mSyncing = true;
+
                 Tasks.clear();
 
                 GenericTypeIndicator<Map<String, MaintenanceTask>> taskList = new GenericTypeIndicator<Map<String, MaintenanceTask>>() {};
@@ -92,6 +109,8 @@ public class DataMgr {
                     Tasks.add(entry.getValue());
                 }
 
+                mSyncing = false;
+
                 Intent broadcastIntent = new Intent();
                 broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
                 App.sharedInstance.sendBroadcast(broadcastIntent);
@@ -100,12 +119,20 @@ public class DataMgr {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("Read failed: " + databaseError.getCode());
+
+                mSyncing = false;
+
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
+                App.sharedInstance.sendBroadcast(broadcastIntent);
             }
         });
 
         mEntryRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                mSyncing = true;
+
                 Entries.clear();
 
                 GenericTypeIndicator<Map<String, TaskEntry>> entryList = new GenericTypeIndicator<Map<String, TaskEntry>>() {};
@@ -117,6 +144,8 @@ public class DataMgr {
                     Entries.add(entry.getValue());
                 }
 
+                mSyncing = false;
+
                 Intent broadcastIntent = new Intent();
                 broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
                 App.sharedInstance.sendBroadcast(broadcastIntent);
@@ -125,6 +154,12 @@ public class DataMgr {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("Read failed: " + databaseError.getCode());
+
+                mSyncing = false;
+
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
+                App.sharedInstance.sendBroadcast(broadcastIntent);
             }
         });
     }
