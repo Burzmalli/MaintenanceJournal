@@ -36,7 +36,6 @@ public class DataMgr {
     private static DatabaseReference mTaskRef;
     private static DatabaseReference mEntryRef;
     public static JournalCardAdapter.MaintenanceItemHolder LastClicked;
-    public static boolean mSyncing;
 
     private static MaintenanceItem tempItem;
 
@@ -59,7 +58,6 @@ public class DataMgr {
         mItemRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mSyncing = true;
 
                 Items.clear();
 
@@ -74,8 +72,6 @@ public class DataMgr {
 
                 Collections.sort(Items);
 
-                mSyncing = false;
-
                 Intent broadcastIntent = new Intent();
                 broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
                 App.sharedInstance.sendBroadcast(broadcastIntent);
@@ -84,8 +80,6 @@ public class DataMgr {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("Read failed: " + databaseError.getCode());
-
-                mSyncing = false;
 
                 Intent broadcastIntent = new Intent();
                 broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
@@ -96,7 +90,6 @@ public class DataMgr {
         mTaskRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mSyncing = true;
 
                 Tasks.clear();
 
@@ -109,8 +102,6 @@ public class DataMgr {
                     Tasks.add(entry.getValue());
                 }
 
-                mSyncing = false;
-
                 Intent broadcastIntent = new Intent();
                 broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
                 App.sharedInstance.sendBroadcast(broadcastIntent);
@@ -119,8 +110,6 @@ public class DataMgr {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("Read failed: " + databaseError.getCode());
-
-                mSyncing = false;
 
                 Intent broadcastIntent = new Intent();
                 broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
@@ -131,7 +120,6 @@ public class DataMgr {
         mEntryRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mSyncing = true;
 
                 Entries.clear();
 
@@ -144,8 +132,6 @@ public class DataMgr {
                     Entries.add(entry.getValue());
                 }
 
-                mSyncing = false;
-
                 Intent broadcastIntent = new Intent();
                 broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
                 App.sharedInstance.sendBroadcast(broadcastIntent);
@@ -154,8 +140,6 @@ public class DataMgr {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("Read failed: " + databaseError.getCode());
-
-                mSyncing = false;
 
                 Intent broadcastIntent = new Intent();
                 broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");

@@ -25,8 +25,7 @@ public class SyncSpinner extends BaseActivity {
 
         registerReceiver(onEvent, filter);
 
-        if(!DataMgr.mSyncing)
-            finish();
+        finish();
     }
 
     private DataUpdateReceiver onEvent=new DataUpdateReceiver() {
