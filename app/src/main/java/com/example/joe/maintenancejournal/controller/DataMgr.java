@@ -55,6 +55,8 @@ public class DataMgr {
         Intent spinnerIntent = new Intent(App.sharedInstance.getApplicationContext(), SyncSpinner.class);
         App.sharedInstance.startActivity(spinnerIntent);
 
+        new DataSetup().execute();
+
         mItemRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -72,18 +74,18 @@ public class DataMgr {
 
                 Collections.sort(Items);
 
-                Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
-                App.sharedInstance.sendBroadcast(broadcastIntent);
+//                Intent broadcastIntent = new Intent();
+//                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
+//                App.sharedInstance.sendBroadcast(broadcastIntent);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("Read failed: " + databaseError.getCode());
 
-                Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
-                App.sharedInstance.sendBroadcast(broadcastIntent);
+//                Intent broadcastIntent = new Intent();
+//                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
+//                App.sharedInstance.sendBroadcast(broadcastIntent);
             }
         });
 
@@ -102,18 +104,18 @@ public class DataMgr {
                     Tasks.add(entry.getValue());
                 }
 
-                Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
-                App.sharedInstance.sendBroadcast(broadcastIntent);
+//                Intent broadcastIntent = new Intent();
+//                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
+//                App.sharedInstance.sendBroadcast(broadcastIntent);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("Read failed: " + databaseError.getCode());
 
-                Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
-                App.sharedInstance.sendBroadcast(broadcastIntent);
+//                Intent broadcastIntent = new Intent();
+//                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
+//                App.sharedInstance.sendBroadcast(broadcastIntent);
             }
         });
 
@@ -132,18 +134,18 @@ public class DataMgr {
                     Entries.add(entry.getValue());
                 }
 
-                Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
-                App.sharedInstance.sendBroadcast(broadcastIntent);
+//                Intent broadcastIntent = new Intent();
+//                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
+//                App.sharedInstance.sendBroadcast(broadcastIntent);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("Read failed: " + databaseError.getCode());
 
-                Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
-                App.sharedInstance.sendBroadcast(broadcastIntent);
+//                Intent broadcastIntent = new Intent();
+//                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
+//                App.sharedInstance.sendBroadcast(broadcastIntent);
             }
         });
     }
