@@ -105,6 +105,7 @@ public class CreateItemActivityFragment extends Fragment {
 
                 //Open the screen
                 startActivity(intent);
+                getActivity().overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
             }
         });
 

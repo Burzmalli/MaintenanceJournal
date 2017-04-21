@@ -110,12 +110,14 @@ public class OptionsActivity extends BaseActivity {
                 Intent intent = new Intent(view.getContext(), MainActivity.class);
 
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
             }
             else if (selectedText == drawerListViewItems[1]){
 
                 Intent intent = new Intent(view.getContext(), ScheduleActivity.class);
 
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
             }
 
             drawerLayout.closeDrawer(drawerListView);

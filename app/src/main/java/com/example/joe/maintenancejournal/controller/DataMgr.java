@@ -7,7 +7,6 @@ import com.example.joe.maintenancejournal.model.MaintenanceItem;
 import com.example.joe.maintenancejournal.model.MaintenanceTask;
 import com.example.joe.maintenancejournal.model.TaskEntry;
 import com.example.joe.maintenancejournal.view.JournalCardAdapter;
-import com.example.joe.maintenancejournal.view.SyncSpinner;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -52,11 +51,6 @@ public class DataMgr {
 
     public static void LoadItems() {
 
-        Intent spinnerIntent = new Intent(App.sharedInstance.getApplicationContext(), SyncSpinner.class);
-        App.sharedInstance.startActivity(spinnerIntent);
-
-        new DataSetup().execute();
-
         mItemRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -74,18 +68,18 @@ public class DataMgr {
 
                 Collections.sort(Items);
 
-//                Intent broadcastIntent = new Intent();
-//                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
-//                App.sharedInstance.sendBroadcast(broadcastIntent);
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
+                App.sharedInstance.sendBroadcast(broadcastIntent);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("Read failed: " + databaseError.getCode());
 
-//                Intent broadcastIntent = new Intent();
-//                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
-//                App.sharedInstance.sendBroadcast(broadcastIntent);
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
+                App.sharedInstance.sendBroadcast(broadcastIntent);
             }
         });
 
@@ -104,18 +98,18 @@ public class DataMgr {
                     Tasks.add(entry.getValue());
                 }
 
-//                Intent broadcastIntent = new Intent();
-//                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
-//                App.sharedInstance.sendBroadcast(broadcastIntent);
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
+                App.sharedInstance.sendBroadcast(broadcastIntent);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("Read failed: " + databaseError.getCode());
 
-//                Intent broadcastIntent = new Intent();
-//                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
-//                App.sharedInstance.sendBroadcast(broadcastIntent);
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
+                App.sharedInstance.sendBroadcast(broadcastIntent);
             }
         });
 
@@ -134,18 +128,18 @@ public class DataMgr {
                     Entries.add(entry.getValue());
                 }
 
-//                Intent broadcastIntent = new Intent();
-//                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
-//                App.sharedInstance.sendBroadcast(broadcastIntent);
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
+                App.sharedInstance.sendBroadcast(broadcastIntent);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("Read failed: " + databaseError.getCode());
 
-//                Intent broadcastIntent = new Intent();
-//                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
-//                App.sharedInstance.sendBroadcast(broadcastIntent);
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
+                App.sharedInstance.sendBroadcast(broadcastIntent);
             }
         });
     }

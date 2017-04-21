@@ -1,5 +1,6 @@
 package com.example.joe.maintenancejournal.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -192,6 +193,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                         performIntent.putExtra(Constants.ITEM_KEY, mHeldItem.Key);
                         performIntent.putExtra(Constants.TASK_KEY, selectedTask.Key);
                         view.getContext().startActivity(performIntent);
+                        ((Activity)view.getContext()).overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
                     }
                 }
             });
@@ -257,7 +259,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
 
                     //Open the screen
                     v.getContext().startActivity(intent);
-
+                    ((Activity)v.getContext()).overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
                 }
             });
 

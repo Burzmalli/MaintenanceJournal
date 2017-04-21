@@ -75,6 +75,7 @@ public class MainActivity extends BaseActivity {
                 Intent intent = new Intent(view.getContext(), CreateItemActivity.class);
 
                 startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
+                overridePendingTransition(android.R.anim.cycle_interpolator, android.R.anim.bounce_interpolator);
             }
         });
     }
@@ -117,12 +118,14 @@ public class MainActivity extends BaseActivity {
                 Intent intent = new Intent(view.getContext(), ScheduleActivity.class);
 
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
             }
             else if(selectedText == drawerListViewItems[2])
             {
                 Intent intent = new Intent(view.getContext(), OptionsActivity.class);
 
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.anticipate_interpolator, android.R.anim.overshoot_interpolator);
             }
 
             drawerLayout.closeDrawer(drawerListView);
