@@ -1,6 +1,10 @@
 package com.example.joe.maintenancejournal.controller;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 
 import com.example.joe.maintenancejournal.App;
 import com.example.joe.maintenancejournal.model.MaintenanceItem;
@@ -29,14 +33,33 @@ public class DataMgr {
     public static List<MaintenanceTask> Tasks = new ArrayList<>();
     public static List<TaskEntry> Entries = new ArrayList<>();
     public static ConfigMgr ConfigMgr = new ConfigMgr();
-    private static DatabaseReference mDatabase;
-    private static FirebaseDatabase mInstance;
-    private static DatabaseReference mItemRef;
-    private static DatabaseReference mTaskRef;
-    private static DatabaseReference mEntryRef;
+    public static DatabaseReference mDatabase;
+    public static FirebaseDatabase mInstance;
+    public static DatabaseReference mItemRef;
+    public static DatabaseReference mTaskRef;
+    public static DatabaseReference mEntryRef;
     public static JournalCardAdapter.MaintenanceItemHolder LastClicked;
+    private static DataService mService;
+    private static boolean mBound = false;
 
     private static MaintenanceItem tempItem;
+
+    private static ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+
+            DataService.DataBinder binder = (DataService.DataBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
 
     static {
         mInstance = FirebaseDatabase.getInstance();
@@ -46,102 +69,8 @@ public class DataMgr {
         mTaskRef = mDatabase.child("tasks");
         mEntryRef = mDatabase.child("entries");
 
-        LoadItems();
-    }
-
-    public static void LoadItems() {
-
-        mItemRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                Items.clear();
-
-                GenericTypeIndicator<Map<String, MaintenanceItem>> itemList = new GenericTypeIndicator<Map<String, MaintenanceItem>>() {};
-
-                Map<String, MaintenanceItem> items = dataSnapshot.getValue(itemList);
-
-                if(items == null) return;
-                for(Map.Entry<String, MaintenanceItem> entry : items.entrySet()) {
-                    Items.add(entry.getValue());
-                }
-
-                Collections.sort(Items);
-
-                Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
-                App.sharedInstance.sendBroadcast(broadcastIntent);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("Read failed: " + databaseError.getCode());
-
-                Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
-                App.sharedInstance.sendBroadcast(broadcastIntent);
-            }
-        });
-
-        mTaskRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                Tasks.clear();
-
-                GenericTypeIndicator<Map<String, MaintenanceTask>> taskList = new GenericTypeIndicator<Map<String, MaintenanceTask>>() {};
-
-                Map<String, MaintenanceTask> tasks = dataSnapshot.getValue(taskList);
-
-                if(tasks == null) return;
-                for(Map.Entry<String, MaintenanceTask> entry : tasks.entrySet()) {
-                    Tasks.add(entry.getValue());
-                }
-
-                Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
-                App.sharedInstance.sendBroadcast(broadcastIntent);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("Read failed: " + databaseError.getCode());
-
-                Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
-                App.sharedInstance.sendBroadcast(broadcastIntent);
-            }
-        });
-
-        mEntryRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                Entries.clear();
-
-                GenericTypeIndicator<Map<String, TaskEntry>> entryList = new GenericTypeIndicator<Map<String, TaskEntry>>() {};
-
-                Map<String, TaskEntry> entries = dataSnapshot.getValue(entryList);
-
-                if(entries == null) return;
-                for(Map.Entry<String, TaskEntry> entry : entries.entrySet()) {
-                    Entries.add(entry.getValue());
-                }
-
-                Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
-                App.sharedInstance.sendBroadcast(broadcastIntent);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("Read failed: " + databaseError.getCode());
-
-                Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
-                App.sharedInstance.sendBroadcast(broadcastIntent);
-            }
-        });
+        Intent svcIntent = new Intent(App.sharedInstance, DataService.class);
+        App.sharedInstance.bindService(svcIntent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     public static MaintenanceItem GetItemFromKey(String Key) {
@@ -316,4 +245,6 @@ public class DataMgr {
 
         return tasks;
     }
+
+
 }

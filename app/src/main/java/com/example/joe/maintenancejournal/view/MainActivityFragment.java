@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.example.joe.maintenancejournal.R;
 import com.example.joe.maintenancejournal.controller.DataMgr;
@@ -105,6 +106,8 @@ public class MainActivityFragment extends Fragment {
     public void UpdateList() {
         if(itemHolderAdapter != null) {
             itemHolderAdapter.notifyDataSetChanged();
+            if(DataMgr.Items.size() > 0)
+                getActivity().findViewById(R.id.progress_spinner).setVisibility(View.GONE);
         }
     }
 }
