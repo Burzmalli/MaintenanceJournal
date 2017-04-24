@@ -66,12 +66,13 @@
             android:elevation="8dp"/>
 
         <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_crash"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:src="@android:drawable/ic_delete"
             android:onClick="forceCrash"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_gravity="bottom|end"
+            android:elevation="8dp"/>
 
 
     </android.support.design.widget.CoordinatorLayout>
