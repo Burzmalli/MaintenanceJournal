@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.example.joe.maintenancejournal.App;
 import com.example.joe.maintenancejournal.R;
+import com.example.joe.maintenancejournal.controller.ListenerTask;
 
 public class MainActivity extends BaseActivity {
 
@@ -75,9 +76,10 @@ public class MainActivity extends BaseActivity {
                 Intent intent = new Intent(view.getContext(), CreateItemActivity.class);
 
                 startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
-                overridePendingTransition(android.R.anim.cycle_interpolator, android.R.anim.bounce_interpolator);
             }
         });
+
+        new ListenerTask().execute();
     }
 
     @Override
@@ -117,15 +119,13 @@ public class MainActivity extends BaseActivity {
 
                 Intent intent = new Intent(view.getContext(), ScheduleActivity.class);
 
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
             }
             else if(selectedText == drawerListViewItems[2])
             {
                 Intent intent = new Intent(view.getContext(), OptionsActivity.class);
 
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.anticipate_interpolator, android.R.anim.overshoot_interpolator);
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
             }
 
             drawerLayout.closeDrawer(drawerListView);
