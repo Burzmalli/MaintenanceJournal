@@ -1,8 +1,8 @@
-package com.example.joe.maintenancejournal;
+package com.example.joe.maintenancejournal.view;
 
 import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -14,6 +14,12 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.joe.maintenancejournal.Constants;
+import com.example.joe.maintenancejournal.R;
+import com.example.joe.maintenancejournal.controller.DataMgr;
+import com.example.joe.maintenancejournal.model.MaintenanceItem;
+import com.example.joe.maintenancejournal.model.MaintenanceTask;
 
 import java.text.NumberFormat;
 import java.util.Calendar;
@@ -36,30 +42,31 @@ public class CreateTaskActivityFragment extends Fragment {
         //Get the index, from the intent, of the item that will be getting the new task
         Intent intent = getActivity().getIntent();
 
-        int itemIndex = intent.getIntExtra("itemIndex", 0);
+        String itemKey = intent.getStringExtra(Constants.ITEM_KEY);
 
         //Get the item based on the index
-        myItem = GlobalMgr.Items.get(itemIndex);
+        myItem = DataMgr.GetItemFromKey(itemKey);
 
         //Get the view for later use
         myView = inflater.inflate(R.layout.fragment_create_task, container, false);
 
-        final EditText costText = (EditText) myView.findViewById(R.id.text_task_cost);
+        final EditText costText = (EditText) myView.findViewById(R.id.text_entry_cost);
 
         //Set the button functionality when saving the task
-        Button saveBtn = (Button) myView.findViewById(R.id.button_save_task);
+        Button saveBtn = (Button) myView.findViewById(R.id.button_save_entry);
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 //Get the textview with the task name and set the name to it
-                TextView tv = (TextView)myView.findViewById(R.id.text_task_name);
+                TextView tv = (TextView)myView.findViewById(R.id.text_entry_name);
 
                 if(tv.getText().toString().isEmpty() || costText.getText().toString().isEmpty())
                     return;
 
                 MaintenanceTask task = new MaintenanceTask();
                 task.TaskName = tv.getText().toString();
+                task.ParentKey = myItem.Key;
 
                 String cleanString = costText.getText().toString().replaceAll("[$,]", "");
 
@@ -74,14 +81,14 @@ public class CreateTaskActivityFragment extends Fragment {
                 Calendar cal = Calendar.getInstance();
                 cal.set(picker.getYear(), picker.getMonth(), picker.getDayOfMonth());
 
-                task.TaskDate = cal.getTime();
-                task.ItemId = myItem.ItemId;
+                task.StartDate = cal.getTime();
+                //task.ItemId = myItem.ItemId;
+                task.ParentKey = myItem.Key;
 
                 CheckedTextView ctv = (CheckedTextView) myView.findViewById(R.id.checkbox_recurring);
                 task.Recurring = ctv.isChecked();
 
-                //Add the task to the selected item's task list
-                myItem.Tasks.add(task);
+                DataMgr.CreateTask(task);
 
                 //Close the screen
                 getActivity().finish();

@@ -1,13 +1,17 @@
-package com.example.joe.maintenancejournal;
+package com.example.joe.maintenancejournal.view;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +22,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.joe.maintenancejournal.App;
+import com.example.joe.maintenancejournal.Constants;
+import com.example.joe.maintenancejournal.R;
+import com.example.joe.maintenancejournal.controller.DataMgr;
+import com.example.joe.maintenancejournal.controller.DataUpdateReceiver;
+import com.example.joe.maintenancejournal.model.MaintenanceItem;
+import com.example.joe.maintenancejournal.model.MaintenanceTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +42,8 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
     private List<MaintenanceItem> itemList;
     private View itemView;
     private ArrayAdapter<MaintenanceTask> thingsArrayAdapter;
+    private boolean Registered;
+    private static int lastClickedPos = -1;
 
     public JournalCardAdapter(List<MaintenanceItem> itemList)
     {
@@ -43,7 +57,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                 from(parent.getContext()).
                 inflate(R.layout.card_layout, parent, false);
 
-        JournalCardAdapter.MaintenanceItemHolder.mParent = this;
+        RegisterForUpdate();
 
         return new MaintenanceItemHolder(itemView);
     }
@@ -55,15 +69,40 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
         holder.mItemName.setText(item.ItemName);
         holder.mItemSummary.setText(item.GetSummary());
 
-        thingsArrayAdapter = new ArrayAdapter<MaintenanceTask>(itemView.getContext(),
-                android.R.layout.simple_list_item_1, item.Tasks);
+        thingsArrayAdapter = new ArrayAdapter<>(itemView.getContext(),
+                android.R.layout.simple_list_item_1, DataMgr.GetItemTasks(item.Key));
 
         holder.mTaskList.setAdapter(thingsArrayAdapter);
+
+        RegisterForUpdate();
     }
 
     @Override
     public int getItemCount() {
         return itemList.size();
+    }
+
+    private void RegisterForUpdate() {
+        if(!Registered) {
+            IntentFilter ifilter = new IntentFilter("com.example.joe.maintenancejournal.DATA_UPDATED");
+
+            App.sharedInstance.registerReceiver(onEvent, ifilter);
+            Registered = true;
+        }
+    }
+
+    private DataUpdateReceiver onEvent=new DataUpdateReceiver() {
+        public void onReceive(Context ctxt, Intent i) {
+
+            updateView();
+        }
+    };
+
+    private void UnregisterForUpdate() {
+        if(Registered) {
+            App.sharedInstance.unregisterReceiver(onEvent);
+            Registered = false;
+        }
     }
 
     public void updateView()
@@ -74,6 +113,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
         }
         else
         {
+
             notifyDataSetChanged();
         }
     }
@@ -85,14 +125,17 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
         private ListView mTaskList;
         private EditText mEditName;
         private MaintenanceItem mHeldItem;
-        public static RecyclerView.Adapter mParent;
+
+        private static int lastSelected = -1;
 
         private Button mAddTaskBtn;
         private Button mDeleteTaskBtn;
         private Button mDeleteItemBtn;
         private FloatingActionButton mEditItemBtn;
         private Button mSaveChangesBtn;
-        private Button mAddImgBtn;
+        private Button mCancelChangesBtn;
+        private TextInputLayout mItemNameInput;
+        //private Button mAddImgBtn;
 
         private boolean expanded = false;
         public static boolean editing = false;
@@ -111,18 +154,46 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
             mDeleteTaskBtn = (Button) itemView.findViewById(R.id.button_delete_task);
             mEditItemBtn = (FloatingActionButton) itemView.findViewById(R.id.fab);
             mSaveChangesBtn = (Button) itemView.findViewById(R.id.button_save_changes);
-            mAddImgBtn = (Button) itemView.findViewById(R.id.button_add_image);
+            //mAddImgBtn = (Button) itemView.findViewById(R.id.button_add_image);
             mDeleteItemBtn = (Button) itemView.findViewById(R.id.button_delete_item);
+            mCancelChangesBtn = (Button) itemView.findViewById(R.id.button_cancel_item);
+            mItemNameInput = (TextInputLayout) itemView.findViewById(R.id.item_name_layout);
+
+            mEditName.addTextChangedListener(new TextWatcher() {
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if(!s.toString().matches("[a-zA-Z0-9 ]*")) mItemNameInput.setError(App.sharedInstance.getString(R.string.item_name_nospecial));
+                    else mItemNameInput.setError(null);
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
 
             mTaskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                    selectedTask = DataMgr.GetItemTasks(mHeldItem.Key).get(position);
+
                     if(editing) {
                         view.setSelected(true);
-                        selectedTask = mHeldItem.Tasks.get(position);
                         mDeleteTaskBtn.setVisibility(View.VISIBLE);
+                    } else {
+                        Intent performIntent = new Intent(view.getContext(), PerformMaintenanceActivity.class);
+                        performIntent.putExtra(Constants.ITEM_KEY, mHeldItem.Key);
+                        performIntent.putExtra(Constants.TASK_KEY, selectedTask.Key);
+                        view.getContext().startActivity(performIntent);
+                        ((Activity)view.getContext()).overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
                     }
                 }
             });
@@ -148,7 +219,10 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                     }
                     else
                     {
-                        ExpandCard();
+                        if(expanded)
+                            CollapseCard();
+                        else
+                            ExpandCard();
                     }
                 }
             });
@@ -162,6 +236,28 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
 
             mSaveChangesBtn.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
+
+                    if(mItemNameInput.getError() != null) {
+                        return;
+                    }
+
+                    if(!DataMgr.isNameUnique(mEditName.getText().toString()))
+                    {
+                        new AlertDialog.Builder(v.getContext())
+                                .setTitle(v.getContext().getString(R.string.alert_title_unique_name))
+                                .setMessage(String.format(v.getContext().getString(R.string.error_unique_name), mEditName.getText().toString()))
+                                .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                })
+
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+
+                        return;
+                    }
+
                     EndEdit(false);
                 }
             });
@@ -173,30 +269,30 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                     Intent intent = new Intent(v.getContext(), CreateTaskActivity.class);
 
                     if(mHeldItem == null)
-                        mHeldItem = GlobalMgr.GetItemFromName(mItemName.getText().toString());
+                        mHeldItem = DataMgr.GetItemFromName(mItemName.getText().toString());
 
                     //Pass the index for the item that will get the new task
-                    intent.putExtra("itemIndex", GlobalMgr.Items.indexOf(mHeldItem));
+                    intent.putExtra(Constants.ITEM_KEY, mHeldItem.Key);
 
                     //Open the screen
                     v.getContext().startActivity(intent);
-
+                    ((Activity)v.getContext()).overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
                 }
             });
 
-            mAddImgBtn.setOnClickListener(new View.OnClickListener() {
+            /*mAddImgBtn.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
 
-                    ((MainActivity) GlobalMgr.mainActivity).selectImage();
+                    ((MainActivity) DataMgr.mainActivity).selectImage();
 
-                    Bitmap img = GlobalMgr.selectedImage;
+                    Bitmap img = DataMgr.selectedImage;
 
                     if(img == null)
                         return;
 
                     mItemImg.setImageBitmap(img);
                 }
-            });
+            });*/
 
             mDeleteTaskBtn.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
@@ -210,9 +306,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                     {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            mHeldItem.Tasks.remove(selectedTask);
-                            GlobalMgr.deleteTask(selectedTask);
-                            mParent.notifyDataSetChanged();
+                            DataMgr.DeleteTask(selectedTask);
                         }
 
                     });
@@ -233,30 +327,56 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                     {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            CollapseCard();
-                            GlobalMgr.deleteItem(mHeldItem);
-                            GlobalMgr.Items.remove(mHeldItem);
+                            DataMgr.DeleteItem(mHeldItem);
                             mHeldItem = null;
-                            mParent.notifyDataSetChanged();
+                            CollapseCard();
                         }
                     });
                     dg.setNegativeButton("No", null);
                     dg.show();
                 }
             });
+
+            mCancelChangesBtn.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+
+                    if(editing) {
+                        AlertDialog.Builder dg = new AlertDialog.Builder(v.getContext());
+                        dg.setIcon(android.R.drawable.ic_dialog_alert);
+                        dg.setTitle("Cancel Edit");
+                        dg.setMessage("Are you sure you want to discard changes?");
+                        dg.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                CollapseCard();
+                            }
+
+                        });
+                        dg.setNegativeButton("No", null);
+                        dg.show();
+                    }
+                    else
+                    {
+                        if(expanded)
+                            CollapseCard();
+                        else
+                            ExpandCard();
+                    }
+                }
+            });
         }
 
         public void ExpandCard()
         {
-            mHeldItem = GlobalMgr.GetItemFromName(mItemName.getText().toString());
+            mHeldItem = DataMgr.GetItemFromName(mItemName.getText().toString());
 
-            if(GlobalMgr.lastClicked != null)
-                GlobalMgr.lastClicked.CollapseCard();
+            if(DataMgr.LastClicked != null && DataMgr.LastClicked != this)
+                DataMgr.LastClicked.CollapseCard();
 
             mTaskList.setVisibility(View.VISIBLE);
             mEditItemBtn.setVisibility(View.VISIBLE);
 
-            GlobalMgr.lastClicked = this;
+            DataMgr.LastClicked = this;
 
             expanded = true;
         }
@@ -268,14 +388,14 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
             mAddTaskBtn.setVisibility(View.GONE);
             mDeleteTaskBtn.setVisibility(View.GONE);
             mEditItemBtn.setVisibility(View.GONE);
-
+            DataMgr.LastClicked = null;
             expanded = false;
         }
 
         public void StartEdit()
         {
             if(mHeldItem == null)
-                mHeldItem = GlobalMgr.GetItemFromName(mItemName.getText().toString());
+                mHeldItem = DataMgr.GetItemFromName(mItemName.getText().toString());
 
             if(mHeldItem == null)
                 return;
@@ -283,10 +403,11 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
             mSaveChangesBtn.setVisibility(itemView.VISIBLE);
             mEditItemBtn.setVisibility(itemView.GONE);
             mItemName.setVisibility(itemView.GONE);
-            mEditName.setVisibility(itemView.VISIBLE);
+            mItemNameInput.setVisibility(itemView.VISIBLE);
             mAddTaskBtn.setVisibility(itemView.VISIBLE);
-            mAddImgBtn.setVisibility(itemView.VISIBLE);
+            //mAddImgBtn.setVisibility(itemView.VISIBLE);
             mDeleteItemBtn.setVisibility(itemView.VISIBLE);
+            mCancelChangesBtn.setVisibility(itemView.VISIBLE);
 
             if(mHeldItem.ItemName.isEmpty()) {
                 mEditName.setTextColor(Color.GRAY);
@@ -305,29 +426,37 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
         {
             if(!isCanceled) {
                 if(mHeldItem == null)
-                    mHeldItem = GlobalMgr.GetItemFromName(mItemName.getText().toString());
+                    mHeldItem = DataMgr.GetItemFromName(mItemName.getText().toString());
 
                 if(mHeldItem == null)
                     return;
 
                 mHeldItem.ItemName = mEditName.getText().toString();
                 mItemName.setText(mHeldItem.ItemName);
+                DataMgr.UpdateItem(mHeldItem);
 
-                GlobalMgr.updateItem(mHeldItem);
+                List<MaintenanceTask> tasks = DataMgr.GetItemTasks(mHeldItem.Key);
+
+                for(MaintenanceTask task : tasks) {
+                    if(!task.Saved) {
+                        task.Saved = true;
+                        DataMgr.UpdateTask(task);
+                    }
+                }
             }
             else
             {
                 if(mHeldItem != null) {
-                    ArrayList<MaintenanceTask> removeTasks = new ArrayList<MaintenanceTask>();
+                    ArrayList<MaintenanceTask> removeTasks = new ArrayList<>();
 
-                    for (MaintenanceTask task : mHeldItem.Tasks) {
-                        if (task.TaskId < 0)
+                    for (MaintenanceTask task : DataMgr.GetItemTasks(mHeldItem.Key)) {
+                        if (!task.Saved)
                             removeTasks.add(task);
                     }
 
                     for (MaintenanceTask task : removeTasks) {
 
-                        mHeldItem.Tasks.remove(task);
+                        DataMgr.DeleteTask(task);
                     }
 
                     removeTasks.clear();
@@ -340,11 +469,12 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
 
             mAddTaskBtn.setVisibility(itemView.GONE);
             mSaveChangesBtn.setVisibility(itemView.GONE);
-            mEditName.setVisibility(itemView.GONE);
+            mItemNameInput.setVisibility(itemView.GONE);
             mItemName.setVisibility(itemView.VISIBLE);
             mEditItemBtn.setVisibility(itemView.VISIBLE);
-            mAddImgBtn.setVisibility(itemView.GONE);
+            //mAddImgBtn.setVisibility(itemView.GONE);
             mDeleteItemBtn.setVisibility(itemView.GONE);
+            mCancelChangesBtn.setVisibility(itemView.GONE);
 
             editing = false;
         }

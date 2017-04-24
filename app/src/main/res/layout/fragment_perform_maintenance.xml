@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -6,34 +7,27 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.joe.maintenancejournal.view.CreateTaskActivityFragment"
-    tools:showIn="@layout/activity_create_task">
+    tools:context="com.example.joe.maintenancejournal.view.PerformMaintenanceActivityFragment"
+    tools:showIn="@layout/activity_perform_maintenance">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/title_add_task"
-        android:text="@string/title_create_task"
-        android:textSize="20dp" />
+        android:id="@+id/title_perform_maintenance"
+        android:text="@string/title_perform_maintenance"
+        android:textSize="20sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/layout_name"
-        android:layout_below="@+id/title_add_task">
+        android:layout_below="@+id/title_perform_maintenance">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/label_task_name"
+            tools:text="@string/label_dummy_task_name"
             android:id="@+id/label_name"/>
-
-        <EditText
-            style="@style/DefaultEditText"
-            android:layout_toEndOf="@+id/label_name"
-            android:layout_toRightOf="@+id/label_name"
-            android:id="@+id/text_entry_name"
-            android:hint="@string/hint_task_name"/>
 
     </LinearLayout>
 
@@ -47,7 +41,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/text_cost"
+            android:text="@string/text_actual_cost"
             android:id="@+id/label_cost"/>
 
         <EditText
@@ -69,26 +63,23 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_below="@+id/text_date"
-        android:id="@+id/picker_task_date"
+        android:id="@+id/picker_entry_date"
         android:datePickerMode="spinner"
         android:spinnersShown="true"
         android:calendarViewShown="false"/>
 
-    <android.support.v7.widget.AppCompatCheckedTextView
-        android:layout_width="wrap_content"
+    <EditText
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/checkbox_recurring"
-        android:id="@+id/checkbox_recurring"
-        android:layout_below="@id/picker_task_date"
-        android:layout_alignParentRight="true"
-        android:checkMark="@drawable/checkmark_selector"
-        android:textSize="24dp" />
+        android:layout_below="@+id/picker_entry_date"
+        android:id="@+id/entry_notes"
+        android:hint="@string/hint_add_notes"/>
 
     <Button
         style="@style/DefaultButton"
-        android:layout_below="@+id/checkbox_recurring"
-        android:layout_alignParentRight="true"
-        android:text="@string/button_save_task"
+        android:layout_below="@+id/entry_notes"
+        android:layout_alignParentEnd="true"
+        android:text="@string/button_save_entry"
         android:id="@+id/button_save_entry"/>
 
 </RelativeLayout>

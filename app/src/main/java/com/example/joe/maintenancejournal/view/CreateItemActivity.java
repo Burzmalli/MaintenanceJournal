@@ -1,10 +1,13 @@
-package com.example.joe.maintenancejournal;
+package com.example.joe.maintenancejournal.view;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-public class CreateItemActivity extends AppCompatActivity {
+import com.example.joe.maintenancejournal.R;
+import com.example.joe.maintenancejournal.controller.DataMgr;
+import com.example.joe.maintenancejournal.model.MaintenanceItem;
+
+public class CreateItemActivity extends BaseActivity {
 
     protected MaintenanceItem myItem;
 
@@ -16,7 +19,7 @@ public class CreateItemActivity extends AppCompatActivity {
 
         myItem.ItemName = "temp";
 
-        GlobalMgr.Items.add(myItem);
+        DataMgr.CreateItem(myItem);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_item);
@@ -27,8 +30,10 @@ public class CreateItemActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //Remove temporary new item if creation is canceled by pressing Back
-        if(GlobalMgr.Items.contains(myItem))
-            GlobalMgr.Items.remove(myItem);
+        if(!myItem.Saved) {
+
+            DataMgr.DeleteItem(myItem);
+        }
 
         super.onBackPressed();
     }

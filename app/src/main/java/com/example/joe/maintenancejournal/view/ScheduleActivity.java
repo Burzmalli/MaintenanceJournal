@@ -1,5 +1,6 @@
-package com.example.joe.maintenancejournal;
+package com.example.joe.maintenancejournal.view;
 
+import android.app.ActivityOptions;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -7,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,12 +20,15 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.joe.maintenancejournal.R;
+import com.example.joe.maintenancejournal.controller.DataMgr;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class ScheduleActivity extends AppCompatActivity {
+public class ScheduleActivity extends BaseActivity {
 
     private List<String> thingsList = null;
     private ListView thingsListView = null;
@@ -80,12 +83,12 @@ public class ScheduleActivity extends AppCompatActivity {
         }
 
         //Set the list source to the item's tasks
-        thingsList = GlobalMgr.GetTasks();
+        thingsList = DataMgr.GetTasks();
 
         //Update the list view with a list adapter
         thingsListView = (ListView) findViewById(R.id.list_of_tasks);
 
-        thingsArrayAdapter = new ArrayAdapter<String>(getBaseContext(),
+        thingsArrayAdapter = new ArrayAdapter<>(getBaseContext(),
                 android.R.layout.simple_list_item_1, thingsList);
 
         thingsListView.setAdapter(thingsArrayAdapter);
@@ -168,15 +171,15 @@ public class ScheduleActivity extends AppCompatActivity {
 
         if(fromSelected == null)
         {
-            thingsList.addAll(GlobalMgr.GetTasks());
+            thingsList.addAll(DataMgr.GetTasks());
         }
         else if(toSelected == null)
         {
-            thingsList.addAll(GlobalMgr.GetFilteredTasks(fromSelected));
+            thingsList.addAll(DataMgr.GetFilteredTasks(fromSelected));
         }
         else
         {
-            thingsList.addAll(GlobalMgr.GetFilteredTasks(fromSelected, toSelected));
+            thingsList.addAll(DataMgr.GetFilteredTasks(fromSelected, toSelected));
         }
 
         if(thingsArrayAdapter != null) {
@@ -195,13 +198,13 @@ public class ScheduleActivity extends AppCompatActivity {
             {
                 Intent intent = new Intent(view.getContext(), MainActivity.class);
 
-                startActivity(intent);
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(ScheduleActivity.this).toBundle());
             }
             else if (selectedText == drawerListViewItems[2]){
 
                 Intent intent = new Intent(view.getContext(), OptionsActivity.class);
 
-                startActivity(intent);
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(ScheduleActivity.this).toBundle());
             }
 
             drawerLayout.closeDrawer(drawerListView);

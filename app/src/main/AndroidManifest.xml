@@ -4,15 +4,18 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
+        android:name="com.example.joe.maintenancejournal.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/MaintenanceTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".view.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/MaintenanceTheme.NoActionBar">
             <intent-filter>
@@ -22,21 +25,31 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CreateItemActivity"
+            android:name=".view.CreateItemActivity"
             android:label="@string/title_activity_create_item"
             android:theme="@style/MaintenanceTheme.NoActionBar" />
         <activity
-            android:name=".CreateTaskActivity"
+            android:name=".view.CreateTaskActivity"
             android:label="@string/title_activity_create_task"
             android:theme="@style/MaintenanceTheme.NoActionBar" />
         <activity
-            android:name=".ScheduleActivity"
+            android:name=".view.PerformMaintenanceActivity"
+            android:label="@string/title_activity_perform_maintenance"
+            android:theme="@style/MaintenanceTheme.NoActionBar" />
+        <activity
+            android:name=".view.ScheduleActivity"
             android:label="@string/title_activity_schedule"
             android:theme="@style/MaintenanceTheme.NoActionBar" />
         <activity
-            android:name=".OptionsActivity"
+            android:name=".view.OptionsActivity"
             android:label="@string/title_activity_options"
-            android:theme="@style/MaintenanceTheme.NoActionBar"></activity>
-    </application>
+            android:theme="@style/MaintenanceTheme.NoActionBar"/>
+        <activity android:name=".view.SyncSpinner" />
 
+        <receiver android:name=".controller.DataUpdateReceiver">
+            <intent-filter>
+                <action android:name="com.example.joe.maintenancejournal.DATA_UPDATED"/>
+             </intent-filter>
+         </receiver>
+        </application>
 </manifest>

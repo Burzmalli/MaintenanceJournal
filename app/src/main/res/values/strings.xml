@@ -11,16 +11,20 @@
     <string name="title_activity_create_item">CreateItem</string>
     <string name="label_item_name">Item Name</string>
     <string name="label_task_name">Task Name</string>
+    <string name="label_dummy_task_name">Sample Task</string>
     <string name="label_task_date">Date</string>
     <string name="label_task_comment">Comment</string>
     <string name="button_save_item">Save Item</string>
     <string name="button_delete_item">Delete Item</string>
     <string name="button_add_task">Add Task</string>
     <string name="button_save_task">Save Task</string>
+    <string name="button_save_entry">Save Maintenance Entry</string>
     <string name="button_delete_task">Delete Task</string>
-    <string name="title_activity_create_task">CreateTaskActivity</string>
+    <string name="title_activity_create_task">Create Task Activity</string>
+    <string name="title_activity_perform_maintenance">Perform Maintenance Activity</string>
     <string name="title_add_item">Create Item</string>
     <string name="title_create_task">Create Task</string>
+    <string name="title_perform_maintenance">Perform Maintenance</string>
     <string name="menu_item_hide">Hide Appbar</string>
     <string name="button_add_image">Add Picture</string>
     <string name="source_from_camera">From Camera</string>
@@ -30,9 +34,12 @@
     <string name="checkbox_recurring">Recurring</string>
     <string name="text_pick_date">Maintenance Date</string>
     <string name="text_cost">Est. Cost</string>
+    <string name="text_actual_cost">Cost</string>
     <string name="hint_task_name">Enter Task Name</string>
     <string name="hint_item_name">Enter Item Name</string>
-    <string name="hint_task_cost">$0.00</string>
+    <string name="hint_cost_value">$0.00</string>
+    <string name="hint_add_notes">Add notes here...</string>
+    <string name="toast_download_complete">Download complete!</string>
     <string name="error_unique_name">An item already exists with the name %1$s. Please enter a unique name.</string>
     <string name="alert_title_unique_name">Name Exists</string>
     <string name="drawer_open">Open Drawer</string>
@@ -51,4 +58,6 @@
         <item>Options</item>
     </string-array>
     <string name="title_activity_options">Options</string>
+    <string name="item_name_nospecial">Item names can only contain letters, numbers, and spaces</string>
+    <string name="download_data_msg">Downloading data...\nPlease wait.</string>
 </resources>

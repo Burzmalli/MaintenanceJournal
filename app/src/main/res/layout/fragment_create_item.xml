@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".CreateItemActivityFragment"
+    tools:context=".view.CreateItemActivityFragment"
     tools:showIn="@layout/activity_create_item">
 
     <TextView
@@ -28,10 +28,17 @@
             android:text="@string/label_item_name"
             android:id="@+id/label_name"/>
 
-        <EditText
-            style="@style/DefaultEditText"
-            android:id="@+id/text_item_name"
-            android:hint="@string/hint_item_name"/>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/item_name_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                style="@style/DefaultEditText"
+                android:id="@+id/text_item_name"
+                android:hint="@string/hint_item_name"/>
+
+        </android.support.design.widget.TextInputLayout>
 
     </LinearLayout>
 

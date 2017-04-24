@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     android:id="@+id/main_drawer"
     tools:openDrawer="start"
-    tools:context="com.example.joe.maintenancejournal.OptionsActivity">
+    tools:context="com.example.joe.maintenancejournal.view.OptionsActivity">
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"

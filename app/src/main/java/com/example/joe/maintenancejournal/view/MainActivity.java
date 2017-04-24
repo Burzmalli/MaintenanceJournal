@@ -1,14 +1,13 @@
-package com.example.joe.maintenancejournal;
+package com.example.joe.maintenancejournal.view;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,24 +15,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class OptionsActivity extends AppCompatActivity {
+import com.example.joe.maintenancejournal.App;
+import com.example.joe.maintenancejournal.R;
+import com.example.joe.maintenancejournal.controller.ListenerTask;
+
+public class MainActivity extends BaseActivity {
 
     private String[] drawerListViewItems;
     private ListView drawerListView;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
-    private Switch mNotificationsSwitch;
+    private MainActivityFragment mainActivityFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_options);
+
+        setContentView(R.layout.activity_main);
 
         //Get list of items for navigation drawer menu
         drawerListViewItems = getResources().getStringArray(R.array.screens);
@@ -42,7 +43,7 @@ public class OptionsActivity extends AppCompatActivity {
         drawerListView = (ListView) findViewById(R.id.left_drawer);
 
         //Set the adapter for the navigation drawer's list
-        drawerListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, drawerListViewItems));
+        drawerListView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, drawerListViewItems));
 
         //Get the drawer layout
         drawerLayout = (DrawerLayout) findViewById(R.id.main_drawer);
@@ -56,7 +57,7 @@ public class OptionsActivity extends AppCompatActivity {
         );
 
         //Create the listener for the items in the navigation drawer
-        drawerListView.setOnItemClickListener(new OptionsActivity.DrawerItemClickListener());
+        drawerListView.setOnItemClickListener(new DrawerItemClickListener());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -67,22 +68,30 @@ public class OptionsActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        mNotificationsSwitch = (Switch) findViewById(R.id.switch_notifications);
-
-        mNotificationsSwitch.setChecked(GlobalMgr.ConfigMgr.Configuration.EnableNotifications);
-
-        mNotificationsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
+        //Set button functionality for adding items
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView,
-                                         boolean isChecked) {
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), CreateItemActivity.class);
 
-                GlobalMgr.ConfigMgr.Configuration.EnableNotifications = isChecked;
-
-                GlobalMgr.ConfigMgr.saveConfiguration();
-
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
             }
         });
+
+        new ListenerTask().execute();
+    }
+
+    @Override
+    protected void onStop() {
+
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
     }
 
     @Override
@@ -106,17 +115,17 @@ public class OptionsActivity extends AppCompatActivity {
         {
             String selectedText = (String)((TextView) view).getText();
 
-            if(selectedText == drawerListViewItems[0])
-            {
-                Intent intent = new Intent(view.getContext(), MainActivity.class);
-
-                startActivity(intent);
-            }
-            else if (selectedText == drawerListViewItems[1]){
+            if (selectedText == drawerListViewItems[1]){
 
                 Intent intent = new Intent(view.getContext(), ScheduleActivity.class);
 
-                startActivity(intent);
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
+            }
+            else if(selectedText == drawerListViewItems[2])
+            {
+                Intent intent = new Intent(view.getContext(), OptionsActivity.class);
+
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
             }
 
             drawerLayout.closeDrawer(drawerListView);
