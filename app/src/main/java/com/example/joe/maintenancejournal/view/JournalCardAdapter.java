@@ -241,6 +241,23 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                         return;
                     }
 
+                    if(!DataMgr.isNameUnique(mEditName.getText().toString()))
+                    {
+                        new AlertDialog.Builder(v.getContext())
+                                .setTitle(v.getContext().getString(R.string.alert_title_unique_name))
+                                .setMessage(String.format(v.getContext().getString(R.string.error_unique_name), mEditName.getText().toString()))
+                                .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                })
+
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+
+                        return;
+                    }
+
                     EndEdit(false);
                 }
             });

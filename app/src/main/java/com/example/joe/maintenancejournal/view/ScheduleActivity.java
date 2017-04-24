@@ -1,5 +1,6 @@
 package com.example.joe.maintenancejournal.view;
 
+import android.app.ActivityOptions;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -197,15 +198,13 @@ public class ScheduleActivity extends BaseActivity {
             {
                 Intent intent = new Intent(view.getContext(), MainActivity.class);
 
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(ScheduleActivity.this).toBundle());
             }
             else if (selectedText == drawerListViewItems[2]){
 
                 Intent intent = new Intent(view.getContext(), OptionsActivity.class);
 
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(ScheduleActivity.this).toBundle());
             }
 
             drawerLayout.closeDrawer(drawerListView);

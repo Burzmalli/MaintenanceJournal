@@ -1,5 +1,6 @@
 package com.example.joe.maintenancejournal.view;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -109,15 +110,13 @@ public class OptionsActivity extends BaseActivity {
             {
                 Intent intent = new Intent(view.getContext(), MainActivity.class);
 
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(OptionsActivity.this).toBundle());
             }
             else if (selectedText == drawerListViewItems[1]){
 
                 Intent intent = new Intent(view.getContext(), ScheduleActivity.class);
 
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(OptionsActivity.this).toBundle());
             }
 
             drawerLayout.closeDrawer(drawerListView);
