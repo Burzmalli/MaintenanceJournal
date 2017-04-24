@@ -18,9 +18,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.example.joe.maintenancejournal.App;
 import com.example.joe.maintenancejournal.R;
 import com.example.joe.maintenancejournal.controller.ListenerTask;
+
+import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends BaseActivity {
 
@@ -79,8 +82,17 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+
+
         new ListenerTask().execute();
+
+        Fabric.with(this, new Crashlytics());
     }
+
+    public void forceCrash(View view) {
+        throw new RuntimeException("This is a crash");
+    }
+
 
     @Override
     protected void onStop() {

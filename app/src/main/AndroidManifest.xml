@@ -51,5 +51,8 @@
                 <action android:name="com.example.joe.maintenancejournal.DATA_UPDATED"/>
              </intent-filter>
          </receiver>
-        </application>
+            <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="f43f0c5d430d623fb678f8f83e5e04a50033baf9" />
+    </application>
 </manifest>
