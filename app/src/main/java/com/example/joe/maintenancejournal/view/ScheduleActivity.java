@@ -20,6 +20,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.example.joe.maintenancejournal.R;
 import com.example.joe.maintenancejournal.controller.DataMgr;
 
@@ -149,6 +151,9 @@ public class ScheduleActivity extends BaseActivity {
                 myDialog.show();
             }
         });
+
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Schedule Viewed"));
     }
 
     @Override

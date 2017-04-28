@@ -23,6 +23,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.example.joe.maintenancejournal.App;
 import com.example.joe.maintenancejournal.Constants;
 import com.example.joe.maintenancejournal.R;
@@ -431,6 +433,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                 if(mHeldItem == null)
                     return;
 
+                String originalName = mHeldItem.ItemName;
                 mHeldItem.ItemName = mEditName.getText().toString();
                 mItemName.setText(mHeldItem.ItemName);
                 DataMgr.UpdateItem(mHeldItem);
@@ -443,6 +446,16 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                         DataMgr.UpdateTask(task);
                     }
                 }
+
+                ContentViewEvent evt = new ContentViewEvent()
+                        .putContentName("Item change saved");
+
+                if(!originalName.equals(mHeldItem.ItemName)) {
+                    evt.putCustomAttribute("Original Item Name", originalName)
+                            .putCustomAttribute("New Item Name", mHeldItem.ItemName);
+                }
+
+                Answers.getInstance().logContentView(evt);
             }
             else
             {
@@ -460,6 +473,9 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                     }
 
                     removeTasks.clear();
+
+                    Answers.getInstance().logContentView(new ContentViewEvent()
+                            .putContentName("Item change canceled"));
                 }
             }
 

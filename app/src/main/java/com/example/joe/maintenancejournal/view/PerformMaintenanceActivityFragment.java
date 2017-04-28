@@ -13,6 +13,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.example.joe.maintenancejournal.Constants;
 import com.example.joe.maintenancejournal.R;
 import com.example.joe.maintenancejournal.controller.DataMgr;
@@ -89,6 +91,9 @@ public class PerformMaintenanceActivityFragment extends Fragment {
 
                 //Close the screen
                 getActivity().finish();
+
+                Answers.getInstance().logContentView(new ContentViewEvent()
+                        .putContentName("Perform maintenance completed"));
             }
         });
 

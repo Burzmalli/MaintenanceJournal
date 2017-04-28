@@ -2,6 +2,8 @@ package com.example.joe.maintenancejournal;
 
 import android.app.Application;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.google.firebase.database.FirebaseDatabase;
 import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
@@ -22,7 +24,9 @@ public class App extends Application {
         sharedInstance = this;
 
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("App Launch"));
+
     }
-
-
 }

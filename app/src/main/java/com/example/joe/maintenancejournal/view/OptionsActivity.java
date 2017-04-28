@@ -19,6 +19,8 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.example.joe.maintenancejournal.R;
 import com.example.joe.maintenancejournal.controller.DataMgr;
 
@@ -83,6 +85,9 @@ public class OptionsActivity extends BaseActivity {
 
             }
         });
+
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Options Opened"));
     }
 
     @Override
