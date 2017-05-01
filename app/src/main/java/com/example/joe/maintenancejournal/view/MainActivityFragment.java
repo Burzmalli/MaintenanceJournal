@@ -55,8 +55,11 @@ public class MainActivityFragment extends Fragment {
             else
                 mgr = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         } else {
-            mgr = new LinearLayoutManager(getActivity());
-            ((LinearLayoutManager) mgr).setOrientation(LinearLayoutManager.VERTICAL);
+            if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                mgr = new LinearLayoutManager(getActivity());
+                ((LinearLayoutManager) mgr).setOrientation(LinearLayoutManager.VERTICAL);
+            } else
+                mgr = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         }
         itemCardRecycler.setLayoutManager(mgr);
 
