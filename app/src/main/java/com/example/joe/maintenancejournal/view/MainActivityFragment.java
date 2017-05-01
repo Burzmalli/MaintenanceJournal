@@ -4,9 +4,13 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,8 +44,20 @@ public class MainActivityFragment extends Fragment {
 
         itemCardRecycler.setHasFixedSize(true);
 
-        LinearLayoutManager mgr = new LinearLayoutManager(getActivity());
-        mgr.setOrientation(LinearLayoutManager.VERTICAL);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+
+        RecyclerView.LayoutManager mgr;
+        if(width >= 900) {
+            if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+                mgr = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+            else
+                mgr = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        } else {
+            mgr = new LinearLayoutManager(getActivity());
+            ((LinearLayoutManager) mgr).setOrientation(LinearLayoutManager.VERTICAL);
+        }
         itemCardRecycler.setLayoutManager(mgr);
 
         itemHolderAdapter = new JournalCardAdapter(DataMgr.Items);

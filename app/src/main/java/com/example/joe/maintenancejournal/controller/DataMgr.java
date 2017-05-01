@@ -53,12 +53,6 @@ public class DataMgr {
 
     public static void LoadItems() {
 
-        try {
-            Thread.sleep(5000);
-        } catch(Exception ex) {
-
-        }
-
         DataMgr.mItemRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
