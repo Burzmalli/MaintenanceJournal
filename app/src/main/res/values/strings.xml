@@ -1,4 +1,5 @@
 <resources>
+    <string name="isTablet">false</string>
     <string name="app_name">Maintenance Journal</string>
     <string name="screen_schedule">Schedule</string>
     <string name="action_settings">Settings</string>

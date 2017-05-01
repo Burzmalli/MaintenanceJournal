@@ -359,8 +359,13 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                     }
                     else
                     {
-                        if(expanded)
+                        if(expanded) {
                             CollapseCard();
+
+                            Intent broadcastIntent = new Intent();
+                            broadcastIntent.setAction("com.example.joe.maintenancejournal.DATA_UPDATED");
+                            App.sharedInstance.sendBroadcast(broadcastIntent);
+                        }
                         else
                             ExpandCard();
                     }

@@ -49,7 +49,7 @@ public class MainActivityFragment extends Fragment {
         int width = displayMetrics.widthPixels;
 
         RecyclerView.LayoutManager mgr;
-        if(width >= 900) {
+        if(getString(R.string.isTablet).equals("true")) {
             if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
                 mgr = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
             else
