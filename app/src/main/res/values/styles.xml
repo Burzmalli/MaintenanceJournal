@@ -9,8 +9,8 @@
     </style>
 
     <style name="MaintenanceTheme" parent="Theme.AppCompat.DayNight">
-        <item name="android:colorBackground">@color/colorLightBlue</item>
-        <item name="android:textColorPrimary">@color/colorGray</item>
+        <item name="android:colorBackground">@color/colorWhite</item>
+        <item name="android:textColorPrimary">@color/colorBlack</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowAllowEnterTransitionOverlap">true</item>
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
