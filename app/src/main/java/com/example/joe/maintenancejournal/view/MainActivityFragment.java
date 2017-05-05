@@ -49,7 +49,7 @@ public class MainActivityFragment extends Fragment {
         int width = displayMetrics.widthPixels;
 
         RecyclerView.LayoutManager mgr;
-        if(getActivity().findViewById(R.id.action_container) != null) {
+        if(getActivity().findViewById(R.id.user_action_container) != null) {
             if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
                 mgr = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
             else
