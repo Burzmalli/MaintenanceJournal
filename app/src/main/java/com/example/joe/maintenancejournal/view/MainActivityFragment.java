@@ -48,6 +48,15 @@ public class MainActivityFragment extends Fragment {
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
 
+        RegisterForUpdate();
+
+        return rootView;
+    }
+
+    @Override
+    public void onActivityCreated (Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
         RecyclerView.LayoutManager mgr;
         if(getActivity().findViewById(R.id.user_action_container) != null) {
             if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
@@ -66,10 +75,6 @@ public class MainActivityFragment extends Fragment {
         itemHolderAdapter = new JournalCardAdapter(DataMgr.Items);
 
         itemCardRecycler.setAdapter(itemHolderAdapter);
-
-        RegisterForUpdate();
-
-        return rootView;
     }
 
     private DataUpdateReceiver onEvent=new DataUpdateReceiver() {
