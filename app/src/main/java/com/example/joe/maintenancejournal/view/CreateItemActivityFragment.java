@@ -57,8 +57,18 @@ public class CreateItemActivityFragment extends Fragment {
 
         itemNameLayout = (TextInputLayout) myView.findViewById(R.id.item_name_layout);
 
-        //Get the item created by the parent activity
-        myItem = ((CreateItemActivity)getActivity()).myItem;
+        Bundle bundle = getArguments();
+
+        if(bundle.getBoolean(Constants.SAME_ACTIVITY)) {
+            myItem = new MaintenanceItem();
+
+            myItem.ItemName = "temp";
+
+            DataMgr.CreateItem(myItem);
+        } else {
+            //Get the item created by the parent activity
+            myItem = ((CreateItemActivity) getActivity()).myItem;
+        }
 
         itemName = (EditText) myView.findViewById(R.id.text_item_name);
 

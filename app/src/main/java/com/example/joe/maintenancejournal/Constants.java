@@ -8,4 +8,5 @@ public final class Constants {
     public static String DATE_FORMAT = "MM/dd/yyyy";
     public static String ITEM_KEY = "itemKey";
     public static String TASK_KEY = "taskKey";
+    public static String SAME_ACTIVITY = "Same Activity";
 }

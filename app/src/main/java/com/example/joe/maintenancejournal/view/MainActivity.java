@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 import com.example.joe.maintenancejournal.App;
+import com.example.joe.maintenancejournal.Constants;
 import com.example.joe.maintenancejournal.R;
 import com.example.joe.maintenancejournal.controller.ListenerTask;
 
@@ -77,9 +78,8 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
 
-                if(findViewById(R.id.action_container) == null) {
+                if(findViewById(R.id.user_action_container) == null) {
                     Intent intent = new Intent(view.getContext(), CreateItemActivity.class);
-
                     startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
                 } else {
                     expandView();
@@ -93,10 +93,13 @@ public class MainActivity extends BaseActivity {
     }
 
     private void expandView() {
-        findViewById(R.id.action_container).setVisibility(View.VISIBLE);
+        findViewById(R.id.user_action_container).setVisibility(View.VISIBLE);
+        Bundle arguments = new Bundle();
+        arguments.putBoolean(Constants.SAME_ACTIVITY, true);
         CreateItemActivityFragment fragment = new CreateItemActivityFragment();
+        fragment.setArguments(arguments);
         getFragmentManager().beginTransaction()
-                .replace(R.id.action_container, fragment)
+                .replace(R.id.user_action_container, fragment)
                 .commit();
     }
 
