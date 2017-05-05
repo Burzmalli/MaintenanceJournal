@@ -19,8 +19,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.crashlytics.android.answers.Answers;
@@ -30,6 +32,7 @@ import com.example.joe.maintenancejournal.Constants;
 import com.example.joe.maintenancejournal.R;
 import com.example.joe.maintenancejournal.controller.DataMgr;
 import com.example.joe.maintenancejournal.controller.DataUpdateReceiver;
+import com.example.joe.maintenancejournal.customui.MaxHeightScrollView;
 import com.example.joe.maintenancejournal.model.MaintenanceItem;
 import com.example.joe.maintenancejournal.model.MaintenanceTask;
 
@@ -137,6 +140,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
         private Button mSaveChangesBtn;
         private Button mCancelChangesBtn;
         private TextInputLayout mItemNameInput;
+        private MaxHeightScrollView mTaskFrame;
         //private Button mAddImgBtn;
 
         private boolean expanded = false;
@@ -151,6 +155,8 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
             mItemName = (TextView) itemView.findViewById(R.id.item_name);
             mItemSummary = (TextView) itemView.findViewById(R.id.item_summary);
             mTaskList = (ListView) itemView.findViewById(R.id.list_of_tasks);
+            mTaskFrame = (MaxHeightScrollView) itemView.findViewById(R.id.maxHeightFrame);
+            mTaskFrame.setMaxHeight(200);
             mEditName = (EditText) itemView.findViewById(R.id.text_item_name);
             mAddTaskBtn = (Button) itemView.findViewById(R.id.button_add_task);
             mDeleteTaskBtn = (Button) itemView.findViewById(R.id.button_delete_task);
@@ -381,6 +387,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
                 DataMgr.LastClicked.CollapseCard();
 
             mTaskList.setVisibility(View.VISIBLE);
+            mTaskFrame.setVisibility(View.VISIBLE);
             mEditItemBtn.setVisibility(View.VISIBLE);
 
             DataMgr.LastClicked = this;
@@ -392,6 +399,7 @@ public class JournalCardAdapter extends RecyclerView.Adapter<JournalCardAdapter.
         {
             EndEdit(true);
             mTaskList.setVisibility(View.GONE);
+            mTaskFrame.setVisibility(View.GONE);
             mAddTaskBtn.setVisibility(View.GONE);
             mDeleteTaskBtn.setVisibility(View.GONE);
             mEditItemBtn.setVisibility(View.GONE);

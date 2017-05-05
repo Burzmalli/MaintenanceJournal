@@ -8,7 +8,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -79,27 +79,35 @@
                 android:layout_weight="1"/>
         </LinearLayout>
 
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="150dp"
-            android:id="@+id/list_of_tasks"
+        <com.example.joe.maintenancejournal.customui.MaxHeightScrollView
+            android:id="@+id/maxHeightFrame"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
             android:layout_alignParentEnd="true"
-            android:layout_below="@id/header_layout"
             android:visibility="gone"
-            android:background="@drawable/selected_item"
-            android:choiceMode="singleChoice"
-            android:listSelector="@color/colorSelectedItem"/>
+            android:layout_below="@id/header_layout">
+
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/list_of_tasks"
+                android:visibility="gone"
+                android:background="@drawable/selected_item"
+                android:choiceMode="singleChoice"
+                android:listSelector="@color/colorSelectedItem"/>
+
+        </com.example.joe.maintenancejournal.customui.MaxHeightScrollView>
 
         <Button
             style="@style/DefaultButton"
-            android:layout_below="@+id/list_of_tasks"
+            android:layout_below="@+id/maxHeightFrame"
             android:id="@+id/button_add_task"
             android:text="@string/button_add_task"
             android:visibility="gone"/>
 
         <Button
             style="@style/DefaultButton"
-            android:layout_below="@+id/list_of_tasks"
+            android:layout_below="@+id/maxHeightFrame"
             android:id="@+id/button_delete_task"
             android:text="@string/button_delete_task"
             android:layout_alignParentEnd="true"
