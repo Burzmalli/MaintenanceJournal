@@ -76,29 +76,23 @@ public class MainActivity extends BaseActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), CreateItemActivity.class);
 
-                if(findViewById(R.id.action_container) == null) {
-                    Intent intent = new Intent(view.getContext(), CreateItemActivity.class);
-
-                    startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
-                } else {
-                    expandView();
-                }
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
             }
         });
+
+
 
         new ListenerTask().execute();
 
         Fabric.with(this, new Crashlytics());
     }
 
-    private void expandView() {
-        findViewById(R.id.action_container).setVisibility(View.VISIBLE);
-        CreateItemActivityFragment fragment = new CreateItemActivityFragment();
-        getFragmentManager().beginTransaction()
-                .replace(R.id.action_container, fragment)
-                .commit();
+    public void forceCrash(View view) {
+        throw new RuntimeException("This is a crash");
     }
+
 
     @Override
     protected void onStop() {
