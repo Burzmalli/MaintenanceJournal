@@ -89,11 +89,6 @@ public class MainActivity extends BaseActivity {
         Fabric.with(this, new Crashlytics());
     }
 
-    public void forceCrash(View view) {
-        throw new RuntimeException("This is a crash");
-    }
-
-
     @Override
     protected void onStop() {
 
